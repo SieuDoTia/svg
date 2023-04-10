@@ -671,10 +671,79 @@ void taoHinhTron() {
    }
 }
 
+void veNetGiuaHaiHinhElip() {
+   
+   float elip0_gocX = 1319.8f;
+   float elip0_gocY = 590.6f;
+   float elip0_banKinhX = 115.2f;
+   float elip0_banKinhY = 68.4f;
+   
+   float elip1_gocX = 1422.2f;
+   float elip1_gocY = 781.4f;
+   float elip1_banKinhX = 12.8f;
+   float elip1_banKinhY = 7.6f;
+   
+   // ----
+   float elip0_trungTamX = elip0_gocX + elip0_banKinhX;
+   float elip0_trungTamY = elip0_gocY + elip0_banKinhY;
+   
+   float elip1_trungTamX = elip1_gocX + elip1_banKinhX;
+   float elip1_trungTamY = elip1_gocY + elip1_banKinhY;
+   printf( "trung tâm 0 (%5.1f; %5.1f)  trung tâm 1 (%5.1f; %5.1f)\n", elip0_trungTamX, elip0_trungTamY, elip1_trungTamX, elip1_trungTamY );
+   
+   // ---- mở tập tin SVG
+   FILE *tep = fopen( "netGiuaHaiHinhElip.svg", "w" );
+   
+   if( tep != NULL ) {
+      
+      // ---- đầu tập tin SVG
+      unsigned int beRong = 1400;
+      unsigned int beCao = 1000;
+      fprintf( tep, "<svg version=\"1.1\" width=\"%d\" height=\"%d\" xmlns=\"http://www.w3.org/2000/svg\">\n\n", beRong, beCao );
+      
+      // ---- số lượng bước
+      unsigned short soLuongBuoc = 32;
+      
+      float gocBuoc = kPI*2.0f/(float)soLuongBuoc;
+      
+      unsigned short buoc = 0;
+      float gocHienTai = 2.0*kPI/64.0f;
+      
+      while( buoc < soLuongBuoc ) {
+         
+         // ---- vị trí
+         float diemRanh0_x = elip0_trungTamX + elip0_banKinhX*cosf( gocHienTai );
+         float diemRanh0_y = elip0_trungTamY + elip0_banKinhY*sinf( gocHienTai );
+         
+         float diemRanh1_x = elip1_trungTamX + elip1_banKinhX*cosf( gocHienTai );
+         float diemRanh1_y = elip1_trungTamY + elip1_banKinhY*sinf( gocHienTai );
+         
+         // ---- màu
+         float giaTri = 128.0f*(0.5f + 0.5f*sinf( gocHienTai ));
+         unsigned int hieuUngSang = floorf( giaTri );
+         
+         // ---- vẽ nét
+         duong( tep, diemRanh0_x, diemRanh0_y, diemRanh1_x, diemRanh1_y, 1.5f, 0xff5a00 + (hieuUngSang << 8), 1.0f );
+         
+         gocHienTai += gocBuoc;
+         buoc++;
+      }
+      
+      // ----
+      fprintf( tep, "</svg>\n" );
+      // ---- đóng tệp
+      fclose( tep );
+   }
+}
+
+
 int main( ) {
  
 //   taoTuGiac();   // <---- cho tô màu tư giác
 
-   taoHinhTron();   // <---- cho vẽ hình tròn màu
+//   taoHinhTron();   // <---- cho vẽ hình tròn màu
+
+   veNetGiuaHaiHinhElip();
+   
    return 1;
 }
