@@ -648,7 +648,7 @@ void taoHinhTron() {
          // ---- đặt chuyển sắc
          fprintf( tep, "<defs>\n" );
          datChuyeSacTuyenTinh( tep, mangMau, mangBuocChuyenSac, 2, maSoChuyenSac,
-                              trungTamX,trungTamY, diemRanh_x, diemRanh_y );
+                              trungTamX, trungTamY, diemRanh_x, diemRanh_y );
          fprintf( tep, "</defs>\n\n" );
 
          // ---- vẽ tam giác
@@ -798,7 +798,7 @@ void veDuongCongGiuaBonHinhElip() {
          // ---- vị trí
          float cosGocHienTai = cosf( gocHienTai );
          float sinGocHienTai = sinf( gocHienTai );
-
+         
          float diem0_x = elip0_trungTamX + elip0_banKinhX*cosGocHienTai;
          float diem0_y = elip0_trungTamY + elip0_banKinhY*sinGocHienTai;
          
@@ -807,13 +807,13 @@ void veDuongCongGiuaBonHinhElip() {
          
          float diem2_x = elip2_trungTamX + elip2_banKinhX*cosGocHienTai;
          float diem2_y = elip2_trungTamY + elip2_banKinhY*sinGocHienTai;
-      
+         
          float diem3_x = elip3_trungTamX + elip3_banKinhX*cosGocHienTai;
          float diem3_y = elip3_trungTamY + elip3_banKinhY*sinGocHienTai;
-
+         
          // ---- màu
- //        float giaTri = 128.0f*(0.5f + 0.5f*sinf( gocHienTai ));
-//         unsigned int hieuUngSang = floorf( giaTri );
+         //        float giaTri = 128.0f*(0.5f + 0.5f*sinf( gocHienTai ));
+         //         unsigned int hieuUngSang = floorf( giaTri );
          
          mangDiemCong[0] = diem1_x;
          mangDiemCong[1] = diem1_y;
@@ -821,9 +821,233 @@ void veDuongCongGiuaBonHinhElip() {
          mangDiemCong[3] = diem2_y;
          mangDiemCong[4] = diem3_x;
          mangDiemCong[5] = diem3_y;
-
+         
          // ---- vẽ nét
          duongCong( tep, diem0_x, diem0_y, mangDiemCong, 1, 0, 0x00, 0.0f, 1, 1.5f, 0x00ff00, 1.0f );
+         gocHienTai += gocBuoc;
+         buoc++;
+      }
+      
+   }
+}
+
+// ----- nét chồng lên nhau
+void netChongLenNhau() {
+   
+   // ---- mở tập tin SVG
+   FILE *tep = fopen( "netChongLenNhau.svg", "w" );
+   
+   if( tep != NULL ) {
+      
+      // ---- đầu tập tin SVG
+      unsigned int beRong = 1400;
+      unsigned int beCao = 1000;
+      fprintf( tep, "<svg version=\"1.1\" width=\"%d\" height=\"%d\" xmlns=\"http://www.w3.org/2000/svg\">\n\n", beRong, beCao );
+      
+      // ---- vị trí hai đầu nét đáy
+      float netDay0_x = 1014.5f;
+      float netDay0_y = 1376.0f;
+      float netDay1_x = 1014.5f;
+      float netDay1_y = 1140.5f;
+      
+      // ---- vị trí hai đầu nét đỉnh
+      float netDinh0_x = 1013.0f;
+      float netDinh0_y = 1375.5f;
+      float netDinh1_x = 1013.0f;
+      float netDinh1_y = 1139.0f;
+      
+      float netDay_doDay = 8.0f;
+      float netDinh_doDay = 2.0f;
+      
+      // ---- màu nét
+      float netDayMauDo = 74.0f;
+      float netDayMauLuc = 155.0f;
+      float netDayMauXanh = 220.0f;
+      
+      float netDinhMauDo = 179.0f;
+      float netDinhMauLuc = 220.0f;
+      float netDinhMauXanh = 255.0f;
+      
+      // ---- chuẩn bị
+      unsigned char soBuoc = 5;
+      unsigned char buoc = 0;
+      
+      // ---- bước
+      float buoc0_x = (netDinh0_x - netDay0_x)/(float)soBuoc;
+      float buoc0_y = (netDinh0_y - netDay0_y)/(float)soBuoc;
+      float buoc1_x = (netDinh1_x - netDay1_x)/(float)soBuoc;
+      float buoc1_y = (netDinh1_y - netDay1_y)/(float)soBuoc;
+      
+      float buocMauDo = (netDinhMauDo - netDayMauDo)/(float)soBuoc;
+      float buocMauLuc = (netDinhMauLuc - netDayMauLuc)/(float)soBuoc;
+      float buocMauXanh = (netDinhMauXanh - netDayMauXanh)/(float)soBuoc;
+
+      float buocNetDoDay = (netDinh_doDay - netDay_doDay)/soBuoc;
+      
+      float net0_x = netDay0_x;
+      float net0_y = netDay0_y;
+      float net1_x = netDay1_x;
+      float net1_y = netDay1_y;
+      
+      float netMauDo = netDayMauDo;
+      float netMauLuc = netDayMauLuc;
+      float netMauXanh = netDayMauXanh;
+      
+      float netDoDay = netDay_doDay;
+      
+      while( buoc < soBuoc+1 ) {
+         
+         // ----
+         unsigned char mauDo = (unsigned char)floorf( netMauDo );
+         unsigned char mauLuc = (unsigned char)floorf( netMauLuc );
+         unsigned char mauXanh = (unsigned char)floorf( netMauXanh );
+         
+         unsigned int mauNet = mauDo << 16 | mauLuc << 8 | mauXanh;
+         
+         // ---- vẽ nét
+         duong( tep, net0_x, net0_y, net1_x, net1_y, netDoDay, mauNet, 1.0f );
+         
+         printf( "(%5.1f; %5.1f) --> (%5.1f; %5.1f)  %5.3f  mauNet %06x\n", net0_x, net0_x, net1_x, net1_y, netDoDay, mauNet );
+         // ---- tính vị trí mới
+         net0_x += buoc0_x;
+         net0_y += buoc0_y;
+         net1_x += buoc1_x;
+         net1_y += buoc1_y;
+         
+         // ---- tính màu mới
+         netMauDo += buocMauDo;
+         netMauLuc += buocMauLuc;
+         netMauXanh += buocMauXanh;
+         
+         netDoDay += buocNetDoDay;
+         
+         buoc++;
+      }
+      // ----
+      fprintf( tep, "</svg>\n" );
+      // ---- đóng tệp
+      fclose( tep );
+   }
+}
+
+void tinhMauChoGocVaMang( float goc, float gocBuocMau, float *mauDo, float *mauLuc, float *mauXanh, float *mauDoDuc, float *mangMau, unsigned char soLuongMau ) {
+   
+   unsigned char soMauTrongMang = (unsigned char)floorf( goc/gocBuocMau );
+   printf( "soMauTrongMang %d/%d\n", soMauTrongMang, soLuongMau );
+   if( soMauTrongMang >= soLuongMau - 1) {
+      unsigned short chiSoMangMau = (soLuongMau - 1) << 2;
+      *mauDo = mangMau[chiSoMangMau];
+      *mauLuc = mangMau[chiSoMangMau + 1];
+      *mauXanh = mangMau[chiSoMangMau + 2];
+      *mauDoDuc = mangMau[chiSoMangMau + 3];
+   }
+   else {
+      float phanSo = goc/gocBuocMau - (float)soMauTrongMang;
+      float nghichPhanSo = 1.0f - phanSo;
+      printf( " phanSo %5.3f\n", phanSo );
+
+      unsigned short chiSoMangMau = soMauTrongMang << 2;
+      *mauDo = mangMau[chiSoMangMau]*nghichPhanSo + mangMau[chiSoMangMau + 4]*phanSo;
+      *mauLuc = mangMau[chiSoMangMau + 1]*nghichPhanSo + mangMau[chiSoMangMau + 5]*phanSo;
+      *mauXanh = mangMau[chiSoMangMau + 2]*nghichPhanSo + mangMau[chiSoMangMau + 6]*phanSo;
+      *mauDoDuc = mangMau[chiSoMangMau + 3]*nghichPhanSo + mangMau[chiSoMangMau + 7]*phanSo;
+   }
+}
+
+
+void cungChuyenSacGiuHaiHinhTron() {
+
+   float hinhTronNgoai_gocX = 292.0f;
+   float hinhTronNgoai_gocY = 252.0f;
+   float hinhTronNgoai_banKinh = 820.0f;
+   
+   float hinhTronNoi_gocX = 636.0f;
+   float hinhTronNoi_gocY = 596.0f;
+   float hinhTronNoi_banKinh = 476.0f;
+   
+   // ---- tính trung tâm
+   float hinhTronNgoai_trungTamX = hinhTronNgoai_gocX + hinhTronNgoai_banKinh;
+   float hinhTronNgoai_trungTamY = hinhTronNgoai_gocY + hinhTronNgoai_banKinh;
+   
+   float hinhTronNoi_trungTamX = hinhTronNoi_gocX + hinhTronNoi_banKinh;
+   float hinhTronNoi_trungTamY = hinhTronNoi_gocY + hinhTronNoi_banKinh;
+
+   printf( "trung tâm ngoai (%5.1f; %5.1f) %5.1f   trung tâm noi (%5.1f; %5.1f) %5.1f\n", hinhTronNgoai_trungTamX, hinhTronNgoai_trungTamY, hinhTronNgoai_banKinh, hinhTronNoi_trungTamX, hinhTronNoi_trungTamY, hinhTronNoi_banKinh );
+   
+   unsigned char soLuong_mau = 7;
+   float mangMau[32] = {
+   255.0f, 255.0f, 255.0f, 0.0f,
+   255.0f, 255.0f, 0.0f, 0.8f,
+   255.0f, 191.0f, 0.0f, 0.8f,
+   255.0f, 127.0f, 0.0f, 1.0f,
+   255.0f, 63.0f, 0.0f, 1.0f,
+   255.0f, 0.0f, 0.0f, 1.0f,
+   230.0f, 0.0f, 10.0f, 1.0f};
+
+   float gocBuocMau = kPI*0.25f;
+
+   // ---- mở tập tin SVG
+   FILE *tep = fopen( "cungChuyenSacGiuaHaiHinhTron.svg", "w" );
+   
+   if( tep != NULL ) {
+      
+      // ---- đầu tập tin SVG
+      unsigned int beRong = 1400;
+      unsigned int beCao = 1000;
+      fprintf( tep, "<svg version=\"1.1\" width=\"%d\" height=\"%d\" xmlns=\"http://www.w3.org/2000/svg\">\n\n", beRong, beCao );
+      
+      // ---- góc đầu và cuối
+      float gocDau = -kPI*0.75f;
+      float gocCuoi = kPI*1.0f;
+      
+      // ---- số lượng bước
+      unsigned short soLuongBuoc = 180;  // phần của MỘT vòng tròn
+      
+      float gocBuoc = kPI*2.0f/(float)soLuongBuoc;
+      
+      unsigned short buoc = 0;
+      float gocHienTai = gocDau;
+
+      while( gocHienTai < gocCuoi ) {
+         
+         // ---- vị trí
+         float diem0_x = hinhTronNgoai_trungTamX + hinhTronNgoai_banKinh*cosf( gocHienTai );
+         float diem0_y = hinhTronNgoai_trungTamY + hinhTronNgoai_banKinh*sinf( gocHienTai );
+         
+         float diem1_x = hinhTronNgoai_trungTamX + hinhTronNgoai_banKinh*cosf( gocHienTai + gocBuoc + 0.001 );
+         float diem1_y = hinhTronNgoai_trungTamY + hinhTronNgoai_banKinh*sinf( gocHienTai + gocBuoc + 0.001 );
+         
+         float diem2_x = hinhTronNoi_trungTamX + hinhTronNoi_banKinh*cosf( gocHienTai + gocBuoc + 0.001 );
+         float diem2_y = hinhTronNoi_trungTamY + hinhTronNoi_banKinh*sinf( gocHienTai + gocBuoc + 0.001 );
+
+         float diem3_x = hinhTronNoi_trungTamX + hinhTronNoi_banKinh*cosf( gocHienTai );
+         float diem3_y = hinhTronNoi_trungTamY + hinhTronNoi_banKinh*sinf( gocHienTai );
+
+         float mangTuGiac[8];
+         mangTuGiac[0] =  diem0_x;
+         mangTuGiac[1] =  diem0_y;
+         mangTuGiac[2] =  diem1_x;
+         mangTuGiac[3] =  diem1_y;
+         mangTuGiac[4] =  diem2_x;
+         mangTuGiac[5] =  diem2_y;
+         mangTuGiac[6] =  diem3_x;
+         mangTuGiac[7] =  diem3_y;
+
+         // ---- màu
+         float mauDo = 0.0f;
+         float mauLuc = 0.0f;
+         float mauXanh = 0.0f;
+         float mauDoDuc = 0.0f;
+         tinhMauChoGocVaMang( gocHienTai - gocDau, gocBuocMau, &mauDo, &mauLuc, &mauXanh, &mauDoDuc, mangMau, soLuong_mau );
+         unsigned char mauDo_0 = (unsigned char)mauDo;
+         unsigned char mauLuc_0 = (unsigned char)mauLuc;
+         unsigned char mauXanh_0 = (unsigned char)mauXanh;
+         
+         unsigned int mau = mauDo_0 << 16 | mauLuc_0 << 8 | mauXanh_0;
+
+         // ---- vẽ nét
+         daGiac( tep, mangTuGiac, 4, 1, mau, mauDoDuc, 0, 0.0f, 0x00, 1.0f );
+
          gocHienTai += gocBuoc;
          buoc++;
       }
@@ -835,6 +1059,7 @@ void veDuongCongGiuaBonHinhElip() {
    }
 }
 
+
 int main( ) {
  
 //   taoTuGiac();   // <---- cho tô màu tư giác
@@ -843,7 +1068,12 @@ int main( ) {
 
 //  veNetGiuaHaiHinhElip();   // <---- cho vẽ nét giữa hai hình elip
    
-   veDuongCongGiuaBonHinhElip();
+//   veDuongCongGiuaBonHinhElip();   // <---- cho vẽ các đường cong phat từ một hình elip đến một huình elip khách
    
+//   netChongLenNhau();  // <---- các nét chồng lên nhau
+
+   cungChuyenSacGiuHaiHinhTron();   // <----
+
    return 1;
 }
+
