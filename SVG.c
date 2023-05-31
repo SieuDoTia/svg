@@ -14,6 +14,8 @@
 
 
 /*
+void luuDauSVG( FILE *tep, unsigned int beRong, unsigned int beCao );      // ---- đầu tập tin SVG
+ 
 void chuNhat( FILE *tep, float gocX, float gocY, float beRong, float beCao, unsigned char toDay, unsigned int mauToDay, float doDucToDay,
           unsigned char net, float beRongNet, unsigned int mauNet, float doDucNet );
  
@@ -35,7 +37,8 @@ void duongDaDiem( FILE *tep, float *mangDiem, unsigned int soLuongDiem, unsigned
  unsigned char toDay, unsigned int mauToDay, float doDucToDay, unsigned char net, float beRongNet, unsigned int mauNet, float doDucNet )
  
  void vanBan_ngang( FILE *tep, char *xau, float viTriX, float viTriY, char *giaDinhPhong, float coKichPhong, char *beDayPhong,
- unsigned char toDay, unsigned int mauToDay, float doDucToDay, unsigned char net, float beRongNet, unsigned int mauNet, float doDucNet )
+ unsigned char toDay, unsigned int mauToDay, float doDucToDay, unsigned char net, float beRongNet, unsigned int mauNet, float doDucNet,
+ char *canhHang )
  
  void vanBan_doc( FILE *tep, char *xau, float viTriX, float viTriY, char *giaDinhPhong, float coKichPhong, char *beDayPhong,
  unsigned char toDay, unsigned int mauToDay, float doDucToDay, unsigned char net, float beRongNet, unsigned int mauNet, float doDucNet )
@@ -43,6 +46,13 @@ void duongDaDiem( FILE *tep, float *mangDiem, unsigned int soLuongDiem, unsigned
  void hinhTronChuyenSac_khongNet( FILE *tep, float viTriX, float viTriY, float banKinh, unsigned int *mangMau, float *mangViTriBuoc,
  float *mangBuoc, unsigned short soLuongBuoc, unsigned int maSoChuyenSac )
  */
+
+// Lưu đầu tệp SVG
+void luuDauSVG( FILE *tep, unsigned int beRong, unsigned int beCao ) {    // ---- đầu tập tin SVG
+
+   fprintf( tep, "<svg version=\"1.1\" width=\"%d\" height=\"%d\" xmlns=\"http://www.w3.org/2000/svg\">\n\n", beRong, beCao );
+}
+
 
 // Vẽ hình chữ nhật tại góc trái dưới tại (gocX; gocY)
 void chuNhat( FILE *tep, float gocX, float gocY, float beRong, float beCao, unsigned char toDay, unsigned int mauToDay, float doDucToDay,
@@ -232,9 +242,12 @@ void duongCong( FILE *tep, float diemBatDauX, float diemBatDauY, float *mangDiem
 
 
 void vanBan_ngang( FILE *tep, char *xau, float viTriX, float viTriY, char *giaDinhPhong, float coKichPhong, char *beDayPhong,
-                       unsigned char toDay, unsigned int mauToDay, float doDucToDay, unsigned char net, float beRongNet, unsigned int mauNet, float doDucNet ) {
+                       unsigned char toDay, unsigned int mauToDay, float doDucToDay, unsigned char net, float beRongNet, unsigned int mauNet, float doDucNet, unsigned char *canhHang ) {
 
    fprintf( tep, "<text x=\"%5.1f\" y=\"%5.1f\" font-family=\"%s\" font-size=\"%5.1f\" font-weight=\"%s\" writing-mode=\"lr\" ", viTriX, viTriY, giaDinhPhong, coKichPhong, beDayPhong );
+   
+   fprintf( tep, "text-anchor=\"%s\" ", canhHang );   // start middle  end
+   
 	if( toDay )
 	   fprintf( tep, "fill=\"#%06X\" fill-opacity=\"%4.2f\" ", mauToDay, doDucToDay );
 	else
@@ -1110,10 +1123,8 @@ void cungChuyenSacGiuHaiHinhElip() {
    
    if( tep != NULL ) {
       
-      // ---- đầu tập tin SVG
-      unsigned int beRong = 1400;
-      unsigned int beCao = 1000;
-      fprintf( tep, "<svg version=\"1.1\" width=\"%d\" height=\"%d\" xmlns=\"http://www.w3.org/2000/svg\">\n\n", beRong, beCao );
+      // ---- lưu đầu tệp SVG
+      luuDauSVG( tep, 1400, 1000 );
       
       // ---- góc đầu và cuối
       float gocDau = kPI*0.15f;
@@ -1171,8 +1182,9 @@ void cungChuyenSacGiuHaiHinhElip() {
          buoc++;
       }
       
-      // ----
+      // ---- kết thúc tệp SVG
       fprintf( tep, "</svg>\n" );
+
       // ---- đóng tệp
       fclose( tep );
    }
