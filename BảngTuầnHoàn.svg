@@ -51,11 +51,11 @@
 <text x="269.9" y="403.2" font-family="Arial" font-size=" 14.0" font-weight="Normal" writing-mode="lr" text-anchor="end" fill="#FFFFFF" fill-opacity="1.00" stroke="none" >
  2.20 </text>
 
-<rect x="4217.8" y="250.0" width="126.2" height="161.3" fill="#E50430" fill-opacity="1.00" stroke="#987654" stroke-opacity="1.00" stroke-width="  1.0" />
+<rect x="4217.8" y="250.0" width="126.2" height="161.3" fill="#0D776C" fill-opacity="1.00" stroke="#987654" stroke-opacity="1.00" stroke-width="  1.0" />
 
 <rect x="4217.8" y="250.0" width="126.2" height=" 32.3" fill="#000000" fill-opacity="0.50" stroke="none" />
 
-<rect x="4217.8" y="282.3" width=" 48.0" height=" 32.3" fill="#E55D23" fill-opacity="0.70" stroke="none" />
+<rect x="4217.8" y="282.3" width=" 48.0" height=" 32.3" fill="#CB6134" fill-opacity="0.70" stroke="none" />
 
 <rect x="4217.8" y="330.6" width=" 56.8" height=" 37.1" fill="#FFFFFF" fill-opacity="0.15" stroke="none" />
 
@@ -435,11 +435,11 @@
 <text x="4206.5" y="569.5" font-family="Arial" font-size=" 14.0" font-weight="Normal" writing-mode="lr" text-anchor="end" fill="#FFFFFF" fill-opacity="1.00" stroke="none" >
  3.98 </text>
 
-<rect x="4217.8" y="416.3" width="126.2" height="161.3" fill="#D40632" fill-opacity="1.00" stroke="#987654" stroke-opacity="1.00" stroke-width="  1.0" />
+<rect x="4217.8" y="416.3" width="126.2" height="161.3" fill="#167167" fill-opacity="1.00" stroke="#987654" stroke-opacity="1.00" stroke-width="  1.0" />
 
 <rect x="4217.8" y="416.3" width="126.2" height=" 32.3" fill="#000000" fill-opacity="0.50" stroke="none" />
 
-<rect x="4217.8" y="448.5" width=" 48.0" height=" 32.3" fill="#D4602E" fill-opacity="0.70" stroke="none" />
+<rect x="4217.8" y="448.5" width=" 48.0" height=" 32.3" fill="#A9664B" fill-opacity="0.70" stroke="none" />
 
 <rect x="4217.8" y="496.9" width=" 56.8" height=" 37.1" fill="#FFFFFF" fill-opacity="0.15" stroke="none" />
 
@@ -819,11 +819,11 @@
 <text x="4206.5" y="735.8" font-family="Arial" font-size=" 14.0" font-weight="Normal" writing-mode="lr" text-anchor="end" fill="#FFFFFF" fill-opacity="1.00" stroke="none" >
  3.16 </text>
 
-<rect x="4217.8" y="582.6" width="126.2" height="161.3" fill="#C30934" fill-opacity="1.00" stroke="#987654" stroke-opacity="1.00" stroke-width="  1.0" />
+<rect x="4217.8" y="582.6" width="126.2" height="161.3" fill="#206C63" fill-opacity="1.00" stroke="#987654" stroke-opacity="1.00" stroke-width="  1.0" />
 
 <rect x="4217.8" y="582.6" width="126.2" height=" 32.3" fill="#000000" fill-opacity="0.50" stroke="none" />
 
-<rect x="4217.8" y="614.8" width=" 48.0" height=" 32.3" fill="#C3623A" fill-opacity="0.70" stroke="none" />
+<rect x="4217.8" y="614.8" width=" 48.0" height=" 32.3" fill="#876C62" fill-opacity="0.70" stroke="none" />
 
 <rect x="4217.8" y="663.2" width=" 56.8" height=" 37.1" fill="#FFFFFF" fill-opacity="0.15" stroke="none" />
 
@@ -928,7 +928,7 @@
 <rect x="369.6" y="885.9" width=" 37.9" height=" 24.2" fill="#FFFFFF" fill-opacity="0.30" stroke="none" />
 
 <text x="344.3" y="773.0" font-family="Arial" font-size=" 25.0" font-weight="Bold" writing-mode="lr" text-anchor="middle" fill="#FFFFFF" fill-opacity="1.00" stroke="none" >
- Calci </text>
+ Canxi </text>
 
 <text x="305.2" y="806.9" font-family="Arial" font-size=" 30.0" font-weight="Bold" writing-mode="lr" text-anchor="middle" fill="#FFFFFF" fill-opacity="1.00" stroke="none" >
  Ca </text>
@@ -1683,11 +1683,11 @@
 <text x="4206.5" y="902.1" font-family="Arial" font-size=" 14.0" font-weight="Normal" writing-mode="lr" text-anchor="end" fill="#FFFFFF" fill-opacity="1.00" stroke="none" >
  2.96 </text>
 
-<rect x="4217.8" y="748.9" width="126.2" height="161.3" fill="#B20C36" fill-opacity="1.00" stroke="#987654" stroke-opacity="1.00" stroke-width="  1.0" />
+<rect x="4217.8" y="748.9" width="126.2" height="161.3" fill="#29665E" fill-opacity="1.00" stroke="#987654" stroke-opacity="1.00" stroke-width="  1.0" />
 
 <rect x="4217.8" y="748.9" width="126.2" height=" 32.3" fill="#000000" fill-opacity="0.50" stroke="none" />
 
-<rect x="4217.8" y="781.1" width=" 48.0" height=" 32.3" fill="#B26545" fill-opacity="0.70" stroke="none" />
+<rect x="4217.8" y="781.1" width=" 48.0" height=" 32.3" fill="#657179" fill-opacity="0.70" stroke="none" />
 
 <rect x="4217.8" y="829.5" width=" 56.8" height=" 37.1" fill="#FFFFFF" fill-opacity="0.15" stroke="none" />
 
@@ -2512,7 +2512,7 @@
 <rect x="4174.9" y="1052.2" width=" 37.9" height=" 24.2" fill="#FFFFFF" fill-opacity="0.30" stroke="none" />
 
 <text x="4149.7" y="939.3" font-family="Arial" font-size=" 25.0" font-weight="Bold" writing-mode="lr" text-anchor="middle" fill="#FFFFFF" fill-opacity="1.00" stroke="none" >
- Iođ </text>
+ I Ốt </text>
 
 <text x="4110.5" y="973.2" font-family="Arial" font-size=" 30.0" font-weight="Bold" writing-mode="lr" text-anchor="middle" fill="#FFFFFF" fill-opacity="1.00" stroke="none" >
  I </text>
@@ -2547,11 +2547,11 @@
 <text x="4206.5" y="1068.4" font-family="Arial" font-size=" 14.0" font-weight="Normal" writing-mode="lr" text-anchor="end" fill="#FFFFFF" fill-opacity="1.00" stroke="none" >
  2.66 </text>
 
-<rect x="4217.8" y="915.1" width="126.2" height="161.3" fill="#A10F37" fill-opacity="1.00" stroke="#987654" stroke-opacity="1.00" stroke-width="  1.0" />
+<rect x="4217.8" y="915.1" width="126.2" height="161.3" fill="#32615A" fill-opacity="1.00" stroke="#987654" stroke-opacity="1.00" stroke-width="  1.0" />
 
 <rect x="4217.8" y="915.1" width="126.2" height=" 32.3" fill="#000000" fill-opacity="0.50" stroke="none" />
 
-<rect x="4217.8" y="947.4" width=" 48.0" height=" 32.3" fill="#A16851" fill-opacity="0.70" stroke="none" />
+<rect x="4217.8" y="947.4" width=" 48.0" height=" 32.3" fill="#437790" fill-opacity="0.70" stroke="none" />
 
 <rect x="4217.8" y="995.8" width=" 56.8" height=" 37.1" fill="#FFFFFF" fill-opacity="0.15" stroke="none" />
 
@@ -4083,11 +4083,11 @@
 <text x="4206.5" y="1234.7" font-family="Arial" font-size=" 14.0" font-weight="Normal" writing-mode="lr" text-anchor="end" fill="#FFFFFF" fill-opacity="1.00" stroke="none" >
  2.20 </text>
 
-<rect x="4217.8" y="1081.4" width="126.2" height="161.3" fill="#901139" fill-opacity="1.00" stroke="#987654" stroke-opacity="1.00" stroke-width="  1.0" />
+<rect x="4217.8" y="1081.4" width="126.2" height="161.3" fill="#3B5B56" fill-opacity="1.00" stroke="#987654" stroke-opacity="1.00" stroke-width="  1.0" />
 
 <rect x="4217.8" y="1081.4" width="126.2" height=" 32.3" fill="#000000" fill-opacity="0.50" stroke="none" />
 
-<rect x="4217.8" y="1113.7" width=" 48.0" height=" 32.3" fill="#906B5C" fill-opacity="0.70" stroke="none" />
+<rect x="4217.8" y="1113.7" width=" 48.0" height=" 32.3" fill="#217CA7" fill-opacity="0.70" stroke="none" />
 
 <rect x="4217.8" y="1162.1" width=" 56.8" height=" 37.1" fill="#FFFFFF" fill-opacity="0.15" stroke="none" />
 
@@ -5619,11 +5619,11 @@
 <text x="4206.5" y="1400.9" font-family="Arial" font-size=" 14.0" font-weight="Normal" writing-mode="lr" text-anchor="end" fill="#FFFFFF" fill-opacity="1.00" stroke="none" >
  - </text>
 
-<rect x="4217.8" y="1247.7" width="126.2" height="161.3" fill="#7F143B" fill-opacity="1.00" stroke="#987654" stroke-opacity="1.00" stroke-width="  1.0" />
+<rect x="4217.8" y="1247.7" width="126.2" height="161.3" fill="#3F5954" fill-opacity="1.00" stroke="#987654" stroke-opacity="1.00" stroke-width="  1.0" />
 
 <rect x="4217.8" y="1247.7" width="126.2" height=" 32.3" fill="#000000" fill-opacity="0.50" stroke="none" />
 
-<rect x="4217.8" y="1280.0" width=" 48.0" height=" 32.3" fill="#7F6D68" fill-opacity="0.70" stroke="none" />
+<rect x="4217.8" y="1280.0" width=" 48.0" height=" 32.3" fill="#117FB2" fill-opacity="0.70" stroke="none" />
 
 <rect x="4217.8" y="1328.4" width=" 56.8" height=" 37.1" fill="#FFFFFF" fill-opacity="0.15" stroke="none" />
 
@@ -5854,7 +5854,7 @@
 
 <line x1="800.0" y1="681.4" x2="747.0" y2="683.9" stroke="#0000FF" stroke-opacity="0.50" stroke-width="  2.0" />
 <text x="743.2" y="688.7" font-family="Arial" font-size=" 25.0" font-weight="Normal" writing-mode="lr" text-anchor="end" fill="#000000" fill-opacity="1.00" stroke="none" >
- Số oxy hóa </text>
+ Số oxy hóa phổ biến </text>
 
 <line x1="800.0" y1="717.7" x2="747.0" y2="725.0" stroke="#0000FF" stroke-opacity="0.50" stroke-width="  2.0" />
 <text x="743.2" y="729.8" font-family="Arial" font-size=" 25.0" font-weight="Normal" writing-mode="lr" text-anchor="end" fill="#000000" fill-opacity="1.00" stroke="none" >
@@ -5883,5 +5883,8 @@
 <line x1="951.5" y1="802.4" x2="1008.3" y2="831.4" stroke="#0000FF" stroke-opacity="0.50" stroke-width="  2.0" />
 <text x="970.4" y="850.8" font-family="Arial" font-size=" 25.0" font-weight="Normal" writing-mode="lr" text-anchor="start" fill="#000000" fill-opacity="1.00" stroke="none" >
  Độ âm điện </text>
+
+<text x="124.8" y="1513.8" font-family="Arial" font-size=" 25.0" font-weight="Normal" writing-mode="lr" text-anchor="start" fill="#000000" fill-opacity="1.00" stroke="none" >
+ THNN TINH PHỤNG 2023.06.13 - An Giang, Phạm Vi công cộng </text>
 
 </svg>

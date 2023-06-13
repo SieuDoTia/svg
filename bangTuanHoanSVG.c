@@ -1,7 +1,7 @@
 // soDo_LichSuTraiDat_SVG.c
 // Sơ đồ lịch sử Trái Đất/lịch sử địa chất
 // Khởi động 2023.06.01
-// Phiên bản 2023.06.08
+// Phiên bản 2023.06.13
 // Phạm vi công cộng
 
 #include <stdio.h>
@@ -131,7 +131,7 @@ enum {
    ARGON,   // Argon
    
    KALI,    // Kali
-   CALCI,   // Calci
+   CANXI,   // Canxi
    SCANDI,  // Scandi
    TITANI,  // Titani
    VANADI,  // Vanđi
@@ -165,7 +165,7 @@ enum {
    THIEC,    // Thiếc
    ANG_TI_MON, // Ăn Ti Mon
    TELURI,   // Teluri
-   IOD,      // Iođ
+   I_OT,      // I Ốt
    XENON,    // Xenon
    
    CAESI,    // Caesi
@@ -605,10 +605,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 3052;
    nguyenTo->banKinh = 275;
    
-   // ---- Calci
-   nguyenTo = &(mangNguyenTo[CALCI]);
+   // ---- Canxi
+   nguyenTo = &(mangNguyenTo[CANXI]);
    nguyenTo->so = 20;
-   strcpy( nguyenTo->ten, "Calci" );
+   strcpy( nguyenTo->ten, "Canxi" );
    strcpy( nguyenTo->kyHieu, "Ca" );
    strcpy( nguyenTo->tenTrung, "钙" );
    nguyenTo->khoiLuong = 40.0784f;
@@ -1232,10 +1232,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1790;
    nguyenTo->banKinh = 206;
 
-   // ---- Iođ
-   nguyenTo = &(mangNguyenTo[IOD]);
+   // ---- I Ốt
+   nguyenTo = &(mangNguyenTo[I_OT]);
    nguyenTo->so = 53;
-   strcpy( nguyenTo->ten, "Iođ" );
+   strcpy( nguyenTo->ten, "I Ốt" );
    strcpy( nguyenTo->kyHieu, "I" );
    strcpy( nguyenTo->tenTrung, "碘" );
    nguyenTo->khoiLuong = 126.9045;
@@ -2680,7 +2680,7 @@ void veNen( FILE *tep, float gocX, float gocY, float coO_ngang, float coO_doc, u
 }
 
 
-#define kVAN_BAN_DAC_TRUNG__VI_TRI_X 0.50f
+#define kVAN_BAN_DAC_TRUNG__VI_TRI_X  0.50f
 #define kVAN_BAN_DAC_TRUNG__VI_TRI_Y -0.35f
 #define kVAN_BAN_TEN__VI_TRI_X -0.20f
 #define kVAN_BAN_TEN__VI_TRI_Y  0.00f
@@ -2780,7 +2780,7 @@ void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, fl
 
    viTriX = gocX + coO_ngang*kVAN_BAN_SO_OXY_HOA__VI_TRI_X;
    viTriY = gocY + coO_doc*kVAN_BAN_SO_OXY_HOA__VI_TRI_Y;
-   vanBan_ngang( tep, "Số oxy hóa", viTriX, viTriY, "Arial", 25.0f, "Normal",
+   vanBan_ngang( tep, "Số oxy hóa phổ biến", viTriX, viTriY, "Arial", 25.0f, "Normal",
                 kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "end" );
 
    // ---- nhiệt độ chảy
@@ -2876,14 +2876,20 @@ void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo 
    float gocY = dichY;
    char xauSo[32];
    
-   float mangMauNenToanBo[12] = {
+   float mangMauNenToanBo[8] = {
       0.07f, 0.15f, 0.28f, 1.00f,
       1.00f, 0.00f, 0.18f, 1.00f,
    };
 
-   float mangMauNenKyHieu[12] = {
+   float mangMauNenKyHieu[8] = {
       0.07f, 0.50f, 0.70f, 1.00f,
       1.00f, 0.35f, 0.07f, 1.00f,
+   };
+   
+   // ---- màu cho khí trơ
+   float mangMauNenKhiTro[8] = {
+      0.25f, 0.35f, 0.33f, 1.00f,
+      0.00f, 0.50f, 0.45f, 1.00f,
    };
 
    float beRongVungTo = kBE_RONG__KHO - kLE_TRAI - kLE_PHAI;
@@ -2939,21 +2945,43 @@ void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo 
       float phanSoY = gocY/beCaoVungTo;
       if( phanSoX > 1.0f )
          phanSoX = 1.0f;
-      else if( phanSoY > 1.0f )
+      if( phanSoY > 1.0f )
          phanSoY = 1.0f;
 
-      // ---- tính màu nền toàn bộ
-      float phanSo = (phanSoX + (1.0f - phanSoY))*0.5f;
+      // ---- tính phân số cho tô màu
+      float phanSo = 0.0f;
+      if( (soNguyenTo == HELI) || (soNguyenTo == NEON) || (soNguyenTo == ARGON) || (soNguyenTo == KRYPTON) ||
+         (soNguyenTo == XENON) || (soNguyenTo == RADON) || (soNguyenTo == OGANESSON) ) {
+         phanSo = 1.0f - phanSoY;
+      }
+      else
+         phanSo = (phanSoX + (1.0f - phanSoY))*0.5f;
+
       float nghichPhanSo = 1.0f - phanSo;
-      float mauDo = nghichPhanSo*mangMauNenToanBo[0] + phanSo*mangMauNenToanBo[4];
-      float mauLuc = nghichPhanSo*mangMauNenToanBo[1] + phanSo*mangMauNenToanBo[5];
-      float mauXanh = nghichPhanSo*mangMauNenToanBo[2] + phanSo*mangMauNenToanBo[6];
+      
+      // ---- tính màu
+      float mauDo;
+      float mauLuc;
+      float mauXanh;
+      if( (soNguyenTo == HELI) || (soNguyenTo == NEON) || (soNguyenTo == ARGON) || (soNguyenTo == KRYPTON) ||
+         (soNguyenTo == XENON) || (soNguyenTo == RADON) || (soNguyenTo == OGANESSON) ) {
+         mauDo = nghichPhanSo*mangMauNenKhiTro[0] + phanSo*mangMauNenKhiTro[4];
+         mauLuc = nghichPhanSo*mangMauNenKhiTro[1] + phanSo*mangMauNenKhiTro[5];
+         mauXanh = nghichPhanSo*mangMauNenKhiTro[2] + phanSo*mangMauNenKhiTro[6];
+      }
+      else {
+         mauDo = nghichPhanSo*mangMauNenToanBo[0] + phanSo*mangMauNenToanBo[4];
+         mauLuc = nghichPhanSo*mangMauNenToanBo[1] + phanSo*mangMauNenToanBo[5];
+         mauXanh = nghichPhanSo*mangMauNenToanBo[2] + phanSo*mangMauNenToanBo[6];
+      }
+      
+      // ---- đổi sang phạm vi 0x00 đến 0xff
       unsigned char mauDoNenToanBo = (unsigned char)(mauDo*255.0f);
       unsigned char mauLucNenToanBo = (unsigned char)(mauLuc*255.0f);
       unsigned char mauXanhNenToanBo = (unsigned char)(mauXanh*255.0f);
       unsigned int mauNenToanBo = mauDoNenToanBo << 16 | mauLucNenToanBo << 8 | mauXanhNenToanBo;
 
-      // ---- tíng màu nền ký hiệu vaô số
+      // ---- tính màu nền ký hiệu vaô số
       mauDo = nghichPhanSo*mangMauNenKyHieu[0] + phanSo*mangMauNenKyHieu[4];
       mauLuc = nghichPhanSo*mangMauNenKyHieu[1] + phanSo*mangMauNenKyHieu[5];
       mauXanh = nghichPhanSo*mangMauNenKyHieu[2] + phanSo*mangMauNenKyHieu[6];
@@ -3064,6 +3092,11 @@ void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo 
    gocY = kLE_TREN + coO_doc*2.0f;
 
    soDoMoTaDacTrung( tep, nguyenToViDu, gocX, gocY, coO_ngang*phongTo, coO_doc*phongTo, phongTo );
+   
+   // ==== tên công ty
+   gocX = kLE_TRAI - 0.2f*coO_ngang;
+   gocY = kLE_TREN + 7.6f*(coO_doc + giuaDoc);
+      vanBan_ngang( tep, "THNN TINH PHỤNG 2023.06.13 - An Giang, Phạm Vi công cộng", gocX, gocY, "Arial", 25.0f, "Normal", kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
 };
 
 #pragma mark ==== main
