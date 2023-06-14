@@ -84,155 +84,158 @@ void duong( FILE *tep, float diemX0, float diemY0, float diemX1, float diemY1, f
 
 
 
-#define kSO_LUONG__NGUYEN_TO 118  //
+#define kSO_LUONG__NGUYEN_TO 118  //  số lượng nguyên tốcho vẽ bảng tuền hoàn
+
 #define kKHONG_BIET '-'
+
 
 // ----- Nguyên Tố
 typedef struct {
-   unsigned char so;    // số nguyên tố
-   char ten[32];        // tên
-   char kyHieu[4];      // ký hiệu
-   char tenTrung[5]; // tên tiếng trung quốc
-   float khoiLuong;     // khối lượng nguyên tử chuẩn
-   char soOxyHoa[32];   // số oxy hóa
-   float tiTrong;       // kg/m3 tại 273 K
-   float nhietDoChay;   // K
-   float nhietDoSoi;    // K
-   float banKinh;       // pm (Van Der Waals)
-   char cauHinhElecton[32];  // cầu hình electron
-   float nhietDung;     // kJ/(kmol K)
-   float doAmDien;
-   unsigned char loai;  // rắn, lỏng, khí
-   float nangLuongIonHoa1;
-   float nangLuongIonHoa2;
+   unsigned char so;       // số nguyên tố
+   char ten[32];           // tên
+   char kyHieu[4];         // ký hiệu
+   char tenTrung[5];       // tên tiếng Trung Quốc
+   float khoiLuong;        // khối lượng nguyên tử chuẩn
+   char soOxyHoa[32];      // số oxy hóa phổ biến
+   float tiTrong;          // tỉ trọng (kg/m3 tại 273 K)
+   float nhietDoChay;      // nhiệt độ chảy (K)
+   float nhietDoSoi;       // nhiệt độ sôi (K)
+   float banKinh;          // pm (Van Der Waals)
+   char cauHinhElecton[32]; // cầu hình electron
+   float nhietDung;        // nhiệt dunng(kJ/(kmol K)
+   float doAmDien;         // độ điện âm
+   unsigned char loai;     // rắn, lỏng, khí
+   unsigned char cauTrucTinhThe;  // cấu trúc tinh thể
+   float nangLuongIonHoa1; // năng lượng ion hóa 1 (kJ/mol)
+   float nangLuongIonHoa2; // năng lượng ion hóa 2 (kJ/kmol)
 } NguyenTo;
 
 // ---- danh sách nguyên tố
 enum {
-   HYDRO,   // Hyđrô
+   HIDRO,   // Hiđrô
    HELI,    // Heli
    
-   LITHI,   // Lithi
-   BERYLI,  // Beryli
-   BOR,     // Bor
+   LITI,   // Liti
+   BERI,    // Beri
+   BO,      // Bo
    CACBON,  // Cacbon
    NITO,    // Nitơ
    OXI,     // Oxi
-   FLUOR,   // Fluor,
+   FLO,     // Flo,
    NEON,    // Neon
    
    NATRI,   // Natri
-   MAGNESI, // Magnesi
+   MAGIE,   // Magie
    NHOM,    // Nhôm
    SILIC,   // Silic
-   PHOSPHOR, // Phosphor
+   PHOTPHO, // Photpho
    LUU_HUYNH, // Lưu Huỳnh
    CLO,     // Clo
    ARGON,   // Argon
    
    KALI,    // Kali
    CANXI,   // Canxi
-   SCANDI,  // Scandi
-   TITANI,  // Titani
+   SCANDI,  // Scanđi
+   TITAN,  // Titan
    VANADI,  // Vanđi
-   CHROMI,  // Chromi
+   CROM,    // Crom
    MANGAN,  // Mangan
    SAT,     // Sắt
    COBAN,   // Coban
-   NICKEL,  // Nickel
+   NICKEN,  // Nicken
    DONG,    // Đồng
    KEM,     // Kẽm
    GALI,    // Gali
-   GERMANI, // Germani
-   THACH_TIN, // Thạch Tín
+   GEMANI,  // Gemani
+   ASEN,    // Asen
    SELENI,  // Seleni
    BROM,    // Brom
    KRYPTON, // Krypton
    
-   RUBIDI,  // Rubiđi
-   STRONTI, // Stronti
-   YTRI,    // Ytri
-   ZIRCONI, // Zirconi
-   NIOBI,   // Niobi
-   MOLYPDEN, // Molypđen
-   TECNETI,  // Tecneti
-   RUTHENI,  // Rutheni
-   RHODI,    // Rhôđi
+   RUBIDI,   // Rubiđi
+   STRONTI,  // Stronti
+   YTRI,     // Ytri
+   ZIRCONI,  // Zirconi
+   NIOBI,    // Niobi
+   MOLIPDEN, // Molipđen
+   TECNEXI,  // Tecnexi
+   RUTENI,   // Ruteni
+   RODI,     // Rôđi
    PALADI,   // Palađi
    BAC,      // Bạc
-   CADMI,    // Cadmi
+   CADIMI,   // Cađimi
    INDI,     // Indi
    THIEC,    // Thiếc
-   ANG_TI_MON, // Ăn Ti Mon
-   TELURI,   // Teluri
-   I_OT,      // I Ốt
+   ANTIMON,  // Antimon
+   TELU,     // Telu
+   IOT,      // Iot
    XENON,    // Xenon
    
-   CAESI,    // Caesi
+   XESI,     // Xesi
    BARI,     // Bari
-   LANTHAN,  // Lanthan
-   CERI,     // Ceri
-   PRASEODYMI, // Praseođymi
-   NEODYMI,  // Neodymi
+   LANTAN,   // Lantan
+   XERI,     // Xeri
+   PRAZEODIM,// Prazeođim
+   NEODYMI,  // Neođim
    PROMETI,  // Prometi
    SAMARI,   // Samari
    EUROPI,   // Europi
    GADOLINI, // Gađolini
-   TERBI,   // Terbi
-   DYSPROSI, // Đysprosi
+   TEBI,     // Terbi
+   DIPROZI,  // Điprozi
    HONMI,    // Honmi
    ERBI,     // Erbi
-   THULI,    // Thuli
-   YTERBI,   // Yterbi
-   LUTENI,   // Luteni
-   HAFNI,    // Hafni
+   TULI,     // Tuli
+   YTECBI,   // Ytecbi
+   LUTEXI,   // Lutexi
+   HAFINI,   // Hafini
    TANTAN,   // Tantan
-   WOLFRAM,  // Wolfram
-   RHENI,    // Rheni
-   OSMI,     // Osmi
-   IRIDI,    // Iridi
-   BACH_KIM, // BACH_KIM
+   VONFAM,   // Vonfam
+   RENI,     // Reni
+   OSIMI,    // Osimi
+   IRIDI,    // Iriđi
+   PLATIN,   // Platin
    VANG,     // Vàng
-   THUY_NGAN, // Thủy Ngan
-   THALI,    // Thali
+   THUY_NGAN,// Thủy Ngan
+   TALI,     // Tali
    CHI,      // Chì
-   BISMUTH,  // Bismuth
+   BITMUT,   // Bitmut
    POLONI,   // Poloni
    ASTATIN,  // Astatin
    RADON,    // Rađon
 
-   FRANCI,   // Franci
+   FRANXI,   // Franxi
    RADI,     // Rađi
    ACTINI,   // Actini
    THORI,    // Thori
    PROTACTINI, // Protactini
    URANI,    // Urani
    NEPTUNI,  // Neptuni
-   PLUTONI,   // Plutoni
-   AMERICI,  // Americi
+   PLUTONI,  // Plutoni
+   AMERIXI,  // Amerixi
    CURI,     // Curi
-   BERKELI,  // Berkeli
+   BECKELI,  // Beckeli
    CALIFORNI, // Californi
-   EINSTEINI,  // Eisteini
-   FERMI,     // Fermi
+   ENSTENI,  // Esteni
+   FECMI,     // Fecmi
    MENDELEVI, // Menđelevi
    NOBELI,    // Nobeli
-   LAWRENCI,  // Lawrenci
-   RUTHERFORDI, // Rutherfordi
+   LORENXI,   // Lorenxi
+   ROZOFODI,  // Rozofodi
    DUBNI,     // Đubni
-   SEABORGI,  // Seaborgi
-   BOHRI,     // Bohri
-   HASSI,     // Hassi
-   MEINERTI,  // Meinerti
-   DARMSTADTI, // Đarmstadti
+   SIBOGI,    // Siboqi
+   BORI,      // Bori
+   HASI,      // Hasi
+   MEITNERI,  // Méitner©i
+   DAMASTATI, // Đamastati
    REONTGENI, // Reontgeni
-   COPERNICI, // Copernici
-   NIHONI,   // Nihoni
+   COPENIXI,  // Copernixi
+   NIHONI,    // Nihoni
    FLEROVI,   // Flerovi
    MOSCOVI,   // Moscovi
-   LIVERMORI,  // Livermori
-   TENNESSINE, // Tennessine
-   OGANESSON   // Oganesson
+   LIVEMORI,  // Livemori
+   TENEXIN,   // Tenexin
+   OGANESON   // Ôganeson
 };
 
 enum {
@@ -241,13 +244,23 @@ enum {
    RAN    // rắn
 };
 
+enum {
+   LAP_PHUONG,         // lập phương
+   LAP_PHUONG_TAM_MAT, // lập phương tâm mặt
+   LAP_PHUONG_KHOI,    // lập phương khối
+   LUC_PHUONG,         // lục phương
+   TRUC_THOI,          // trực thoi
+   DON_NGHIENG, // đơn nhiêng
+   BA_PHUONG,          // ba phương
+};
+
 #pragma mark ==== Chuẩn Bị Thôn Tin Nguyên Tố
 void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    
-   // ---- Hyđrô
-   NguyenTo *nguyenTo = &(mangNguyenTo[HYDRO]);
+   // ---- Hiđrô
+   NguyenTo *nguyenTo = &(mangNguyenTo[HIDRO]);
    nguyenTo->so = 1;
-   strcpy( nguyenTo->ten, "Hyđrô" );
+   strcpy( nguyenTo->ten, "Hiđrô" );
    strcpy( nguyenTo->kyHieu, "H" );
    strcpy( nguyenTo->tenTrung, "氢" );
    nguyenTo->khoiLuong = 1.0079f;
@@ -282,10 +295,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 5250.5f;
    nguyenTo->banKinh = 140;
    
-   // ---- Lithi
-   nguyenTo = &(mangNguyenTo[LITHI]);
+   // ---- Liti
+   nguyenTo = &(mangNguyenTo[LITI]);
    nguyenTo->so = 3;
-   strcpy( nguyenTo->ten, "Lithi" );
+   strcpy( nguyenTo->ten, "Liti" );
    strcpy( nguyenTo->kyHieu, "Li" );
    strcpy( nguyenTo->tenTrung, "锂" );
    nguyenTo->khoiLuong = 6.941f;
@@ -301,10 +314,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 7298.1f;
    nguyenTo->banKinh = 182;
 
-   // ---- Beryli
-   nguyenTo = &(mangNguyenTo[BERYLI]);
+   // ---- Beri
+   nguyenTo = &(mangNguyenTo[BERI]);
    nguyenTo->so = 4;
-   strcpy( nguyenTo->ten, "Beryli" );
+   strcpy( nguyenTo->ten, "Beri" );
    strcpy( nguyenTo->kyHieu, "Be" );
    strcpy( nguyenTo->tenTrung, "铍" );
    nguyenTo->khoiLuong = 9.0122f;
@@ -320,10 +333,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1757.1f;
    nguyenTo->banKinh = 153;
    
-   // ---- Bor
-   nguyenTo = &(mangNguyenTo[BOR]);
+   // ---- Bo
+   nguyenTo = &(mangNguyenTo[BO]);
    nguyenTo->so = 5;
-   strcpy( nguyenTo->ten, "Bor" );
+   strcpy( nguyenTo->ten, "Bo" );
    strcpy( nguyenTo->kyHieu, "B" );
    strcpy( nguyenTo->tenTrung, "硼" );
    nguyenTo->khoiLuong = 10.8117f;
@@ -396,10 +409,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 3388.3f;
    nguyenTo->banKinh = 152;
    
-   // ---- Fluor
-   nguyenTo = &(mangNguyenTo[FLUOR]);
+   // ---- Flo
+   nguyenTo = &(mangNguyenTo[FLO]);
    nguyenTo->so = 9;
-   strcpy( nguyenTo->ten, "Fluor" );
+   strcpy( nguyenTo->ten, "Flo" );
    strcpy( nguyenTo->kyHieu, "F" );
    strcpy( nguyenTo->tenTrung, "氟" );
    nguyenTo->khoiLuong = 18.9984f;
@@ -453,10 +466,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 4562.0f;
    nguyenTo->banKinh = 227;
 
-   // ---- Magnesi
-   nguyenTo = &(mangNguyenTo[MAGNESI]);
+   // ---- Magie
+   nguyenTo = &(mangNguyenTo[MAGIE]);
    nguyenTo->so = 12;
-   strcpy( nguyenTo->ten, "Magnesi" );
+   strcpy( nguyenTo->ten, "Magie" );
    strcpy( nguyenTo->kyHieu, "Mg" );
    strcpy( nguyenTo->tenTrung, "镁" );
    nguyenTo->khoiLuong = 24.3051f;
@@ -510,10 +523,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1577.1f;
    nguyenTo->banKinh = 210;
    
-   // ---- Phosphor
-   nguyenTo = &(mangNguyenTo[PHOSPHOR]);
+   // ---- Photpho
+   nguyenTo = &(mangNguyenTo[PHOTPHO]);
    nguyenTo->so = 15;
-   strcpy( nguyenTo->ten, "Phosphor" );
+   strcpy( nguyenTo->ten, "Photpho" );
    strcpy( nguyenTo->kyHieu, "P" );
    strcpy( nguyenTo->tenTrung, "磷" );
    nguyenTo->khoiLuong = 30.9737f;
@@ -643,10 +656,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1235.0f;
    nguyenTo->banKinh = 211;
 
-   // ---- Titani
-   nguyenTo = &(mangNguyenTo[TITANI]);
+   // ---- Titan
+   nguyenTo = &(mangNguyenTo[TITAN]);
    nguyenTo->so = 22;
-   strcpy( nguyenTo->ten, "Titani" );
+   strcpy( nguyenTo->ten, "Titan" );
    strcpy( nguyenTo->kyHieu, "Ti" );
    strcpy( nguyenTo->tenTrung, "钛" );
    nguyenTo->khoiLuong = 47.8671f;
@@ -681,10 +694,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1414;
    nguyenTo->banKinh = 134;  // ???
    
-   // ---- Chromi
-   nguyenTo = &(mangNguyenTo[CHROMI]);
+   // ---- Crom
+   nguyenTo = &(mangNguyenTo[CROM]);
    nguyenTo->so = 24;
-   strcpy( nguyenTo->ten, "Chromi" );
+   strcpy( nguyenTo->ten, "Crom" );
    strcpy( nguyenTo->kyHieu, "Cr" );
    strcpy( nguyenTo->tenTrung, "铬" );
    nguyenTo->khoiLuong = 50.9415f;
@@ -757,10 +770,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1648;
    nguyenTo->banKinh = 125;  // ???
    
-   // ---- Nickel
-   nguyenTo = &(mangNguyenTo[NICKEL]);
+   // ---- Nicken
+   nguyenTo = &(mangNguyenTo[NICKEN]);
    nguyenTo->so = 28;
-   strcpy( nguyenTo->ten, "Nickel" );
+   strcpy( nguyenTo->ten, "Nicken" );
    strcpy( nguyenTo->kyHieu, "Ni" );
    strcpy( nguyenTo->tenTrung, "镍" );
    nguyenTo->khoiLuong = 58.6934f;
@@ -833,10 +846,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1979.3;
    nguyenTo->banKinh = 187;
    
-   // ---- Germani
-   nguyenTo = &(mangNguyenTo[GERMANI]);
+   // ---- Gemani
+   nguyenTo = &(mangNguyenTo[GEMANI]);
    nguyenTo->so = 32;
-   strcpy( nguyenTo->ten, "Germani" );
+   strcpy( nguyenTo->ten, "Gemani" );
    strcpy( nguyenTo->kyHieu, "Ge" );
    strcpy( nguyenTo->tenTrung, "锗" );
    nguyenTo->khoiLuong = 72.631f;
@@ -852,10 +865,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1537.5;
    nguyenTo->banKinh = 211;
 
-   // ---- Thạch Tin
-   nguyenTo = &(mangNguyenTo[THACH_TIN]);
+   // ---- Asen (Thạch Tin)
+   nguyenTo = &(mangNguyenTo[ASEN]);
    nguyenTo->so = 33;
-   strcpy( nguyenTo->ten, "Thạch Tin" );
+   strcpy( nguyenTo->ten, "Asen" );
    strcpy( nguyenTo->kyHieu, "As" );
    strcpy( nguyenTo->tenTrung, "砷" );
    nguyenTo->khoiLuong = 74.9216f;
@@ -1023,10 +1036,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1380;
    nguyenTo->banKinh = 164; // <---- ???
 
-   // ---- Molybđen
-   nguyenTo = &(mangNguyenTo[MOLYPDEN]);
+   // ---- Molipđen
+   nguyenTo = &(mangNguyenTo[MOLIPDEN]);
    nguyenTo->so = 42;
-   strcpy( nguyenTo->ten, "Molybđen" );
+   strcpy( nguyenTo->ten, "Molipđen" );
    strcpy( nguyenTo->kyHieu, "Mo" );
    strcpy( nguyenTo->tenTrung, "钼" );
    nguyenTo->khoiLuong = 95.941f;
@@ -1042,10 +1055,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1560;
    nguyenTo->banKinh = 154; // <---- ???
 
-   // ---- Techneti
-   nguyenTo = &(mangNguyenTo[TECNETI]);
+   // ---- Tecnexi
+   nguyenTo = &(mangNguyenTo[TECNEXI]);
    nguyenTo->so = 43;
-   strcpy( nguyenTo->ten, "Techneti" );
+   strcpy( nguyenTo->ten, "Tecnexi" );
    strcpy( nguyenTo->kyHieu, "Tc" );
    strcpy( nguyenTo->tenTrung, "锝" );
    nguyenTo->khoiLuong = 98.0f;
@@ -1061,10 +1074,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1470;
    nguyenTo->banKinh = 147; // <---- ???
    
-   // ---- Rutheni
-   nguyenTo = &(mangNguyenTo[RUTHENI]);
+   // ---- Ruteni
+   nguyenTo = &(mangNguyenTo[RUTENI]);
    nguyenTo->so = 44;
-   strcpy( nguyenTo->ten, "Rutheni" );
+   strcpy( nguyenTo->ten, "Ruteni" );
    strcpy( nguyenTo->kyHieu, "Ru" );
    strcpy( nguyenTo->tenTrung, "钌" );
    nguyenTo->khoiLuong = 101.07f;
@@ -1080,10 +1093,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1620;
    nguyenTo->banKinh = 146; // <---- ???
 
-   // ---- Rhôđi
-   nguyenTo = &(mangNguyenTo[RHODI]);
+   // ---- Rôđi
+   nguyenTo = &(mangNguyenTo[RODI]);
    nguyenTo->so = 45;
-   strcpy( nguyenTo->ten, "Rhôđi" );
+   strcpy( nguyenTo->ten, "Rôđi" );
    strcpy( nguyenTo->kyHieu, "Rh" );
    strcpy( nguyenTo->tenTrung, "铑" );
    nguyenTo->khoiLuong = 102.9055f;
@@ -1137,10 +1150,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 2070;
    nguyenTo->banKinh = 172;
 
-   // ---- Cađmi
-   nguyenTo = &(mangNguyenTo[CADMI]);
+   // ---- Cađimi
+   nguyenTo = &(mangNguyenTo[CADIMI]);
    nguyenTo->so = 48;
-   strcpy( nguyenTo->ten, "Cađmi" );
+   strcpy( nguyenTo->ten, "Cađimi" );
    strcpy( nguyenTo->kyHieu, "Cd" );
    strcpy( nguyenTo->tenTrung, "镉" );
    nguyenTo->khoiLuong = 112.411f;
@@ -1195,7 +1208,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->banKinh = 217;
 
    // ---- Antimon
-   nguyenTo = &(mangNguyenTo[ANG_TI_MON]);
+   nguyenTo = &(mangNguyenTo[ANTIMON]);
    nguyenTo->so = 51;
    strcpy( nguyenTo->ten, "Antimon" );
    strcpy( nguyenTo->kyHieu, "Sb" );
@@ -1213,10 +1226,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1594.9f;
    nguyenTo->banKinh = 206;
 
-   // ---- Teluri
-   nguyenTo = &(mangNguyenTo[TELURI]);
+   // ---- Telu
+   nguyenTo = &(mangNguyenTo[TELU]);
    nguyenTo->so = 52;
-   strcpy( nguyenTo->ten, "Teluri" );
+   strcpy( nguyenTo->ten, "Telu" );
    strcpy( nguyenTo->kyHieu, "Te" );
    strcpy( nguyenTo->tenTrung, "碲" );
    nguyenTo->khoiLuong = 127.60;
@@ -1232,10 +1245,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1790;
    nguyenTo->banKinh = 206;
 
-   // ---- I Ốt
-   nguyenTo = &(mangNguyenTo[I_OT]);
+   // ---- Iot
+   nguyenTo = &(mangNguyenTo[IOT]);
    nguyenTo->so = 53;
-   strcpy( nguyenTo->ten, "I Ốt" );
+   strcpy( nguyenTo->ten, "Iot" );
    strcpy( nguyenTo->kyHieu, "I" );
    strcpy( nguyenTo->tenTrung, "碘" );
    nguyenTo->khoiLuong = 126.9045;
@@ -1270,10 +1283,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 2046.4f;
    nguyenTo->banKinh = 216;
 
-   // ---- Caesi
-   nguyenTo = &(mangNguyenTo[CAESI]);
+   // ---- Xesi
+   nguyenTo = &(mangNguyenTo[XESI]);
    nguyenTo->so = 55;
-   strcpy( nguyenTo->ten, "Caesi" );
+   strcpy( nguyenTo->ten, "Xesi" );
    strcpy( nguyenTo->kyHieu, "Cs" );
    strcpy( nguyenTo->tenTrung, "铯" );
    nguyenTo->khoiLuong = 132.9055f;
@@ -1308,10 +1321,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 965.2f;
    nguyenTo->banKinh = 268;
 
-   // ---- Lanthan
-   nguyenTo = &(mangNguyenTo[LANTHAN]);
+   // ---- Lantan
+   nguyenTo = &(mangNguyenTo[LANTAN]);
    nguyenTo->so = 57;
-   strcpy( nguyenTo->ten, "Lanthan" );
+   strcpy( nguyenTo->ten, "Lantan" );
    strcpy( nguyenTo->kyHieu, "La" );
    strcpy( nguyenTo->tenTrung, "镧" );
    nguyenTo->khoiLuong = 138.9055f;
@@ -1327,10 +1340,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1067;
    nguyenTo->banKinh = 207;
 
-   // ---- Ceri
-   nguyenTo = &(mangNguyenTo[CERI]);
+   // ---- Xeri
+   nguyenTo = &(mangNguyenTo[XERI]);
    nguyenTo->so = 58;
-   strcpy( nguyenTo->ten, "Ceri" );
+   strcpy( nguyenTo->ten, "Xeri" );
    strcpy( nguyenTo->kyHieu, "Ce" );
    strcpy( nguyenTo->tenTrung, "铈" );
    nguyenTo->khoiLuong = 140.116f;
@@ -1346,10 +1359,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1050;
    nguyenTo->banKinh = 204;
 
-   // ---- Praseođymi
-   nguyenTo = &(mangNguyenTo[PRASEODYMI]);
+   // ---- Prazeođim
+   nguyenTo = &(mangNguyenTo[PRAZEODIM]);
    nguyenTo->so = 59;
-   strcpy( nguyenTo->ten, "Praseođymi" );
+   strcpy( nguyenTo->ten, "Prazeođim" );
    strcpy( nguyenTo->kyHieu, "Pr" );
    strcpy( nguyenTo->tenTrung, "镨" );
    nguyenTo->khoiLuong = 140.9077f;
@@ -1365,10 +1378,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1020;
    nguyenTo->banKinh = 203;
 
-   // ---- Neođymi
+   // ---- Neođim
    nguyenTo = &(mangNguyenTo[NEODYMI]);
    nguyenTo->so = 60;
-   strcpy( nguyenTo->ten, "Neođymi" );
+   strcpy( nguyenTo->ten, "Neođim" );
    strcpy( nguyenTo->kyHieu, "Nd" );
    strcpy( nguyenTo->tenTrung, "钕" );
    nguyenTo->khoiLuong = 144.242f;
@@ -1384,10 +1397,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1040;
    nguyenTo->banKinh = 201;
    
-   // ---- Promethi
+   // ---- Prometi
    nguyenTo = &(mangNguyenTo[PROMETI]);
    nguyenTo->so = 61;
-   strcpy( nguyenTo->ten, "Promethi" );
+   strcpy( nguyenTo->ten, "Prometi" );
    strcpy( nguyenTo->kyHieu, "Pm" );
    strcpy( nguyenTo->tenTrung, "钷" );
    nguyenTo->khoiLuong = 145;
@@ -1460,10 +1473,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1170;
    nguyenTo->banKinh = 196;
 
-   // ---- Terbi
-   nguyenTo = &(mangNguyenTo[TERBI]);
+   // ---- Tebi
+   nguyenTo = &(mangNguyenTo[TEBI]);
    nguyenTo->so = 65;
-   strcpy( nguyenTo->ten, "Terbi" );
+   strcpy( nguyenTo->ten, "Tebi" );
    strcpy( nguyenTo->kyHieu, "Tb" );
    strcpy( nguyenTo->tenTrung, "铽" );
    nguyenTo->khoiLuong = 158.9254f;
@@ -1479,10 +1492,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1110;
    nguyenTo->banKinh = 194;
 
-   // ---- Đysprosi
-   nguyenTo = &(mangNguyenTo[DYSPROSI]);
+   // ---- Điprozi
+   nguyenTo = &(mangNguyenTo[DIPROZI]);
    nguyenTo->so = 66;
-   strcpy( nguyenTo->ten, "Đysprosi" );
+   strcpy( nguyenTo->ten, "Điprozi" );
    strcpy( nguyenTo->kyHieu, "Dy" );
    strcpy( nguyenTo->tenTrung, "镝" );
    nguyenTo->khoiLuong = 162.500f;
@@ -1498,10 +1511,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1130;
    nguyenTo->banKinh = 192;
 
-   // ---- Holmi
+   // ---- Honmi
    nguyenTo = &(mangNguyenTo[HONMI]);
    nguyenTo->so = 67;
-   strcpy( nguyenTo->ten, "Holmi" );
+   strcpy( nguyenTo->ten, "Honmi" );
    strcpy( nguyenTo->kyHieu, "Ho" );
    strcpy( nguyenTo->tenTrung, "钬" );
    nguyenTo->khoiLuong = 164.9303f;
@@ -1517,10 +1530,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1140;
    nguyenTo->banKinh = 192;
 
-   // ---- Erbi
+   // ---- Eribi
    nguyenTo = &(mangNguyenTo[ERBI]);
    nguyenTo->so = 68;
-   strcpy( nguyenTo->ten, "Erbi" );
+   strcpy( nguyenTo->ten, "Eribi" );
    strcpy( nguyenTo->kyHieu, "Er" );
    strcpy( nguyenTo->tenTrung, "铒" );
    nguyenTo->khoiLuong = 167.259f;
@@ -1536,10 +1549,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1150;
    nguyenTo->banKinh = 189;
 
-   // ---- Thuli
-   nguyenTo = &(mangNguyenTo[THULI]);
+   // ---- Tuli
+   nguyenTo = &(mangNguyenTo[TULI]);
    nguyenTo->so = 69;
-   strcpy( nguyenTo->ten, "Thuli" );
+   strcpy( nguyenTo->ten, "Tuli" );
    strcpy( nguyenTo->kyHieu, "Tm" );
    strcpy( nguyenTo->tenTrung, "铥" );
    nguyenTo->khoiLuong = 168.9342f;
@@ -1555,10 +1568,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1160;
    nguyenTo->banKinh = 190;
 
-   // ---- Yterbi
-   nguyenTo = &(mangNguyenTo[YTERBI]);
+   // ---- Ytecbi
+   nguyenTo = &(mangNguyenTo[YTECBI]);
    nguyenTo->so = 70;
-   strcpy( nguyenTo->ten, "Yterbi" );
+   strcpy( nguyenTo->ten, "Ytecbi" );
    strcpy( nguyenTo->kyHieu, "Yb" );
    strcpy( nguyenTo->tenTrung, "镱" );
    nguyenTo->khoiLuong = 168.9342f;
@@ -1574,10 +1587,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1174.8;
    nguyenTo->banKinh = 187;
 
-   // ---- Luteti
-   nguyenTo = &(mangNguyenTo[LUTENI]);
+   // ---- Lutexi
+   nguyenTo = &(mangNguyenTo[LUTEXI]);
    nguyenTo->so = 71;
-   strcpy( nguyenTo->ten, "Luteti" );
+   strcpy( nguyenTo->ten, "Lutexi" );
    strcpy( nguyenTo->kyHieu, "Lu" );
    strcpy( nguyenTo->tenTrung, "镥" );
    nguyenTo->khoiLuong = 174.9668f;
@@ -1593,10 +1606,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1340;
    nguyenTo->banKinh = 174;    // <------
 
-   // ---- Hafni
-   nguyenTo = &(mangNguyenTo[HAFNI]);
+   // ---- Hafini
+   nguyenTo = &(mangNguyenTo[HAFINI]);
    nguyenTo->so = 72;
-   strcpy( nguyenTo->ten, "Hafni" );
+   strcpy( nguyenTo->ten, "Hafini" );
    strcpy( nguyenTo->kyHieu, "Hf" );
    strcpy( nguyenTo->tenTrung, "铪" );
    nguyenTo->khoiLuong = 178.49f;
@@ -1631,10 +1644,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1500;
    nguyenTo->banKinh = 170;    // <------
 
-   // ---- Wolfram
-   nguyenTo = &(mangNguyenTo[WOLFRAM]);
+   // ---- Vonfam
+   nguyenTo = &(mangNguyenTo[VONFAM]);
    nguyenTo->so = 74;
-   strcpy( nguyenTo->ten, "Wolfram" );
+   strcpy( nguyenTo->ten, "Vonfam" );
    strcpy( nguyenTo->kyHieu, "W" );
    strcpy( nguyenTo->tenTrung, "鎢" );
    nguyenTo->khoiLuong = 183.84f;
@@ -1650,10 +1663,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1700;
    nguyenTo->banKinh = 162;    // <------
 
-   // ---- Rheni
-   nguyenTo = &(mangNguyenTo[RHENI]);
+   // ---- Reni
+   nguyenTo = &(mangNguyenTo[RENI]);
    nguyenTo->so = 75;
-   strcpy( nguyenTo->ten, "Rheni" );
+   strcpy( nguyenTo->ten, "Reni" );
    strcpy( nguyenTo->kyHieu, "Re" );
    strcpy( nguyenTo->tenTrung, "铼" );
    nguyenTo->khoiLuong = 186.207f;
@@ -1669,10 +1682,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1260;
    nguyenTo->banKinh = 151;    // <------
 
-   // ---- Osmi
-   nguyenTo = &(mangNguyenTo[OSMI]);
+   // ---- Osimi
+   nguyenTo = &(mangNguyenTo[OSIMI]);
    nguyenTo->so = 76;
-   strcpy( nguyenTo->ten, "Osmi" );
+   strcpy( nguyenTo->ten, "Osimi" );
    strcpy( nguyenTo->kyHieu, "Os" );
    strcpy( nguyenTo->tenTrung, "锇" );
    nguyenTo->khoiLuong = 190.23f;
@@ -1707,10 +1720,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1600;
    nguyenTo->banKinh = 141;    // <------
 
-   // ---- Bạch Kim
-   nguyenTo = &(mangNguyenTo[BACH_KIM]);
+   // ---- Platin (Bạch Kim)
+   nguyenTo = &(mangNguyenTo[PLATIN]);
    nguyenTo->so = 78;
-   strcpy( nguyenTo->ten, "Bạch Kim" );
+   strcpy( nguyenTo->ten, "Platin" );
    strcpy( nguyenTo->kyHieu, "Pt" );
    strcpy( nguyenTo->tenTrung, "铂" );
    nguyenTo->khoiLuong = 195.084f;
@@ -1764,10 +1777,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1810;
    nguyenTo->banKinh = 155;
 
-   // ---- Thali
-   nguyenTo = &(mangNguyenTo[THALI]);
+   // ---- Tali
+   nguyenTo = &(mangNguyenTo[TALI]);
    nguyenTo->so = 81;
-   strcpy( nguyenTo->ten, "Thali" );
+   strcpy( nguyenTo->ten, "Tali" );
    strcpy( nguyenTo->kyHieu, "Tl" );
    strcpy( nguyenTo->tenTrung, "铊" );
    nguyenTo->khoiLuong = 204.3833f;
@@ -1802,10 +1815,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1450.5;
    nguyenTo->banKinh = 202;
 
-   // ---- Bismuth
-   nguyenTo = &(mangNguyenTo[BISMUTH]);
+   // ---- Bitmut
+   nguyenTo = &(mangNguyenTo[BITMUT]);
    nguyenTo->so = 83;
-   strcpy( nguyenTo->ten, "Bismuth" );
+   strcpy( nguyenTo->ten, "Bitmut" );
    strcpy( nguyenTo->kyHieu, "Bi" );
    strcpy( nguyenTo->tenTrung, "铋" );
    nguyenTo->khoiLuong = 208.9804f;
@@ -1878,10 +1891,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 220;
 
-   // ---- Franci
-   nguyenTo = &(mangNguyenTo[FRANCI]);
+   // ---- Franxi
+   nguyenTo = &(mangNguyenTo[FRANXI]);
    nguyenTo->so = 87;
-   strcpy( nguyenTo->ten, "Franci" );
+   strcpy( nguyenTo->ten, "Franxi" );
    strcpy( nguyenTo->kyHieu, "Fr" );
    strcpy( nguyenTo->tenTrung, "钫" );
    nguyenTo->khoiLuong = 226;
@@ -2030,10 +2043,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 187;  // <-----
 
-   // ---- Americi
-   nguyenTo = &(mangNguyenTo[AMERICI]);
+   // ---- Amerixi
+   nguyenTo = &(mangNguyenTo[AMERIXI]);
    nguyenTo->so = 95;
-   strcpy( nguyenTo->ten, "Americi" );
+   strcpy( nguyenTo->ten, "Amerixi" );
    strcpy( nguyenTo->kyHieu, "Am" );
    strcpy( nguyenTo->tenTrung, "镅" );
    nguyenTo->khoiLuong = 243;
@@ -2068,10 +2081,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 169;  // <-----
 
-   // ---- Berkeli
-   nguyenTo = &(mangNguyenTo[BERKELI]);
+   // ---- Beckeli
+   nguyenTo = &(mangNguyenTo[BECKELI]);
    nguyenTo->so = 97;
-   strcpy( nguyenTo->ten, "Berkeli" );
+   strcpy( nguyenTo->ten, "Beckeli" );
    strcpy( nguyenTo->kyHieu, "Bk" );
    strcpy( nguyenTo->tenTrung, "锫" );
    nguyenTo->khoiLuong = 247;
@@ -2106,10 +2119,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = kKHONG_BIET;
 
-   // ---- Einsteini
-   nguyenTo = &(mangNguyenTo[EINSTEINI]);
+   // ---- Ensteni
+   nguyenTo = &(mangNguyenTo[ENSTENI]);
    nguyenTo->so = 98;
-   strcpy( nguyenTo->ten, "Einsteini" );
+   strcpy( nguyenTo->ten, "Ensteni" );
    strcpy( nguyenTo->kyHieu, "Es" );
    strcpy( nguyenTo->tenTrung, "锿" );
    nguyenTo->khoiLuong = 252;
@@ -2125,10 +2138,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = kKHONG_BIET;
 
-   // ---- Fermi
-   nguyenTo = &(mangNguyenTo[FERMI]);
+   // ---- Fecmi
+   nguyenTo = &(mangNguyenTo[FECMI]);
    nguyenTo->so = 100;
-   strcpy( nguyenTo->ten, "Fermi" );
+   strcpy( nguyenTo->ten, "Fecmi" );
    strcpy( nguyenTo->kyHieu, "Fm" );
    strcpy( nguyenTo->tenTrung, "镄" );
    nguyenTo->khoiLuong = 257;
@@ -2182,10 +2195,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1254.3f;
    nguyenTo->banKinh = kKHONG_BIET;
 
-   // ---- Lawrenci
-   nguyenTo = &(mangNguyenTo[LAWRENCI]);
+   // ---- Lorenxi
+   nguyenTo = &(mangNguyenTo[LORENXI]);
    nguyenTo->so = 103;
-   strcpy( nguyenTo->ten, "Lawrenci" );
+   strcpy( nguyenTo->ten, "Lorenxi" );
    strcpy( nguyenTo->kyHieu, "Lr" );
    strcpy( nguyenTo->tenTrung, "铹" );
    nguyenTo->khoiLuong = 262;
@@ -2201,10 +2214,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1428.0f;
    nguyenTo->banKinh = kKHONG_BIET;
 
-   // ---- Rutherforđi
-   nguyenTo = &(mangNguyenTo[RUTHERFORDI]);
+   // ---- Rozofođi
+   nguyenTo = &(mangNguyenTo[ROZOFODI]);
    nguyenTo->so = 104;
-   strcpy( nguyenTo->ten, "Rutherforđi" );
+   strcpy( nguyenTo->ten, "Rozofođi" );
    strcpy( nguyenTo->kyHieu, "Rf" );
    strcpy( nguyenTo->tenTrung, "𬬻" );
    nguyenTo->khoiLuong = 267;
@@ -2220,10 +2233,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1148;
    nguyenTo->banKinh = 157;   // <-----
 
-   // ---- Đubni
+   // ---- Đupni
    nguyenTo = &(mangNguyenTo[DUBNI]);
    nguyenTo->so = 105;
-   strcpy( nguyenTo->ten, "Đubni" );
+   strcpy( nguyenTo->ten, "Đupni" );
    strcpy( nguyenTo->kyHieu, "Db" );
    strcpy( nguyenTo->tenTrung, "𬭊" );
    nguyenTo->khoiLuong = 268;
@@ -2239,10 +2252,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 149;
 
-   // ---- Seaborgi
-   nguyenTo = &(mangNguyenTo[SEABORGI]);
+   // ---- Sibogi
+   nguyenTo = &(mangNguyenTo[SIBOGI]);
    nguyenTo->so = 106;
-   strcpy( nguyenTo->ten, "Seaborgi" );
+   strcpy( nguyenTo->ten, "Sibogi" );
    strcpy( nguyenTo->kyHieu, "Sg" );
    strcpy( nguyenTo->tenTrung, "𬭳" );
    nguyenTo->khoiLuong = 269;
@@ -2258,10 +2271,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 143;  // <----
 
-   // ---- Bohri
-   nguyenTo = &(mangNguyenTo[BOHRI]);
+   // ---- Bori
+   nguyenTo = &(mangNguyenTo[BORI]);
    nguyenTo->so = 107;
-   strcpy( nguyenTo->ten, "Bohri" );
+   strcpy( nguyenTo->ten, "Bori" );
    strcpy( nguyenTo->kyHieu, "Bh" );
    strcpy( nguyenTo->tenTrung, "𬭛" );
    nguyenTo->khoiLuong = 270;
@@ -2277,10 +2290,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1690;
    nguyenTo->banKinh = 141;  // <----
 
-   // ---- Hassi
-   nguyenTo = &(mangNguyenTo[HASSI]);
+   // ---- Hasi
+   nguyenTo = &(mangNguyenTo[HASI]);
    nguyenTo->so = 108;
-   strcpy( nguyenTo->ten, "Hassi" );
+   strcpy( nguyenTo->ten, "Hasi" );
    strcpy( nguyenTo->kyHieu, "Hs" );
    strcpy( nguyenTo->tenTrung, "𬭶" );
    nguyenTo->khoiLuong = 269;
@@ -2296,10 +2309,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 1690;
    nguyenTo->banKinh = 134;  // <----
 
-   // ---- Meitneri
-   nguyenTo = &(mangNguyenTo[MEINERTI]);
+   // ---- Méitneri
+   nguyenTo = &(mangNguyenTo[MEITNERI]);
    nguyenTo->so = 109;
-   strcpy( nguyenTo->ten, "Meitneri" );
+   strcpy( nguyenTo->ten, "Méitneri" );
    strcpy( nguyenTo->kyHieu, "Mt" );
    strcpy( nguyenTo->tenTrung, "鿏" );
    nguyenTo->khoiLuong = 278;
@@ -2315,10 +2328,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 129;  // <----
 
-   // ---- Darmstađti
-   nguyenTo = &(mangNguyenTo[DARMSTADTI]);
+   // ---- Damastati
+   nguyenTo = &(mangNguyenTo[DAMASTATI]);
    nguyenTo->so = 110;
-   strcpy( nguyenTo->ten, "Darmstađti" );
+   strcpy( nguyenTo->ten, "Damastati" );
    strcpy( nguyenTo->kyHieu, "Ds" );
    strcpy( nguyenTo->tenTrung, "𫟼" );
    nguyenTo->khoiLuong = 281;
@@ -2353,10 +2366,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 121;  // <----
 
-   // ---- Copernici
-   nguyenTo = &(mangNguyenTo[COPERNICI]);
+   // ---- Copenixi
+   nguyenTo = &(mangNguyenTo[COPENIXI]);
    nguyenTo->so = 112;
-   strcpy( nguyenTo->ten, "Copernici" );
+   strcpy( nguyenTo->ten, "Copenixi" );
    strcpy( nguyenTo->kyHieu, "Cn" );
    strcpy( nguyenTo->tenTrung, "鿔" );
    nguyenTo->khoiLuong = 285;
@@ -2429,10 +2442,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = 2055;
    nguyenTo->banKinh = 162;  // <----
 
-   // ---- Livermori
-   nguyenTo = &(mangNguyenTo[LIVERMORI]);
+   // ---- Livemori
+   nguyenTo = &(mangNguyenTo[LIVEMORI]);
    nguyenTo->so = 116;
-   strcpy( nguyenTo->ten, "Livermori" );
+   strcpy( nguyenTo->ten, "Livemori" );
    strcpy( nguyenTo->kyHieu, "Lv" );
    strcpy( nguyenTo->tenTrung, "𫟷" );
    nguyenTo->khoiLuong = 293;
@@ -2448,10 +2461,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 175;  // <----
 
-   // ---- Tennessine
-   nguyenTo = &(mangNguyenTo[TENNESSINE]);
+   // ---- Tenexin
+   nguyenTo = &(mangNguyenTo[TENEXIN]);
    nguyenTo->so = 117;
-   strcpy( nguyenTo->ten, "Tennessine" );
+   strcpy( nguyenTo->ten, "Tenexin" );
    strcpy( nguyenTo->kyHieu, "Ts" );
    strcpy( nguyenTo->tenTrung, "鿬" );
    nguyenTo->khoiLuong = 294;
@@ -2467,10 +2480,10 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 165;  // <----
 
-   // ---- Oganesson
-   nguyenTo = &(mangNguyenTo[OGANESSON]);
+   // ---- Oganeson
+   nguyenTo = &(mangNguyenTo[OGANESON]);
    nguyenTo->so = 118;
-   strcpy( nguyenTo->ten, "Oganesson" );
+   strcpy( nguyenTo->ten, "Ôganeson" );
    strcpy( nguyenTo->kyHieu, "Og" );
    strcpy( nguyenTo->tenTrung, "鿫" );
    nguyenTo->khoiLuong = 294;
@@ -2904,11 +2917,11 @@ void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo 
       
       if( soNguyenTo == HELI )
          gocX += 30.0f*(coO_ngang + giuaNgang);
-      else if( soNguyenTo == LITHI ) {
+      else if( soNguyenTo == LITI ) {
          gocX = dichX;
          gocY += coO_doc + giuaDoc;
       }
-      else if( soNguyenTo == BOR )
+      else if( soNguyenTo == BO )
          gocX += 24.0f*(coO_ngang + giuaNgang);
       else if( soNguyenTo == NATRI ) {
          gocX = dichX;
@@ -2931,11 +2944,11 @@ void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo 
       else if( soNguyenTo == YTRI )
          gocX += 14.0f*(coO_ngang + giuaNgang);
       // ----
-      else if( soNguyenTo == CAESI ) {
+      else if( soNguyenTo == XESI ) {
          gocX = dichX;
          gocY += coO_doc + giuaDoc;
       }
-      else if( soNguyenTo == FRANCI ) {
+      else if( soNguyenTo == FRANXI ) {
          gocX = dichX;
          gocY += coO_doc + giuaDoc;
       }
@@ -2951,7 +2964,7 @@ void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo 
       // ---- tính phân số cho tô màu
       float phanSo = 0.0f;
       if( (soNguyenTo == HELI) || (soNguyenTo == NEON) || (soNguyenTo == ARGON) || (soNguyenTo == KRYPTON) ||
-         (soNguyenTo == XENON) || (soNguyenTo == RADON) || (soNguyenTo == OGANESSON) ) {
+         (soNguyenTo == XENON) || (soNguyenTo == RADON) || (soNguyenTo == OGANESON) ) {
          phanSo = 1.0f - phanSoY;
       }
       else
@@ -2964,7 +2977,7 @@ void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo 
       float mauLuc;
       float mauXanh;
       if( (soNguyenTo == HELI) || (soNguyenTo == NEON) || (soNguyenTo == ARGON) || (soNguyenTo == KRYPTON) ||
-         (soNguyenTo == XENON) || (soNguyenTo == RADON) || (soNguyenTo == OGANESSON) ) {
+         (soNguyenTo == XENON) || (soNguyenTo == RADON) || (soNguyenTo == OGANESON) ) {
          mauDo = nghichPhanSo*mangMauNenKhiTro[0] + phanSo*mangMauNenKhiTro[4];
          mauLuc = nghichPhanSo*mangMauNenKhiTro[1] + phanSo*mangMauNenKhiTro[5];
          mauXanh = nghichPhanSo*mangMauNenKhiTro[2] + phanSo*mangMauNenKhiTro[6];
