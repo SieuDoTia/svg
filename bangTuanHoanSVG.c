@@ -1,7 +1,7 @@
 // soDo_LichSuTraiDat_SVG.c
 // Sơ đồ lịch sử Trái Đất/lịch sử địa chất
 // Khởi động 2023.06.01
-// Phiên bản 2023.06.13
+// Phiên bản 2023.06.21
 // Phạm vi công cộng
 
 #include <stdio.h>
@@ -15,7 +15,7 @@
 
 #define kLE_TRAI 150.0f  // cho số trục y
 #define kLE_PHAI 150.0f
-#define kLE_DUOI 180.0f  // cho số trục x
+#define kLE_DUOI 160.0f  // cho số trục x
 #define kLE_TREN 250.0f  // cho tiêu đề
 
 #define kGIUA_NGANG 5.0f
@@ -108,6 +108,7 @@ typedef struct {
    unsigned char cauTrucTinhThe;  // cấu trúc tinh thể
    float nangLuongIonHoa1; // năng lượng ion hóa 1 (kJ/mol)
    float nangLuongIonHoa2; // năng lượng ion hóa 2 (kJ/kmol)
+   unsigned char dongViOnDinh[11];  // đồng vị ổ định
 } NguyenTo;
 
 // ---- danh sách nguyên tố
@@ -247,11 +248,14 @@ enum {
 enum {
    LAP_PHUONG,         // lập phương
    LAP_PHUONG_TAM_MAT, // lập phương tâm mặt
-   LAP_PHUONG_KHOI,    // lập phương khối
+   LAP_PHUONG_TAM_KHOI,// lập phương tâm khối
+   LAP_PHUONG_KIM_CUONG,// lập phương kim cương
    LUC_PHUONG,         // lục phương
    TRUC_THOI,          // trực thoi
-   DON_NGHIENG, // đơn nhiêng
+   DON_NGHIENG,        // đơn nhiêng
+   BA_NGHIENG,         // ba nghiêng
    BA_PHUONG,          // ba phương
+   VO_DANG,            // vô dạng
 };
 
 #pragma mark ==== Chuẩn Bị Thôn Tin Nguyên Tố
@@ -272,9 +276,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 0.08988;
    nguyenTo->nhietDung = 28.836f;
    nguyenTo->doAmDien = 2.20f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 1312.0f;
    nguyenTo->nangLuongIonHoa2 = 0.0f;
    nguyenTo->banKinh = 120;
+   nguyenTo->dongViOnDinh[0] = 1;
+   nguyenTo->dongViOnDinh[1] = 2;
+   nguyenTo->dongViOnDinh[2] = 0;
 
    // ---- Heli
    nguyenTo = &(mangNguyenTo[HELI]);
@@ -291,9 +299,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 0.1786;
    nguyenTo->nhietDung = 20.786f;
    nguyenTo->doAmDien = 0.0f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 2372.3f;
    nguyenTo->nangLuongIonHoa2 = 5250.5f;
    nguyenTo->banKinh = 140;
+   nguyenTo->dongViOnDinh[0] = 3;
+   nguyenTo->dongViOnDinh[1] = 4;
+   nguyenTo->dongViOnDinh[2] = 0;
    
    // ---- Liti
    nguyenTo = &(mangNguyenTo[LITI]);
@@ -310,9 +322,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 534;
    nguyenTo->nhietDung = 24.860f;
    nguyenTo->doAmDien = 0.98f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 520.2f;
    nguyenTo->nangLuongIonHoa2 = 7298.1f;
    nguyenTo->banKinh = 182;
+   nguyenTo->dongViOnDinh[0] = 6;
+   nguyenTo->dongViOnDinh[1] = 7;
+   nguyenTo->dongViOnDinh[2] = 0;
 
    // ---- Beri
    nguyenTo = &(mangNguyenTo[BERI]);
@@ -329,9 +345,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 1850;
    nguyenTo->nhietDung = 16.443f;
    nguyenTo->doAmDien = 1.57f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 899.5f;
    nguyenTo->nangLuongIonHoa2 = 1757.1f;
    nguyenTo->banKinh = 153;
+   nguyenTo->dongViOnDinh[0] = 9;
+   nguyenTo->dongViOnDinh[1] = 0;
    
    // ---- Bo
    nguyenTo = &(mangNguyenTo[BO]);
@@ -348,9 +367,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 2080;  // <---- nhiệt độ chảy
    nguyenTo->nhietDung = 11.087f;
    nguyenTo->doAmDien = 2.04f;
+   nguyenTo->cauTrucTinhThe = BA_PHUONG;  // ???
    nguyenTo->nangLuongIonHoa1 = 800.6f;
    nguyenTo->nangLuongIonHoa2 = 2427.1f;
    nguyenTo->banKinh = 192;
+   nguyenTo->dongViOnDinh[0] = 10;
+   nguyenTo->dongViOnDinh[1] = 11;
+   nguyenTo->dongViOnDinh[2] = 0;
    
    // ---- Cacbon
    nguyenTo = &(mangNguyenTo[CACBON]);
@@ -367,9 +390,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 2267;
    nguyenTo->nhietDung = 8.517f;
    nguyenTo->doAmDien = 2.55f;
+   nguyenTo->cauTrucTinhThe = VO_DANG;
    nguyenTo->nangLuongIonHoa1 = 1086.5f;
    nguyenTo->nangLuongIonHoa2 = 2352.6f;
    nguyenTo->banKinh = 170;
+   nguyenTo->dongViOnDinh[0] = 12;
+   nguyenTo->dongViOnDinh[1] = 13;
+   nguyenTo->dongViOnDinh[2] = 0;
 
    // ---- Nitơ
    nguyenTo = &(mangNguyenTo[NITO]);
@@ -386,9 +413,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 1.251;
    nguyenTo->nhietDung = 29.124f;
    nguyenTo->doAmDien = 3.04f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 1402.3f;
    nguyenTo->nangLuongIonHoa2 = 2856.0f;
    nguyenTo->banKinh = 155;
+   nguyenTo->dongViOnDinh[0] = 14;
+   nguyenTo->dongViOnDinh[1] = 15;
+   nguyenTo->dongViOnDinh[2] = 0;
 
    // ---- Oxi
    nguyenTo = &(mangNguyenTo[OXI]);
@@ -405,9 +436,14 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 1.429;
    nguyenTo->nhietDung = 29.378f;
    nguyenTo->doAmDien = 3.44f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 1313.9f;
    nguyenTo->nangLuongIonHoa2 = 3388.3f;
    nguyenTo->banKinh = 152;
+   nguyenTo->dongViOnDinh[0] = 16;
+   nguyenTo->dongViOnDinh[1] = 17;
+   nguyenTo->dongViOnDinh[2] = 18;
+   nguyenTo->dongViOnDinh[3] = 0;
    
    // ---- Flo
    nguyenTo = &(mangNguyenTo[FLO]);
@@ -424,9 +460,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 1.696;
    nguyenTo->nhietDung = 31.0f;
    nguyenTo->doAmDien = 3.98f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 1681.0f;
    nguyenTo->nangLuongIonHoa2 = 3374.0f;
    nguyenTo->banKinh = 135;
+   nguyenTo->dongViOnDinh[0] = 19;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Neon
    nguyenTo = &(mangNguyenTo[NEON]);
@@ -443,9 +482,14 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 0.9002;
    nguyenTo->nhietDung = 20.786;
    nguyenTo->doAmDien = 0.0f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 2080.7f;
    nguyenTo->nangLuongIonHoa2 = 3952.3f;
    nguyenTo->banKinh = 154;
+   nguyenTo->dongViOnDinh[0] = 20;
+   nguyenTo->dongViOnDinh[1] = 21;
+   nguyenTo->dongViOnDinh[2] = 22;
+   nguyenTo->dongViOnDinh[3] = 0;
    
    // ---- Natri
    nguyenTo = &(mangNguyenTo[NATRI]);
@@ -462,9 +506,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 968;
    nguyenTo->nhietDung = 28.230f;
    nguyenTo->doAmDien = 0.93f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 495.8f;
    nguyenTo->nangLuongIonHoa2 = 4562.0f;
    nguyenTo->banKinh = 227;
+   nguyenTo->dongViOnDinh[0] = 23;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Magie
    nguyenTo = &(mangNguyenTo[MAGIE]);
@@ -481,9 +528,14 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 1738;
    nguyenTo->nhietDung = 24.869;
    nguyenTo->doAmDien = 1.31f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 737.7f;
    nguyenTo->nangLuongIonHoa2 = 1450.7f;
    nguyenTo->banKinh = 173;
+   nguyenTo->dongViOnDinh[0] = 24;
+   nguyenTo->dongViOnDinh[1] = 25;
+   nguyenTo->dongViOnDinh[2] = 26;
+   nguyenTo->dongViOnDinh[3] = 0;
 
    // ---- Nhôm
    nguyenTo = &(mangNguyenTo[NHOM]);
@@ -500,9 +552,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 2700;
    nguyenTo->nhietDung = 24.200f;
    nguyenTo->doAmDien = 1.61f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 577.5f;
    nguyenTo->nangLuongIonHoa2 = 1816.7f;
    nguyenTo->banKinh = 184;
+   nguyenTo->dongViOnDinh[0] = 27;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Silic
    nguyenTo = &(mangNguyenTo[SILIC]);
@@ -519,9 +574,14 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 2329;
    nguyenTo->nhietDung = 19.789f;
    nguyenTo->doAmDien = 1.90f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 786.5f;
    nguyenTo->nangLuongIonHoa2 = 1577.1f;
    nguyenTo->banKinh = 210;
+   nguyenTo->dongViOnDinh[0] = 28;
+   nguyenTo->dongViOnDinh[1] = 29;
+   nguyenTo->dongViOnDinh[2] = 30;
+   nguyenTo->dongViOnDinh[3] = 0;
    
    // ---- Photpho
    nguyenTo = &(mangNguyenTo[PHOTPHO]);
@@ -538,9 +598,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 2300;
    nguyenTo->nhietDung = 23.824f;
    nguyenTo->doAmDien = 2.19f;
+   nguyenTo->cauTrucTinhThe = VO_DANG;
    nguyenTo->nangLuongIonHoa1 = 1011.8f;
    nguyenTo->nangLuongIonHoa2 = 1907;
    nguyenTo->banKinh = 180;
+   nguyenTo->dongViOnDinh[0] = 31;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Lưu Huỳnh
    nguyenTo = &(mangNguyenTo[LUU_HUYNH]);
@@ -557,9 +620,14 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 2070;
    nguyenTo->nhietDung = 22.75f;
    nguyenTo->doAmDien = 2.58f;
+   nguyenTo->cauTrucTinhThe = TRUC_THOI;
    nguyenTo->nangLuongIonHoa1 = 999.6f;
    nguyenTo->nangLuongIonHoa2 = 2252;
    nguyenTo->banKinh = 180;
+   nguyenTo->dongViOnDinh[0] = 32;
+   nguyenTo->dongViOnDinh[1] = 33;
+   nguyenTo->dongViOnDinh[2] = 34;
+   nguyenTo->dongViOnDinh[3] = 0;
 
    // ---- Clo
    nguyenTo = &(mangNguyenTo[CLO]);
@@ -576,9 +644,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 3.200;  // <---- ?????
    nguyenTo->nhietDung = 33.949f;
    nguyenTo->doAmDien = 3.16f;
+   nguyenTo->cauTrucTinhThe = TRUC_THOI;
    nguyenTo->nangLuongIonHoa1 = 1251.2f;
    nguyenTo->nangLuongIonHoa2 = 2298;
    nguyenTo->banKinh = 100;  // <----- ????
+   nguyenTo->dongViOnDinh[0] = 35;
+   nguyenTo->dongViOnDinh[1] = 36;
+   nguyenTo->dongViOnDinh[2] = 0;
    
    // ---- Argon
    nguyenTo = &(mangNguyenTo[ARGON]);
@@ -595,9 +667,14 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 1.784f;
    nguyenTo->nhietDung = 20.786f;
    nguyenTo->doAmDien = 0.0f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 1520.6f;
    nguyenTo->nangLuongIonHoa2 = 2665.8f;
    nguyenTo->banKinh = 188;
+   nguyenTo->dongViOnDinh[0] = 36;
+   nguyenTo->dongViOnDinh[1] = 38;
+   nguyenTo->dongViOnDinh[2] = 40;
+   nguyenTo->dongViOnDinh[3] = 0;
 
    // ---- Kali
    nguyenTo = &(mangNguyenTo[KALI]);
@@ -614,9 +691,14 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 862;
    nguyenTo->nhietDung = 29.6f;
    nguyenTo->doAmDien = 0.82f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 418.8f;
    nguyenTo->nangLuongIonHoa2 = 3052;
    nguyenTo->banKinh = 275;
+   nguyenTo->dongViOnDinh[0] = 39;
+   nguyenTo->dongViOnDinh[1] = 40;
+   nguyenTo->dongViOnDinh[2] = 41;
+   nguyenTo->dongViOnDinh[3] = 0;
    
    // ---- Canxi
    nguyenTo = &(mangNguyenTo[CANXI]);
@@ -633,9 +715,17 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 1550;
    nguyenTo->nhietDung = 25.929f;
    nguyenTo->doAmDien = 1.00f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 589.8f;
    nguyenTo->nangLuongIonHoa2 = 1145.4f;
    nguyenTo->banKinh = 231;
+   nguyenTo->dongViOnDinh[0] = 40;
+   nguyenTo->dongViOnDinh[1] = 42;
+   nguyenTo->dongViOnDinh[2] = 43;
+   nguyenTo->dongViOnDinh[3] = 44;
+   nguyenTo->dongViOnDinh[4] = 46;
+   nguyenTo->dongViOnDinh[5] = 48;
+   nguyenTo->dongViOnDinh[6] = 0;
    
    // ---- Scanđi
    nguyenTo = &(mangNguyenTo[SCANDI]);
@@ -652,9 +742,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 2985;
    nguyenTo->nhietDung = 25.52f;
    nguyenTo->doAmDien = 1.36f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 633.1f;
    nguyenTo->nangLuongIonHoa2 = 1235.0f;
    nguyenTo->banKinh = 211;
+   nguyenTo->dongViOnDinh[0] = 45;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Titan
    nguyenTo = &(mangNguyenTo[TITAN]);
@@ -671,9 +764,16 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 4506;
    nguyenTo->nhietDung = 25.06f;
    nguyenTo->doAmDien = 1.54f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 658.8f;
    nguyenTo->nangLuongIonHoa2 = 1309.8f;
    nguyenTo->banKinh = 147;  // <------ ???
+   nguyenTo->dongViOnDinh[0] = 46;
+   nguyenTo->dongViOnDinh[1] = 47;
+   nguyenTo->dongViOnDinh[2] = 48;
+   nguyenTo->dongViOnDinh[3] = 49;
+   nguyenTo->dongViOnDinh[4] = 50;
+   nguyenTo->dongViOnDinh[5] = 0;
    
    // ---- Vanađi
    nguyenTo = &(mangNguyenTo[VANADI]);
@@ -690,9 +790,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 6000;
    nguyenTo->nhietDung = 24.89f;
    nguyenTo->doAmDien = 1.63f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 650.9f;
    nguyenTo->nangLuongIonHoa2 = 1414;
    nguyenTo->banKinh = 134;  // ???
+   nguyenTo->dongViOnDinh[0] = 50;
+   nguyenTo->dongViOnDinh[1] = 51;
+   nguyenTo->dongViOnDinh[2] = 0;
    
    // ---- Crom
    nguyenTo = &(mangNguyenTo[CROM]);
@@ -709,9 +813,15 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 7190;
    nguyenTo->nhietDung = 23.35f;
    nguyenTo->doAmDien = 1.66f;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = 650.9f;
    nguyenTo->nangLuongIonHoa2 = 1414;
    nguyenTo->banKinh = 128;  // ???
+   nguyenTo->dongViOnDinh[0] = 50;
+   nguyenTo->dongViOnDinh[1] = 52;
+   nguyenTo->dongViOnDinh[2] = 53;
+   nguyenTo->dongViOnDinh[3] = 54;
+   nguyenTo->dongViOnDinh[4] = 0;
 
    // ---- Mangan
    nguyenTo = &(mangNguyenTo[MANGAN]);
@@ -728,9 +838,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 7210;
    nguyenTo->nhietDung = 26.32f;
    nguyenTo->doAmDien = 1.55f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 717.3f;
    nguyenTo->nangLuongIonHoa2 = 1509.0f;
    nguyenTo->banKinh = 127;  // ???
+   nguyenTo->dongViOnDinh[0] = 55;
+   nguyenTo->dongViOnDinh[1] = 0;
    
    // ---- Sắt
    nguyenTo = &(mangNguyenTo[SAT]);
@@ -747,9 +860,15 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 7874;
    nguyenTo->nhietDung = 25.10f;
    nguyenTo->doAmDien = 1.83f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 762.5f;
    nguyenTo->nangLuongIonHoa2 = 1561.9f;
    nguyenTo->banKinh = 126;  // ???
+   nguyenTo->dongViOnDinh[0] = 54;
+   nguyenTo->dongViOnDinh[1] = 56;
+   nguyenTo->dongViOnDinh[2] = 57;
+   nguyenTo->dongViOnDinh[3] = 58;
+   nguyenTo->dongViOnDinh[4] = 0;
    
    // ---- Coban
    nguyenTo = &(mangNguyenTo[COBAN]);
@@ -766,9 +885,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 8900;
    nguyenTo->nhietDung = 24.81f;
    nguyenTo->doAmDien = 1.88f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 760.4f;
    nguyenTo->nangLuongIonHoa2 = 1648;
    nguyenTo->banKinh = 125;  // ???
+   nguyenTo->dongViOnDinh[0] = 58;
+   nguyenTo->dongViOnDinh[1] = 0;
    
    // ---- Nicken
    nguyenTo = &(mangNguyenTo[NICKEN]);
@@ -785,9 +907,16 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 8908;
    nguyenTo->nhietDung = 26.07f;
    nguyenTo->doAmDien = 1.91f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 737.1f;
    nguyenTo->nangLuongIonHoa2 = 1753;
    nguyenTo->banKinh = 124;  // ???
+   nguyenTo->dongViOnDinh[0] = 58;
+   nguyenTo->dongViOnDinh[1] = 60;
+   nguyenTo->dongViOnDinh[2] = 61;
+   nguyenTo->dongViOnDinh[3] = 62;
+   nguyenTo->dongViOnDinh[4] = 64;
+   nguyenTo->dongViOnDinh[5] = 0;
    
    // ---- Đồng
    nguyenTo = &(mangNguyenTo[DONG]);
@@ -804,9 +933,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 8940;
    nguyenTo->nhietDung = 24.440f;
    nguyenTo->doAmDien = 1.90f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 745.5f;
    nguyenTo->nangLuongIonHoa2 = 1957.9;
    nguyenTo->banKinh = 140;
+   nguyenTo->dongViOnDinh[0] = 63;
+   nguyenTo->dongViOnDinh[1] = 65;
+   nguyenTo->dongViOnDinh[2] = 0;
    
    // ---- Kẽm
    nguyenTo = &(mangNguyenTo[KEM]);
@@ -823,9 +956,16 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 7140;
    nguyenTo->nhietDung = 25.470f;
    nguyenTo->doAmDien = 1.65f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 906.4f;
    nguyenTo->nangLuongIonHoa2 = 1733.3;
    nguyenTo->banKinh = 139;
+   nguyenTo->dongViOnDinh[0] = 64;
+   nguyenTo->dongViOnDinh[1] = 66;
+   nguyenTo->dongViOnDinh[2] = 67;
+   nguyenTo->dongViOnDinh[3] = 68;
+   nguyenTo->dongViOnDinh[4] = 70;
+   nguyenTo->dongViOnDinh[5] = 0;
    
    // ---- Gali
    nguyenTo = &(mangNguyenTo[GALI]);
@@ -842,9 +982,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 5910;
    nguyenTo->nhietDung = 25.86f;
    nguyenTo->doAmDien = 1.81f;
+   nguyenTo->cauTrucTinhThe = TRUC_THOI;
    nguyenTo->nangLuongIonHoa1 = 578.8f;
    nguyenTo->nangLuongIonHoa2 = 1979.3;
    nguyenTo->banKinh = 187;
+   nguyenTo->dongViOnDinh[0] = 69;
+   nguyenTo->dongViOnDinh[1] = 71;
+   nguyenTo->dongViOnDinh[2] = 0;
    
    // ---- Gemani
    nguyenTo = &(mangNguyenTo[GEMANI]);
@@ -861,9 +1005,16 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 5323;
    nguyenTo->nhietDung = 23.222f;
    nguyenTo->doAmDien = 2.01f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_KIM_CUONG;
    nguyenTo->nangLuongIonHoa1 = 762;
    nguyenTo->nangLuongIonHoa2 = 1537.5;
    nguyenTo->banKinh = 211;
+   nguyenTo->dongViOnDinh[0] = 70;
+   nguyenTo->dongViOnDinh[1] = 72;
+   nguyenTo->dongViOnDinh[2] = 73;
+   nguyenTo->dongViOnDinh[3] = 74;
+   nguyenTo->dongViOnDinh[4] = 76;
+   nguyenTo->dongViOnDinh[5] = 0;
 
    // ---- Asen (Thạch Tin)
    nguyenTo = &(mangNguyenTo[ASEN]);
@@ -880,9 +1031,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 5727;
    nguyenTo->nhietDung = 24.64f;
    nguyenTo->doAmDien = 2.18f;
+   nguyenTo->cauTrucTinhThe = BA_NGHIENG;
    nguyenTo->nangLuongIonHoa1 = 947;
    nguyenTo->nangLuongIonHoa2 = 1798;
    nguyenTo->banKinh = 185;
+   nguyenTo->dongViOnDinh[0] = 75;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Seleni
    nguyenTo = &(mangNguyenTo[SELENI]);
@@ -899,9 +1053,17 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 4280;
    nguyenTo->nhietDung = 25.363f;
    nguyenTo->doAmDien = 2.55f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 941;
    nguyenTo->nangLuongIonHoa2 = 2045;
    nguyenTo->banKinh = 190;
+   nguyenTo->dongViOnDinh[0] = 74;
+   nguyenTo->dongViOnDinh[1] = 76;
+   nguyenTo->dongViOnDinh[2] = 77;
+   nguyenTo->dongViOnDinh[3] = 78;
+   nguyenTo->dongViOnDinh[4] = 80;
+   nguyenTo->dongViOnDinh[5] = 82;
+   nguyenTo->dongViOnDinh[6] = 0;
 
    // ---- Brom
    nguyenTo = &(mangNguyenTo[BROM]);
@@ -918,9 +1080,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 3102.8;
    nguyenTo->nhietDung = 25.69f; // <---- ????
    nguyenTo->doAmDien = 2.96f;
+   nguyenTo->cauTrucTinhThe = TRUC_THOI;
    nguyenTo->nangLuongIonHoa1 = 1139.9;
    nguyenTo->nangLuongIonHoa2 = 2103;
    nguyenTo->banKinh = 185;
+   nguyenTo->dongViOnDinh[0] = 79;
+   nguyenTo->dongViOnDinh[1] = 81;
+   nguyenTo->dongViOnDinh[2] = 0;
    
    // ---- Krypton
    nguyenTo = &(mangNguyenTo[KRYPTON]);
@@ -937,9 +1103,17 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 3.749;
    nguyenTo->nhietDung = 20.768f;
    nguyenTo->doAmDien = 0.0f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 1350.8;
    nguyenTo->nangLuongIonHoa2 = 2350.4;
    nguyenTo->banKinh = 202;
+   nguyenTo->dongViOnDinh[0] = 78;
+   nguyenTo->dongViOnDinh[1] = 80;
+   nguyenTo->dongViOnDinh[2] = 82;
+   nguyenTo->dongViOnDinh[3] = 83;
+   nguyenTo->dongViOnDinh[4] = 84;
+   nguyenTo->dongViOnDinh[5] = 86;
+   nguyenTo->dongViOnDinh[6] = 0;
 
    // ---- Rubiđi
    nguyenTo = &(mangNguyenTo[RUBIDI]);
@@ -956,9 +1130,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 1532;
    nguyenTo->nhietDung = 31.060f;
    nguyenTo->doAmDien = 0.82f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 403;
    nguyenTo->nangLuongIonHoa2 = 2632.1f;
    nguyenTo->banKinh = 303;
+   nguyenTo->dongViOnDinh[0] = 85;
+   nguyenTo->dongViOnDinh[1] = 87;
+   nguyenTo->dongViOnDinh[2] = 0;
 
    // ---- Stronti
    nguyenTo = &(mangNguyenTo[STRONTI]);
@@ -975,9 +1153,15 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 2640;
    nguyenTo->nhietDung = 26.4;
    nguyenTo->doAmDien = 0.95f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 549.5;
    nguyenTo->nangLuongIonHoa2 = 1064.2f;
    nguyenTo->banKinh = 249;
+   nguyenTo->dongViOnDinh[0] = 84;
+   nguyenTo->dongViOnDinh[1] = 86;
+   nguyenTo->dongViOnDinh[2] = 87;
+   nguyenTo->dongViOnDinh[3] = 88;
+   nguyenTo->dongViOnDinh[4] = 0;
 
    // ---- Ytri
    nguyenTo = &(mangNguyenTo[YTRI]);
@@ -994,9 +1178,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 4472;
    nguyenTo->nhietDung = 26.53;
    nguyenTo->doAmDien = 1.22f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 600;
    nguyenTo->nangLuongIonHoa2 = 1180;
    nguyenTo->banKinh = 190; // <---- ???
+   nguyenTo->dongViOnDinh[0] = 89;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Zirconi
    nguyenTo = &(mangNguyenTo[ZIRCONI]);
@@ -1013,9 +1200,16 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 6520;
    nguyenTo->nhietDung = 25.36f;
    nguyenTo->doAmDien = 1.233;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG;  // ???
    nguyenTo->nangLuongIonHoa1 = 640.1f;
    nguyenTo->nangLuongIonHoa2 = 1270;
    nguyenTo->banKinh = 175; // <---- ???
+   nguyenTo->dongViOnDinh[0] = 90;
+   nguyenTo->dongViOnDinh[1] = 91;
+   nguyenTo->dongViOnDinh[2] = 92;
+   nguyenTo->dongViOnDinh[3] = 94;
+   nguyenTo->dongViOnDinh[4] = 96;
+   nguyenTo->dongViOnDinh[5] = 0;
 
    // ---- Niobi
    nguyenTo = &(mangNguyenTo[NIOBI]);
@@ -1032,9 +1226,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 8570;
    nguyenTo->nhietDung = 24.60f;
    nguyenTo->doAmDien = 1.60;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 652.1f;
    nguyenTo->nangLuongIonHoa2 = 1380;
    nguyenTo->banKinh = 164; // <---- ???
+   nguyenTo->dongViOnDinh[0] = 93;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Molipđen
    nguyenTo = &(mangNguyenTo[MOLIPDEN]);
@@ -1051,9 +1248,18 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 8570;
    nguyenTo->nhietDung = 24.06f;
    nguyenTo->doAmDien = 2.16;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 684.3f;
    nguyenTo->nangLuongIonHoa2 = 1560;
    nguyenTo->banKinh = 154; // <---- ???
+   nguyenTo->dongViOnDinh[0] = 92;
+   nguyenTo->dongViOnDinh[1] = 94;
+   nguyenTo->dongViOnDinh[2] = 95;
+   nguyenTo->dongViOnDinh[3] = 96;
+   nguyenTo->dongViOnDinh[4] = 97;
+   nguyenTo->dongViOnDinh[5] = 98;
+   nguyenTo->dongViOnDinh[6] = 100;
+   nguyenTo->dongViOnDinh[7] = 0;
 
    // ---- Tecnexi
    nguyenTo = &(mangNguyenTo[TECNEXI]);
@@ -1070,9 +1276,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 11000;
    nguyenTo->nhietDung = 24.27f;
    nguyenTo->doAmDien = 1.9f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 702;
    nguyenTo->nangLuongIonHoa2 = 1470;
    nguyenTo->banKinh = 147; // <---- ???
+   nguyenTo->dongViOnDinh[0] = 0;
    
    // ---- Ruteni
    nguyenTo = &(mangNguyenTo[RUTENI]);
@@ -1089,9 +1297,18 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 12450;
    nguyenTo->nhietDung = 24.06f;
    nguyenTo->doAmDien = 2.3f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 710.2;
    nguyenTo->nangLuongIonHoa2 = 1620;
    nguyenTo->banKinh = 146; // <---- ???
+   nguyenTo->dongViOnDinh[0] = 96;
+   nguyenTo->dongViOnDinh[1] = 98;
+   nguyenTo->dongViOnDinh[2] = 99;
+   nguyenTo->dongViOnDinh[3] = 100;
+   nguyenTo->dongViOnDinh[4] = 101;
+   nguyenTo->dongViOnDinh[5] = 102;
+   nguyenTo->dongViOnDinh[6] = 104;
+   nguyenTo->dongViOnDinh[7] = 0;
 
    // ---- Rôđi
    nguyenTo = &(mangNguyenTo[RODI]);
@@ -1108,9 +1325,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 12410;
    nguyenTo->nhietDung = 24.98f;
    nguyenTo->doAmDien = 2.28f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 719.7;
    nguyenTo->nangLuongIonHoa2 = 1740;
    nguyenTo->banKinh = 142; // <---- ???
+   nguyenTo->dongViOnDinh[0] = 103;
+   nguyenTo->dongViOnDinh[1] = 0;
    
    // ---- Paladi
    nguyenTo = &(mangNguyenTo[PALADI]);
@@ -1127,9 +1347,17 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 12023;
    nguyenTo->nhietDung = 25.98f;
    nguyenTo->doAmDien = 2.20f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 804.4f;
    nguyenTo->nangLuongIonHoa2 = 1870;
    nguyenTo->banKinh = 163;
+   nguyenTo->dongViOnDinh[0] = 102;
+   nguyenTo->dongViOnDinh[1] = 104;
+   nguyenTo->dongViOnDinh[2] = 105;
+   nguyenTo->dongViOnDinh[3] = 106;
+   nguyenTo->dongViOnDinh[4] = 108;
+   nguyenTo->dongViOnDinh[5] = 110;
+   nguyenTo->dongViOnDinh[6] = 0;
 
    // ---- Bạc
    nguyenTo = &(mangNguyenTo[BAC]);
@@ -1146,9 +1374,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 10490;
    nguyenTo->nhietDung = 25.350f;
    nguyenTo->doAmDien = 1.93f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 731.0f;
    nguyenTo->nangLuongIonHoa2 = 2070;
    nguyenTo->banKinh = 172;
+   nguyenTo->dongViOnDinh[0] = 107;
+   nguyenTo->dongViOnDinh[1] = 109;
+   nguyenTo->dongViOnDinh[2] = 0;
 
    // ---- Cađimi
    nguyenTo = &(mangNguyenTo[CADIMI]);
@@ -1165,9 +1397,19 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 8650;
    nguyenTo->nhietDung = 26.020f;
    nguyenTo->doAmDien = 1.69f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 867.8f;
    nguyenTo->nangLuongIonHoa2 = 1631.4f;
    nguyenTo->banKinh = 172;
+   nguyenTo->dongViOnDinh[0] = 106;
+   nguyenTo->dongViOnDinh[1] = 108;
+   nguyenTo->dongViOnDinh[2] = 110;
+   nguyenTo->dongViOnDinh[3] = 111;
+   nguyenTo->dongViOnDinh[4] = 112;
+   nguyenTo->dongViOnDinh[5] = 113;
+   nguyenTo->dongViOnDinh[6] = 114;
+   nguyenTo->dongViOnDinh[7] = 116;
+   nguyenTo->dongViOnDinh[8] = 0;
 
    // ---- Inđi
    nguyenTo = &(mangNguyenTo[INDI]);
@@ -1184,9 +1426,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 7310;
    nguyenTo->nhietDung = 26.74f;
    nguyenTo->doAmDien = 1.78f;
+   nguyenTo->cauTrucTinhThe = TRUC_THOI;
    nguyenTo->nangLuongIonHoa1 = 558.3f;
    nguyenTo->nangLuongIonHoa2 = 1820.7f;
    nguyenTo->banKinh = 193;
+   nguyenTo->dongViOnDinh[0] = 113;
+   nguyenTo->dongViOnDinh[1] = 115;
+   nguyenTo->dongViOnDinh[2] = 0;
 
    // ---- Thiếc
    nguyenTo = &(mangNguyenTo[THIEC]);
@@ -1203,9 +1449,21 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 7310;
    nguyenTo->nhietDung = 26.74f;
    nguyenTo->doAmDien = 1.96f;
+   nguyenTo->cauTrucTinhThe = TRUC_THOI;
    nguyenTo->nangLuongIonHoa1 = 708.6f;
    nguyenTo->nangLuongIonHoa2 = 1411.8f;
    nguyenTo->banKinh = 217;
+   nguyenTo->dongViOnDinh[0] = 112;
+   nguyenTo->dongViOnDinh[1] = 114;
+   nguyenTo->dongViOnDinh[2] = 115;
+   nguyenTo->dongViOnDinh[3] = 116;
+   nguyenTo->dongViOnDinh[4] = 117;
+   nguyenTo->dongViOnDinh[5] = 118;
+   nguyenTo->dongViOnDinh[6] = 119;
+   nguyenTo->dongViOnDinh[7] = 120;
+   nguyenTo->dongViOnDinh[8] = 122;
+   nguyenTo->dongViOnDinh[9] = 124;
+   nguyenTo->dongViOnDinh[10] = 0;
 
    // ---- Antimon
    nguyenTo = &(mangNguyenTo[ANTIMON]);
@@ -1222,9 +1480,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 6697;
    nguyenTo->nhietDung = 25.23f;
    nguyenTo->doAmDien = 2.05f;
+   nguyenTo->cauTrucTinhThe = BA_NGHIENG;
    nguyenTo->nangLuongIonHoa1 = 834;
    nguyenTo->nangLuongIonHoa2 = 1594.9f;
    nguyenTo->banKinh = 206;
+   nguyenTo->dongViOnDinh[0] = 121;
+   nguyenTo->dongViOnDinh[1] = 123;
+   nguyenTo->dongViOnDinh[2] = 0;
 
    // ---- Telu
    nguyenTo = &(mangNguyenTo[TELU]);
@@ -1241,9 +1503,19 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 6697;
    nguyenTo->nhietDung = 25.73f;
    nguyenTo->doAmDien = 2.1f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 869.3f;
    nguyenTo->nangLuongIonHoa2 = 1790;
    nguyenTo->banKinh = 206;
+   nguyenTo->dongViOnDinh[0] = 120;
+   nguyenTo->dongViOnDinh[1] = 122;
+   nguyenTo->dongViOnDinh[2] = 123;
+   nguyenTo->dongViOnDinh[3] = 124;
+   nguyenTo->dongViOnDinh[4] = 125;
+   nguyenTo->dongViOnDinh[5] = 126;
+   nguyenTo->dongViOnDinh[6] = 128;
+   nguyenTo->dongViOnDinh[7] = 130;
+   nguyenTo->dongViOnDinh[8] = 0;
 
    // ---- Iot
    nguyenTo = &(mangNguyenTo[IOT]);
@@ -1260,9 +1532,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 4933;
    nguyenTo->nhietDung = 54.44f;
    nguyenTo->doAmDien = 2.66f;
+   nguyenTo->cauTrucTinhThe = TRUC_THOI;
    nguyenTo->nangLuongIonHoa1 = 1008.4f;
    nguyenTo->nangLuongIonHoa2 = 1845.9f;
    nguyenTo->banKinh = 198;
+   nguyenTo->dongViOnDinh[0] = 127;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Xenon
    nguyenTo = &(mangNguyenTo[XENON]);
@@ -1279,9 +1554,20 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 5.894;
    nguyenTo->nhietDung = 20.786;
    nguyenTo->doAmDien = 2.6f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 1170.4f;
    nguyenTo->nangLuongIonHoa2 = 2046.4f;
    nguyenTo->banKinh = 216;
+   nguyenTo->dongViOnDinh[0] = 124;
+   nguyenTo->dongViOnDinh[1] = 126;
+   nguyenTo->dongViOnDinh[2] = 128;
+   nguyenTo->dongViOnDinh[3] = 129;
+   nguyenTo->dongViOnDinh[4] = 130;
+   nguyenTo->dongViOnDinh[5] = 131;
+   nguyenTo->dongViOnDinh[6] = 132;
+   nguyenTo->dongViOnDinh[7] = 134;
+   nguyenTo->dongViOnDinh[8] = 136;
+   nguyenTo->dongViOnDinh[9] = 0;
 
    // ---- Xesi
    nguyenTo = &(mangNguyenTo[XESI]);
@@ -1298,9 +1584,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 1930;
    nguyenTo->nhietDung = 32.210;
    nguyenTo->doAmDien = 0.79f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 375.7f;
    nguyenTo->nangLuongIonHoa2 = 2234.3f;
    nguyenTo->banKinh = 343;
+   nguyenTo->dongViOnDinh[0] = 133;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Bari
    nguyenTo = &(mangNguyenTo[BARI]);
@@ -1317,9 +1606,18 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 3510;
    nguyenTo->nhietDung = 28.07;
    nguyenTo->doAmDien = 0.89f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 502.9f;
    nguyenTo->nangLuongIonHoa2 = 965.2f;
    nguyenTo->banKinh = 268;
+   nguyenTo->dongViOnDinh[0] = 130;
+   nguyenTo->dongViOnDinh[1] = 132;
+   nguyenTo->dongViOnDinh[2] = 134;
+   nguyenTo->dongViOnDinh[3] = 135;
+   nguyenTo->dongViOnDinh[4] = 136;
+   nguyenTo->dongViOnDinh[5] = 137;
+   nguyenTo->dongViOnDinh[6] = 138;
+   nguyenTo->dongViOnDinh[7] = 0;
 
    // ---- Lantan
    nguyenTo = &(mangNguyenTo[LANTAN]);
@@ -1336,9 +1634,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 6162;
    nguyenTo->nhietDung = 27.11;
    nguyenTo->doAmDien = 1.10f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 538.1f;
    nguyenTo->nangLuongIonHoa2 = 1067;
    nguyenTo->banKinh = 207;
+   nguyenTo->dongViOnDinh[0] = 138;
+   nguyenTo->dongViOnDinh[1] = 139;
+   nguyenTo->dongViOnDinh[2] = 0;
 
    // ---- Xeri
    nguyenTo = &(mangNguyenTo[XERI]);
@@ -1355,9 +1657,15 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 6770;
    nguyenTo->nhietDung = 26.94;
    nguyenTo->doAmDien = 1.12f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 534.4f;
    nguyenTo->nangLuongIonHoa2 = 1050;
    nguyenTo->banKinh = 204;
+   nguyenTo->dongViOnDinh[0] = 136;
+   nguyenTo->dongViOnDinh[1] = 138;
+   nguyenTo->dongViOnDinh[2] = 140;
+   nguyenTo->dongViOnDinh[3] = 142;
+   nguyenTo->dongViOnDinh[4] = 0;
 
    // ---- Prazeođim
    nguyenTo = &(mangNguyenTo[PRAZEODIM]);
@@ -1374,9 +1682,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 6770;
    nguyenTo->nhietDung = 27.20;
    nguyenTo->doAmDien = 1.13f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 527;
    nguyenTo->nangLuongIonHoa2 = 1020;
    nguyenTo->banKinh = 203;
+   nguyenTo->dongViOnDinh[0] = 141;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Neođim
    nguyenTo = &(mangNguyenTo[NEODYMI]);
@@ -1393,9 +1704,18 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 7010;
    nguyenTo->nhietDung = 27.45;
    nguyenTo->doAmDien = 1.14f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 533.1f;
    nguyenTo->nangLuongIonHoa2 = 1040;
    nguyenTo->banKinh = 201;
+   nguyenTo->dongViOnDinh[0] = 142;
+   nguyenTo->dongViOnDinh[1] = 143;
+   nguyenTo->dongViOnDinh[2] = 144;
+   nguyenTo->dongViOnDinh[3] = 145;
+   nguyenTo->dongViOnDinh[4] = 146;
+   nguyenTo->dongViOnDinh[5] = 148;
+   nguyenTo->dongViOnDinh[6] = 150;
+   nguyenTo->dongViOnDinh[7] = 0;
    
    // ---- Prometi
    nguyenTo = &(mangNguyenTo[PROMETI]);
@@ -1412,9 +1732,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 7260;
    nguyenTo->nhietDung = 0.0f;
    nguyenTo->doAmDien = 1.13f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 540;
    nguyenTo->nangLuongIonHoa2 = 1050;
    nguyenTo->banKinh = 199;
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Samari
    nguyenTo = &(mangNguyenTo[SAMARI]);
@@ -1431,9 +1753,18 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 7520;
    nguyenTo->nhietDung = 29.54f;
    nguyenTo->doAmDien = 1.17f;
+   nguyenTo->cauTrucTinhThe = BA_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 544.5f;
    nguyenTo->nangLuongIonHoa2 = 1070;
    nguyenTo->banKinh = 198;
+   nguyenTo->dongViOnDinh[0] = 144;
+   nguyenTo->dongViOnDinh[1] = 147;
+   nguyenTo->dongViOnDinh[2] = 148;
+   nguyenTo->dongViOnDinh[3] = 149;
+   nguyenTo->dongViOnDinh[4] = 150;
+   nguyenTo->dongViOnDinh[5] = 152;
+   nguyenTo->dongViOnDinh[6] = 154;
+   nguyenTo->dongViOnDinh[7] = 0;
 
    // ---- Europi
    nguyenTo = &(mangNguyenTo[EUROPI]);
@@ -1450,9 +1781,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 5264;
    nguyenTo->nhietDung = 27.66f;
    nguyenTo->doAmDien = 1.2f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 547.1f;
    nguyenTo->nangLuongIonHoa2 = 1085;
    nguyenTo->banKinh = 198;
+   nguyenTo->dongViOnDinh[0] = 151;
+   nguyenTo->dongViOnDinh[1] = 153;
+   nguyenTo->dongViOnDinh[2] = 0;
 
    // ---- Gađolini
    nguyenTo = &(mangNguyenTo[GADOLINI]);
@@ -1469,9 +1804,18 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 7900;
    nguyenTo->nhietDung = 37.03f;
    nguyenTo->doAmDien = 1.2f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 593.4f;
    nguyenTo->nangLuongIonHoa2 = 1170;
    nguyenTo->banKinh = 196;
+   nguyenTo->dongViOnDinh[0] = 152;
+   nguyenTo->dongViOnDinh[1] = 154;
+   nguyenTo->dongViOnDinh[2] = 155;
+   nguyenTo->dongViOnDinh[3] = 156;
+   nguyenTo->dongViOnDinh[4] = 157;
+   nguyenTo->dongViOnDinh[5] = 158;
+   nguyenTo->dongViOnDinh[6] = 160;
+   nguyenTo->dongViOnDinh[7] = 0;
 
    // ---- Tebi
    nguyenTo = &(mangNguyenTo[TEBI]);
@@ -1488,9 +1832,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 8230;
    nguyenTo->nhietDung = 28.91f;
    nguyenTo->doAmDien = 1.2f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 565.8f;
    nguyenTo->nangLuongIonHoa2 = 1110;
    nguyenTo->banKinh = 194;
+   nguyenTo->dongViOnDinh[0] = 159;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Điprozi
    nguyenTo = &(mangNguyenTo[DIPROZI]);
@@ -1507,9 +1854,18 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 8540;
    nguyenTo->nhietDung = 27.70f;
    nguyenTo->doAmDien = 1.22f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 573.0f;
    nguyenTo->nangLuongIonHoa2 = 1130;
    nguyenTo->banKinh = 192;
+   nguyenTo->dongViOnDinh[0] = 156;
+   nguyenTo->dongViOnDinh[1] = 158;
+   nguyenTo->dongViOnDinh[2] = 160;
+   nguyenTo->dongViOnDinh[3] = 161;
+   nguyenTo->dongViOnDinh[4] = 162;
+   nguyenTo->dongViOnDinh[5] = 163;
+   nguyenTo->dongViOnDinh[6] = 164;
+   nguyenTo->dongViOnDinh[7] = 0;
 
    // ---- Honmi
    nguyenTo = &(mangNguyenTo[HONMI]);
@@ -1526,9 +1882,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 8790;
    nguyenTo->nhietDung = 27.15f;
    nguyenTo->doAmDien = 1.22f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 581.0f;
    nguyenTo->nangLuongIonHoa2 = 1140;
    nguyenTo->banKinh = 192;
+   nguyenTo->dongViOnDinh[0] = 165;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Eribi
    nguyenTo = &(mangNguyenTo[ERBI]);
@@ -1545,9 +1904,17 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 9066;
    nguyenTo->nhietDung = 28.12f;
    nguyenTo->doAmDien = 1.24f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 589.3f;
    nguyenTo->nangLuongIonHoa2 = 1150;
    nguyenTo->banKinh = 189;
+   nguyenTo->dongViOnDinh[0] = 162;
+   nguyenTo->dongViOnDinh[1] = 164;
+   nguyenTo->dongViOnDinh[2] = 166;
+   nguyenTo->dongViOnDinh[3] = 167;
+   nguyenTo->dongViOnDinh[4] = 168;
+   nguyenTo->dongViOnDinh[5] = 170;
+   nguyenTo->dongViOnDinh[6] = 0;
 
    // ---- Tuli
    nguyenTo = &(mangNguyenTo[TULI]);
@@ -1564,9 +1931,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 9320;
    nguyenTo->nhietDung = 27.03f;
    nguyenTo->doAmDien = 1.24f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 596.7f;
    nguyenTo->nangLuongIonHoa2 = 1160;
    nguyenTo->banKinh = 190;
+   nguyenTo->dongViOnDinh[0] = 169;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Ytecbi
    nguyenTo = &(mangNguyenTo[YTECBI]);
@@ -1583,9 +1953,18 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 6900;
    nguyenTo->nhietDung = 26.74f;
    nguyenTo->doAmDien = 1.1f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 603.4f;
    nguyenTo->nangLuongIonHoa2 = 1174.8;
    nguyenTo->banKinh = 187;
+   nguyenTo->dongViOnDinh[0] = 168;
+   nguyenTo->dongViOnDinh[1] = 170;
+   nguyenTo->dongViOnDinh[2] = 171;
+   nguyenTo->dongViOnDinh[3] = 172;
+   nguyenTo->dongViOnDinh[4] = 173;
+   nguyenTo->dongViOnDinh[5] = 174;
+   nguyenTo->dongViOnDinh[6] = 176;
+   nguyenTo->dongViOnDinh[7] = 0;
 
    // ---- Lutexi
    nguyenTo = &(mangNguyenTo[LUTEXI]);
@@ -1602,9 +1981,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 9841;
    nguyenTo->nhietDung = 26.86f;
    nguyenTo->doAmDien = 1.27f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 523.5f;
    nguyenTo->nangLuongIonHoa2 = 1340;
    nguyenTo->banKinh = 174;    // <------
+   nguyenTo->dongViOnDinh[0] = 175;
+   nguyenTo->dongViOnDinh[1] = 176;
+   nguyenTo->dongViOnDinh[2] = 0;
 
    // ---- Hafini
    nguyenTo = &(mangNguyenTo[HAFINI]);
@@ -1621,9 +2004,17 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 13310;
    nguyenTo->nhietDung = 25.73f;
    nguyenTo->doAmDien = 1.3f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 658.5f;
    nguyenTo->nangLuongIonHoa2 = 1440;
    nguyenTo->banKinh = 175;    // <------
+   nguyenTo->dongViOnDinh[0] = 174;
+   nguyenTo->dongViOnDinh[1] = 176;
+   nguyenTo->dongViOnDinh[2] = 177;
+   nguyenTo->dongViOnDinh[3] = 178;
+   nguyenTo->dongViOnDinh[4] = 179;
+   nguyenTo->dongViOnDinh[5] = 180;
+   nguyenTo->dongViOnDinh[6] = 0;
 
    // ---- Tantan
    nguyenTo = &(mangNguyenTo[TANTAN]);
@@ -1640,9 +2031,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 16690;
    nguyenTo->nhietDung = 25.36f;
    nguyenTo->doAmDien = 1.5f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 761;
    nguyenTo->nangLuongIonHoa2 = 1500;
    nguyenTo->banKinh = 170;    // <------
+   nguyenTo->dongViOnDinh[0] = 181;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Vonfam
    nguyenTo = &(mangNguyenTo[VONFAM]);
@@ -1659,9 +2053,16 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 19250;
    nguyenTo->nhietDung = 24.27f;
    nguyenTo->doAmDien = 2.36f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 770;
    nguyenTo->nangLuongIonHoa2 = 1700;
    nguyenTo->banKinh = 162;    // <------
+   nguyenTo->dongViOnDinh[0] = 180;
+   nguyenTo->dongViOnDinh[1] = 182;
+   nguyenTo->dongViOnDinh[2] = 183;
+   nguyenTo->dongViOnDinh[3] = 184;
+   nguyenTo->dongViOnDinh[4] = 186;
+   nguyenTo->dongViOnDinh[5] = 0;
 
    // ---- Reni
    nguyenTo = &(mangNguyenTo[RENI]);
@@ -1678,9 +2079,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 21020;
    nguyenTo->nhietDung = 25.48f;
    nguyenTo->doAmDien = 1.9f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 760;
    nguyenTo->nangLuongIonHoa2 = 1260;
    nguyenTo->banKinh = 151;    // <------
+   nguyenTo->dongViOnDinh[0] = 185;
+   nguyenTo->dongViOnDinh[1] = 187;
+   nguyenTo->dongViOnDinh[2] = 0;
 
    // ---- Osimi
    nguyenTo = &(mangNguyenTo[OSIMI]);
@@ -1697,9 +2102,18 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 22590;
    nguyenTo->nhietDung = 24.70f;
    nguyenTo->doAmDien = 2.2f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 840;
    nguyenTo->nangLuongIonHoa2 = 1600;
    nguyenTo->banKinh = 144;    // <-----
+   nguyenTo->dongViOnDinh[0] = 184;
+   nguyenTo->dongViOnDinh[1] = 186;
+   nguyenTo->dongViOnDinh[2] = 187;
+   nguyenTo->dongViOnDinh[3] = 188;
+   nguyenTo->dongViOnDinh[4] = 189;
+   nguyenTo->dongViOnDinh[5] = 190;
+   nguyenTo->dongViOnDinh[6] = 192;
+   nguyenTo->dongViOnDinh[7] = 0;
 
    // ---- Iriđi
    nguyenTo = &(mangNguyenTo[IRIDI]);
@@ -1716,9 +2130,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 22560;
    nguyenTo->nhietDung = 25.10f;
    nguyenTo->doAmDien = 2.2f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 880;
    nguyenTo->nangLuongIonHoa2 = 1600;
    nguyenTo->banKinh = 141;    // <------
+   nguyenTo->dongViOnDinh[0] = 191;
+   nguyenTo->dongViOnDinh[1] = 193;
+   nguyenTo->dongViOnDinh[2] = 0;
 
    // ---- Platin (Bạch Kim)
    nguyenTo = &(mangNguyenTo[PLATIN]);
@@ -1735,9 +2153,17 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 21450;
    nguyenTo->nhietDung = 25.86f;
    nguyenTo->doAmDien = 2.2f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 870;
    nguyenTo->nangLuongIonHoa2 = 1791;
    nguyenTo->banKinh = 175;
+   nguyenTo->dongViOnDinh[0] = 190;
+   nguyenTo->dongViOnDinh[1] = 192;
+   nguyenTo->dongViOnDinh[2] = 194;
+   nguyenTo->dongViOnDinh[3] = 195;
+   nguyenTo->dongViOnDinh[4] = 196;
+   nguyenTo->dongViOnDinh[5] = 198;
+   nguyenTo->dongViOnDinh[6] = 0;
 
    // ---- Vàng
    nguyenTo = &(mangNguyenTo[VANG]);
@@ -1754,9 +2180,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 19300;
    nguyenTo->nhietDung = 25.418f;
    nguyenTo->doAmDien = 2.54f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 890.1;
    nguyenTo->nangLuongIonHoa2 = 1980;
    nguyenTo->banKinh = 166;
+   nguyenTo->dongViOnDinh[0] = 197;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Thủy Ngân
    nguyenTo = &(mangNguyenTo[THUY_NGAN]);
@@ -1773,9 +2202,18 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 13534;
    nguyenTo->nhietDung = 27.983f;
    nguyenTo->doAmDien = 2.00f;
+   nguyenTo->cauTrucTinhThe = BA_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 1007.1;
    nguyenTo->nangLuongIonHoa2 = 1810;
    nguyenTo->banKinh = 155;
+   nguyenTo->dongViOnDinh[0] = 196;
+   nguyenTo->dongViOnDinh[1] = 198;
+   nguyenTo->dongViOnDinh[2] = 199;
+   nguyenTo->dongViOnDinh[3] = 200;
+   nguyenTo->dongViOnDinh[4] = 201;
+   nguyenTo->dongViOnDinh[5] = 202;
+   nguyenTo->dongViOnDinh[6] = 204;
+   nguyenTo->dongViOnDinh[7] = 0;
 
    // ---- Tali
    nguyenTo = &(mangNguyenTo[TALI]);
@@ -1792,9 +2230,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 11850;
    nguyenTo->nhietDung = 26.32f;
    nguyenTo->doAmDien = 1.62f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 589.4;
    nguyenTo->nangLuongIonHoa2 = 1971;
    nguyenTo->banKinh = 196;
+   nguyenTo->dongViOnDinh[0] = 203;
+   nguyenTo->dongViOnDinh[1] = 205;
+   nguyenTo->dongViOnDinh[2] = 0;
 
    // ---- Chì
    nguyenTo = &(mangNguyenTo[CHI]);
@@ -1811,9 +2253,15 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 11340;
    nguyenTo->nhietDung = 26.650f;
    nguyenTo->doAmDien = 2.33f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 715.6;
    nguyenTo->nangLuongIonHoa2 = 1450.5;
    nguyenTo->banKinh = 202;
+   nguyenTo->dongViOnDinh[0] = 204;
+   nguyenTo->dongViOnDinh[1] = 206;
+   nguyenTo->dongViOnDinh[2] = 207;
+   nguyenTo->dongViOnDinh[3] = 208;
+   nguyenTo->dongViOnDinh[4] = 0;
 
    // ---- Bitmut
    nguyenTo = &(mangNguyenTo[BITMUT]);
@@ -1830,9 +2278,12 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 11340;
    nguyenTo->nhietDung = 25.52f;
    nguyenTo->doAmDien = 2.02f;
+   nguyenTo->cauTrucTinhThe = BA_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 703;
    nguyenTo->nangLuongIonHoa2 = 1610;
    nguyenTo->banKinh = 207;
+   nguyenTo->dongViOnDinh[0] = 209;
+   nguyenTo->dongViOnDinh[1] = 0;
 
    // ---- Poloni
    nguyenTo = &(mangNguyenTo[POLONI]);
@@ -1849,9 +2300,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 9196;
    nguyenTo->nhietDung = 26.4f;
    nguyenTo->doAmDien = 2.0f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 812.1;
    nguyenTo->nangLuongIonHoa2 = 0.0f;
    nguyenTo->banKinh = 197;
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Astatin
    nguyenTo = &(mangNguyenTo[ASTATIN]);
@@ -1868,9 +2321,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 9196;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = 2.2f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 890;
    nguyenTo->nangLuongIonHoa2 = 0.0f;
    nguyenTo->banKinh = 202;
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Rađon
    nguyenTo = &(mangNguyenTo[RADON]);
@@ -1887,9 +2342,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 9.73f;
    nguyenTo->nhietDung = 20.786f;
    nguyenTo->doAmDien = 2.2f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 1037;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 220;
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Franxi
    nguyenTo = &(mangNguyenTo[FRANXI]);
@@ -1906,9 +2363,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 1870;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = 0.7f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 393;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 260;
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Rađi
    nguyenTo = &(mangNguyenTo[RADI]);
@@ -1925,9 +2384,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 5500;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = 0.9f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 509.3;
    nguyenTo->nangLuongIonHoa2 = 979;
    nguyenTo->banKinh = 283;
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Actini
    nguyenTo = &(mangNguyenTo[ACTINI]);
@@ -1944,9 +2405,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 10000;
    nguyenTo->nhietDung = 27.2;
    nguyenTo->doAmDien = 1.1f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 499;
    nguyenTo->nangLuongIonHoa2 = 1170;
    nguyenTo->banKinh = 215; // <----
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Thôri
    nguyenTo = &(mangNguyenTo[THORI]);
@@ -1963,9 +2426,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 11700;
    nguyenTo->nhietDung = 26.23;
    nguyenTo->doAmDien = 1.3f;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_MAT;
    nguyenTo->nangLuongIonHoa1 = 587;
    nguyenTo->nangLuongIonHoa2 = 1110;
    nguyenTo->banKinh = 206; // <----
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Protactini
    nguyenTo = &(mangNguyenTo[PROTACTINI]);
@@ -1982,9 +2447,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 15370;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = 1.5f;
+   nguyenTo->cauTrucTinhThe = TRUC_THOI;
    nguyenTo->nangLuongIonHoa1 = 586;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 200; // <----
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Urani
    nguyenTo = &(mangNguyenTo[URANI]);
@@ -2001,9 +2468,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 19100;
    nguyenTo->nhietDung = 27.665f;
    nguyenTo->doAmDien = 1.38f;
+   nguyenTo->cauTrucTinhThe = TRUC_THOI;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 186;
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Neptuni
    nguyenTo = &(mangNguyenTo[NEPTUNI]);
@@ -2020,9 +2489,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 20450;
    nguyenTo->nhietDung = 29.46f;
    nguyenTo->doAmDien = 1.36f;
+   nguyenTo->cauTrucTinhThe = TRUC_THOI;
    nguyenTo->nangLuongIonHoa1 = 604.5f;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 190;  // <-----
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Plutoni
    nguyenTo = &(mangNguyenTo[PLUTONI]);
@@ -2039,9 +2510,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 19816;
    nguyenTo->nhietDung = 35.5f;
    nguyenTo->doAmDien = 1.28f;
+   nguyenTo->cauTrucTinhThe = DON_NGHIENG;
    nguyenTo->nangLuongIonHoa1 = 584.7f;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 187;  // <-----
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Amerixi
    nguyenTo = &(mangNguyenTo[AMERIXI]);
@@ -2058,9 +2531,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 12000;
    nguyenTo->nhietDung = 62.7f;  // <---- ????
    nguyenTo->doAmDien = 1.3f;
+   nguyenTo->cauTrucTinhThe = LUC_PHUONG;
    nguyenTo->nangLuongIonHoa1 = 587;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 180;  // <-----
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Curi
    nguyenTo = &(mangNguyenTo[CURI]);
@@ -2077,9 +2552,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 13510;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = 1.3f;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 169;  // <-----
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Beckeli
    nguyenTo = &(mangNguyenTo[BECKELI]);
@@ -2096,9 +2573,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 14780;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = 1.3f;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 170;  // <-----
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Californi
    nguyenTo = &(mangNguyenTo[CALIFORNI]);
@@ -2115,9 +2594,11 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 15100;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = 1.3f;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = 608;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = kKHONG_BIET;
+   nguyenTo->dongViOnDinh[0] = 0;
 
    // ---- Ensteni
    nguyenTo = &(mangNguyenTo[ENSTENI]);
@@ -2134,6 +2615,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 8840;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = 1.3f;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = 608;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = kKHONG_BIET;
@@ -2153,6 +2635,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 9700;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = 1.3f;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = kKHONG_BIET;
@@ -2172,6 +2655,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = 1.3f;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = 635;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = kKHONG_BIET;
@@ -2191,6 +2675,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = 641.6f;
    nguyenTo->nangLuongIonHoa2 = 1254.3f;
    nguyenTo->banKinh = kKHONG_BIET;
@@ -2210,6 +2695,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = 443.8f;
    nguyenTo->nangLuongIonHoa2 = 1428.0f;
    nguyenTo->banKinh = kKHONG_BIET;
@@ -2229,6 +2715,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 23000;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = 578;
    nguyenTo->nangLuongIonHoa2 = 1148;
    nguyenTo->banKinh = 157;   // <-----
@@ -2248,6 +2735,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 149;
@@ -2267,6 +2755,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 143;  // <----
@@ -2286,6 +2775,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = 740;
    nguyenTo->nangLuongIonHoa2 = 1690;
    nguyenTo->banKinh = 141;  // <----
@@ -2305,6 +2795,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = 740;
    nguyenTo->nangLuongIonHoa2 = 1690;
    nguyenTo->banKinh = 134;  // <----
@@ -2324,6 +2815,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 129;  // <----
@@ -2343,6 +2835,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 128;  // <----
@@ -2362,6 +2855,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 121;  // <----
@@ -2381,6 +2875,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 122;  // <----
@@ -2400,6 +2895,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 18000;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = VO_DANG;
    nguyenTo->nangLuongIonHoa1 = 705;
    nguyenTo->nangLuongIonHoa2 = 1820;
    nguyenTo->banKinh = 176;  // <----
@@ -2419,6 +2915,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 14000;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = 820;
    nguyenTo->nangLuongIonHoa2 = 1620;
    nguyenTo->banKinh = 143;  // <----
@@ -2438,6 +2935,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 11000;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = 538;
    nguyenTo->nangLuongIonHoa2 = 2055;
    nguyenTo->banKinh = 162;  // <----
@@ -2457,6 +2955,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 175;  // <----
@@ -2476,6 +2975,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = VO_DANG;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 165;  // <----
@@ -2495,12 +2995,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = VO_DANG;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 157;  // <----
 }
 
-#pragma mark ==== vẽ
+#pragma mark ==== vẽ ô
 //    0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
 //    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 // 0  *                                                             *
@@ -2553,10 +3054,13 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
 #define kTI_TRONG__VI_TRI_Y  0.70f
 
 #define kKHOI_LUONG__VI_TRI_X  0.05f
-#define kKHOI_LUONG__VI_TRI_Y  0.95f
+#define kKHOI_LUONG__VI_TRI_Y  0.93f
 
 #define kDO_AM_DIEN__VI_TRI_X  0.95f
 #define kDO_AM_DIEN__VI_TRI_Y  0.95f
+
+#define kDONG_VI__VI_TRI_X  0.02f
+#define kDONG_VI__VI_TRI_Y  0.985f
 
 void vanBanNguyenTo( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, float coO_ngang, float coO_doc, unsigned int mauVanBan, float phongTo ) {
 
@@ -2668,6 +3172,25 @@ void vanBanNguyenTo( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, floa
    vanBan_ngang( tep, xauSo, gocX_dacTrung, gocY_dacTrung, "Arial", 14.0f*phongTo, "Normal",
                 kDUNG, mauVanBan, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "end" );
 
+   // ---- đồng vị ổ định
+   gocX_dacTrung = gocX + coO_ngang*kDONG_VI__VI_TRI_X;
+   gocY_dacTrung = gocY + coO_doc*kDONG_VI__VI_TRI_Y;
+   unsigned char dongVi = nguyenTo->dongViOnDinh[0];
+   if( dongVi == 0 )
+      vanBan_ngang( tep, "- - -", gocX_dacTrung, gocY_dacTrung, "Arial", 6.0f*phongTo, "Normal",
+                   kDUNG, mauVanBan, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   else {
+      unsigned char chiSo = 1;
+      while( dongVi ) {  // chuỗi đồng vị ổn định kết thúc bởi số không
+         sprintf( xauSo, "%3d ", dongVi );
+         vanBan_ngang( tep, xauSo, gocX_dacTrung, gocY_dacTrung, "Arial", 6.0f*phongTo, "Normal",
+                kDUNG, mauVanBan, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+         gocX_dacTrung += coO_ngang*0.1f*phongTo;
+         dongVi = nguyenTo->dongViOnDinh[chiSo];
+         chiSo++;
+      }
+   }
+
 }
 
 void veNen( FILE *tep, float gocX, float gocY, float coO_ngang, float coO_doc, unsigned int mauNenToanBo, unsigned int mauNenKyHieu ) {
@@ -2688,7 +3211,11 @@ void veNen( FILE *tep, float gocX, float gocY, float coO_ngang, float coO_doc, u
    chuNhat( tep, gocX, gocY + 0.73f*coO_doc, coO_ngang, coO_doc*0.12f, kDUNG, 0x000000, 0.25f,
            kSAI, 0.0f, 0x000000, 0.0f );
    // ---- nền độ âm điện
-   chuNhat( tep, gocX + 0.70f*coO_ngang, gocY + 0.85f*coO_doc, coO_ngang*0.30f, coO_doc*0.15, kDUNG, 0xffffff, 0.3f,
+   chuNhat( tep, gocX + 0.70f*coO_ngang, gocY + 0.85f*coO_doc, coO_ngang*0.30f, coO_doc*0.10, kDUNG, 0xffffff, 0.3f,
+           kSAI, 0.0f, 0x000000, 0.0f );
+   
+   // ---- những đồng vị ổn định
+   chuNhat( tep, gocX, gocY + 0.95f*coO_doc, coO_ngang, coO_doc*0.05, kDUNG, 0xffffff, 0.15f,
            kSAI, 0.0f, 0x000000, 0.0f );
 }
 
@@ -2715,10 +3242,12 @@ void veNen( FILE *tep, float gocX, float gocY, float coO_ngang, float coO_doc, u
 #define kVAN_BAN_TI_TRONG__VI_TRI_Y  0.70f
 #define kVAN_BAN_CAU_HINH_ELECTRON__VI_TRI_X  1.20f
 #define kVAN_BAN_CAU_HINH_ELECTRON__VI_TRI_Y  0.90f
-#define kVAN_BAN_KHOI_LUONG__VI_TRI_X  0.20f
+#define kVAN_BAN_KHOI_LUONG__VI_TRI_X  0.00f
 #define kVAN_BAN_KHOI_LUONG__VI_TRI_Y  1.15f
 #define kVAN_BAN_DO_AM_DIEN__VI_TRI_X  1.00f
 #define kVAN_BAN_DO_AM_DIEN__VI_TRI_Y  1.15f
+#define kVAN_BAN_DONG_VI__VI_TRI_X 0.50f
+#define kVAN_BAN_DONG_VI__VI_TRI_Y 1.35f
 
 void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, float coO_ngang, float coO_doc, float phongTo ) {
    
@@ -2857,9 +3386,9 @@ void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, fl
                 kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
 
    // ---- Khối lượng nguyên tử
-   x1 = gocX + coO_ngang*0.30f;
-   y1 = gocY + coO_doc*0.95f;
-   x2 = gocX + coO_ngang*(kVAN_BAN_KHOI_LUONG__VI_TRI_X - 0.25f);
+   x1 = gocX + coO_ngang*0.10f;
+   y1 = gocY + coO_doc*0.90f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_KHOI_LUONG__VI_TRI_X - 0.50f);
    y2 = gocY + coO_doc*(kVAN_BAN_KHOI_LUONG__VI_TRI_Y - 0.08f);
    duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
 
@@ -2870,7 +3399,7 @@ void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, fl
 
    // ---- độ âm điện
    x1 = gocX + coO_ngang*0.9f;
-   y1 = gocY + coO_doc*0.95f;
+   y1 = gocY + coO_doc*0.90f;
    x2 = gocX + coO_ngang*(kVAN_BAN_DO_AM_DIEN__VI_TRI_X + 0.2f);
    y2 = gocY + coO_doc*(kVAN_BAN_DO_AM_DIEN__VI_TRI_Y - 0.08f);
    duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
@@ -2879,6 +3408,18 @@ void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, fl
    viTriY = gocY + coO_doc*kVAN_BAN_DO_AM_DIEN__VI_TRI_Y;
    vanBan_ngang( tep, "Độ âm điện", viTriX, viTriY, "Arial", 25.0f, "Normal",
                 kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   // ---- những đồng vị ổn định
+   x1 = gocX + coO_ngang*0.08f;
+   y1 = gocY + coO_doc*0.99f;
+   x2 = gocX + coO_ngang*kVAN_BAN_DONG_VI__VI_TRI_X;
+   y2 = gocY + coO_doc*(kVAN_BAN_DONG_VI__VI_TRI_Y - 0.08f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
+   
+   viTriX = gocX + coO_ngang*kVAN_BAN_DONG_VI__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_DONG_VI__VI_TRI_Y;
+   vanBan_ngang( tep, "Những đồng vị ổ định (hay > 10¹⁰ năm)", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
 }
 
 
@@ -3143,7 +3684,7 @@ int main( int argc, char *argv[] ) {
          // ----ghi đầu tập tin SVG
          ghiDauSVG( tapTinSVG, kBE_RONG__KHO, kBE_CAO__KHO );
  
-         printf( "%5.1f  %5.1f\n", coO_ngang, coO_doc );
+         printf( "Khổ ô: %5.1f  %5.1f\n", coO_ngang, coO_doc );
          veBangTuanHoanDungCoO( tapTinSVG, coO_ngang, coO_doc, mangNguyenTo, kLE_TRAI, kLE_TREN,
                                kGIUA_NGANG, kGIUA_DOC );
 
