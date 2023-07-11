@@ -1,7 +1,7 @@
 // soDo_LichSuTraiDat_SVG.c
 // Sơ đồ lịch sử Trái Đất/lịch sử địa chất
 // Khởi động 2023.06.01
-// Phiên bản 2023.06.21
+// Phiên bản 2023.07.11
 // Phạm vi công cộng
 
 #include <stdio.h>
@@ -83,10 +83,310 @@ void duong( FILE *tep, float diemX0, float diemY0, float diemX1, float diemY1, f
 }
 
 
+// Vẽ đa giác
+void daGiac( FILE *tep, float *mangDiem, unsigned int soLuongDiem, unsigned char toDay, unsigned int mauToDay, float doDucToDay,
+            unsigned char net, float beRongNet, unsigned int mauNet, float doDucNet ) {
+   int chiSoDiem = 0;
+   
+   fprintf( tep, "<polygon points=\"" );
+   while( chiSoDiem < soLuongDiem ) {
+      fprintf( tep, "%5.1f,%5.1f  ", mangDiem[chiSoDiem << 1], mangDiem[(chiSoDiem << 1) + 1] );
+      
+      // ---- cho dễ nhìn trong tệp SVG
+      if( chiSoDiem % 10 == 0 )
+         fprintf( tep, "\n" );
+      
+      chiSoDiem++;
+   }
+   
+   fprintf( tep, "\"\n" );
+   if( toDay )
+      fprintf( tep, "fill=\"#%06X\" fill-opacity=\"%4.2f\" ", mauToDay, doDucToDay );
+   else
+      fprintf( tep, "fill=\"none\" " );
+   if( net ) {
+      fprintf( tep, "stroke=\"#%06X\" stroke-opacity=\"%4.2f\" ", mauNet, doDucNet );
+      fprintf( tep, "stroke-width=\"%5.1f\" ", beRongNet );
+   }
+   else {
+      fprintf( tep, "stroke=\"none\" " );
+   }
+   
+   fprintf( tep, "/>\n\n" );
+}
 
-#define kSO_LUONG__NGUYEN_TO 118  //  số lượng nguyên tốcho vẽ bảng tuền hoàn
+// mảng phải có điểm sắp xếp với nhau: x0; y0; x1; y1; ...
+void duongDaDiem( FILE *tep, float *mangDiem, unsigned int soLuongDiem, unsigned char toDay, unsigned int mauToDay, float doDucToDay,
+                 unsigned char net, float beRongNet, unsigned int mauNet, float doDucNet ) {
+   int chiSo = 0; // points are interlaced
+   
+   fprintf( tep, "<polyline points=\"" );
+   while( chiSo < soLuongDiem ) {
+      fprintf( tep, "%5.1f,%5.1f  ", mangDiem[chiSo << 1], mangDiem[(chiSo << 1) + 1] );
+      if( chiSo % 10 == 0 )
+         fprintf( tep, "\n" );
+      chiSo++;
+   }
+   
+   fprintf( tep, "\"\n" );
+   if( toDay )
+      fprintf( tep, "fill=\"#%06X\" fill-opacity=\"%4.2f\" ", mauToDay, doDucToDay );
+   else
+      fprintf( tep, "fill=\"none\" " );
+   if( net ) {
+      fprintf( tep, "stroke=\"#%06X\" stroke-opacity=\"%4.2f\" ", mauNet, doDucNet );
+      fprintf( tep, "stroke-width=\"%5.1f\" ", beRongNet );
+   }
+   else {
+      fprintf( tep, "stroke=\"none\" " );
+   }
+   
+   fprintf( tep, "/>\n\n" );
+}
 
-#define kKHONG_BIET '-'
+// Vẽ hình tròn tại điểm (tamX; tamY)
+void hinhTron( FILE *tep, float tamX, float tamY, float banKinh, unsigned char toDay, unsigned int mauToDay, float doDucToDay,
+              unsigned char net, float beRongNet, unsigned int mauNet, float doDucNet ) {
+   
+   fprintf( tep, "<circle cx=\"%5.1f\" cy=\"%5.1f\" r=\"%5.1f\" ", tamX, tamY, banKinh );
+   if( toDay )
+      fprintf( tep, "fill=\"#%06X\" fill-opacity=\"%4.2f\" ", mauToDay, doDucToDay );
+   else
+      fprintf( tep, "fill=\"none\" " );
+   if( net ) {
+      fprintf( tep, "stroke=\"#%06X\" stroke-opacity=\"%4.2f\" ", mauNet, doDucNet );
+      fprintf( tep, "stroke-width=\"%5.1f\" ", beRongNet );
+   }
+   else {
+      fprintf( tep, "stroke=\"none\" " );
+   }
+   
+   fprintf( tep, "/>\n\n" );
+}
+
+#pragma mark ======= Vẽ Cấu Trúc Tinh Thể
+enum {
+   LAP_PHUONG,         // lập phương
+   LAP_PHUONG_TAM_MAT, // lập phương tâm mặt
+   LAP_PHUONG_TAM_KHOI,// lập phương tâm khối
+   LAP_PHUONG_KIM_CUONG,// lập phương kim cương
+   LUC_PHUONG,         // lục phương
+   TRUC_THOI,          // trực thoi - ba cạnh khác nhau
+   DON_NGHIENG,        // đơn nhiêng - ba cạnh bằng nhau, hai góc = π/2 mộ góc ≠π/2
+   BA_PHUONG,          // ba phương - ba cạnh bằng nhau, ba góc khác
+   BA_NGHIENG,         // ba nghiêng - ba cạnh khác nhau, ba góc khác
+   VO_DANG,            // vô dạng
+};
+
+#define kCAN_3_CHIA_2 0.8660254f
+#define kCAN_2_CHIA_2 0.7071068f
+#define kBE_DAY_NET 1.5f
+
+void tinhTheLapPhuong( FILE *tep, float viTriTamX, float viTriTamY, float phongTo, unsigned int mau ) {
+
+   // ---- hình vuông
+   float mangDiem[8];
+   mangDiem[0] = 0.8f*phongTo + viTriTamX;
+   mangDiem[1] = 0.8f*phongTo + viTriTamY;
+   mangDiem[2] = mangDiem[0];
+   mangDiem[3] = -0.8f*phongTo + viTriTamY;
+   mangDiem[4] = -0.8f*phongTo + viTriTamX;
+   mangDiem[5] = mangDiem[3];
+   mangDiem[6] = mangDiem[4];
+   mangDiem[7] = mangDiem[1];
+   daGiac( tep, mangDiem, 4, kSAI, 0x000000, 0.0f, kDUNG, kBE_DAY_NET, mau, 1.0f );
+}
+
+// ba cạnh bằng nhau, hết góc = π/2
+void tinhTheLapPhuongTamMat( FILE *tep, float viTriTamX, float viTriTamY, float phongTo, unsigned int mau ) {
+   
+   // ---- hình vuông
+   float mangDiem[8];
+   mangDiem[0] = 0.8f*phongTo + viTriTamX;
+   mangDiem[1] = 0.8f*phongTo + viTriTamY;
+   mangDiem[2] = mangDiem[0];
+   mangDiem[3] = -0.8f*phongTo + viTriTamY;
+   mangDiem[4] = -0.8f*phongTo + viTriTamX;
+   mangDiem[5] = mangDiem[3];
+   mangDiem[6] = mangDiem[4];
+   mangDiem[7] = mangDiem[1];
+   daGiac( tep, mangDiem, 4, kSAI, 0x000000, 0.0f, kDUNG, kBE_DAY_NET, mau, 1.0f );
+   
+   // ---- hai nét chéo
+   duong( tep, mangDiem[0], mangDiem[1], mangDiem[4], mangDiem[5], kBE_DAY_NET, mau, 1.0f );
+   duong( tep, mangDiem[2], mangDiem[3], mangDiem[6], mangDiem[7], kBE_DAY_NET, mau, 1.0f );
+}
+
+// ba cạnh bằng nhau, hết góc = π/2
+void tinhTheLapPhuongTamKhoi( FILE *tep, float viTriTamX, float viTriTamY, float phongTo, unsigned int mau ) {
+   
+   // ---- hình vuông
+   float mangDiem[8];
+   mangDiem[0] = 0.8f*phongTo + viTriTamX;
+   mangDiem[1] = 0.8f*phongTo + viTriTamY;
+   mangDiem[2] = mangDiem[0];
+   mangDiem[3] = -0.8f*phongTo + viTriTamY;
+   mangDiem[4] = -0.8f*phongTo + viTriTamX;
+   mangDiem[5] = mangDiem[3];
+   mangDiem[6] = mangDiem[4];
+   mangDiem[7] = mangDiem[1];
+   daGiac( tep, mangDiem, 4, kSAI, 0x000000, 0.0f, kDUNG, 2.0f, mau, 1.0f );
+   
+   // ---- hình tròn guữa
+   hinhTron( tep, viTriTamX, viTriTamY, 0.1f*phongTo, kSAI, 0x000000, 0.0f,  kDUNG, kBE_DAY_NET, mau, 1.0f );
+}
+
+void tinhTheLapPhuongKimCuong( FILE *tep, float viTriTamX, float viTriTamY, float phongTo, unsigned int mau ) {
+   
+   // ---- hình vuông
+   float mangDiem[16];
+   mangDiem[0] = viTriTamX;
+   mangDiem[1] = phongTo + viTriTamY;
+   mangDiem[2] = kCAN_2_CHIA_2*phongTo + viTriTamX;
+   mangDiem[3] = kCAN_2_CHIA_2*phongTo + viTriTamY;
+   mangDiem[4] = phongTo + viTriTamX;
+   mangDiem[5] = viTriTamY;
+   mangDiem[6] = mangDiem[2];
+   mangDiem[7] = -kCAN_2_CHIA_2*phongTo + viTriTamY;;
+   mangDiem[8] = viTriTamX;
+   mangDiem[9] = -phongTo + viTriTamY;
+   mangDiem[10] = -kCAN_2_CHIA_2*phongTo + viTriTamX;
+   mangDiem[11] = mangDiem[7];
+   mangDiem[12] = -phongTo + viTriTamX;
+   mangDiem[13] = mangDiem[5];
+   mangDiem[14] = mangDiem[10];
+   mangDiem[15] = mangDiem[3];
+   daGiac( tep, mangDiem, 8, kSAI, 0x000000, 0.0f, kDUNG, 2.0f, mau, 1.0f );
+
+   // ---- hai nét chéo
+   duong( tep, mangDiem[0], mangDiem[1], mangDiem[8], mangDiem[9], kBE_DAY_NET, mau, 1.0f );
+   duong( tep, mangDiem[4], mangDiem[5], mangDiem[12], mangDiem[13], kBE_DAY_NET, mau, 1.0f );
+}
+
+// ba cạnh khác nhau, hết góc = π/2
+void tinhTheTrucThoi( FILE *tep, float viTriTamX, float viTriTamY, float phongTo, unsigned int mau ) {
+   
+   float mangDiem[8];
+   mangDiem[0] = 0.5f*phongTo + viTriTamX;
+   mangDiem[1] = phongTo + viTriTamY;
+   mangDiem[2] = mangDiem[0];
+   mangDiem[3] = -phongTo + viTriTamY;
+   mangDiem[4] = -0.5f*phongTo + viTriTamX;
+   mangDiem[5] = mangDiem[3];
+   mangDiem[6] = mangDiem[4];
+   mangDiem[7] = mangDiem[1];
+   daGiac( tep, mangDiem, 4, kSAI, 0x000000, 0.0f, kDUNG, kBE_DAY_NET, mau, 1.0f );
+}
+
+void tinhTheLucPhuong( FILE *tep, float viTriTamX, float viTriTamY, float phongTo, unsigned int mau ) {
+   
+   // ---- hình lục giác
+   float mangDiem[12];
+   mangDiem[0] = viTriTamX;
+   mangDiem[1] = phongTo + viTriTamY;
+   mangDiem[2] = kCAN_3_CHIA_2*phongTo + viTriTamX;
+   mangDiem[3] = 0.5f*phongTo + viTriTamY;
+   mangDiem[4] = mangDiem[2];
+   mangDiem[5] = -0.5f*phongTo + viTriTamY;
+   mangDiem[6] = viTriTamX;
+   mangDiem[7] = -phongTo + viTriTamY;
+   mangDiem[8] = -kCAN_3_CHIA_2*phongTo + viTriTamX;
+   mangDiem[9] = -0.5f*phongTo + viTriTamY;
+   mangDiem[10] = mangDiem[8];
+   mangDiem[11] = 0.5f*phongTo + viTriTamY;
+   
+   daGiac( tep, mangDiem, 6, kSAI, 0x000000, 0.0f, kDUNG, kBE_DAY_NET, mau, 1.0f );
+}
+
+void tinhTheDonNghieng( FILE *tep, float viTriTamX, float viTriTamY, float phongTo, unsigned int mau ) {
+   
+   float mangDiem[8];
+   mangDiem[0] = phongTo + viTriTamX;
+   mangDiem[1] = 0.8f*phongTo + viTriTamY;
+   mangDiem[2] = 0.5f*phongTo + viTriTamX;
+   mangDiem[3] = -0.8f*phongTo + viTriTamY;
+   mangDiem[4] = -phongTo + viTriTamX;
+   mangDiem[5] = mangDiem[3];
+   mangDiem[6] = -0.5f*phongTo + viTriTamX;
+   mangDiem[7] = mangDiem[1];
+   daGiac( tep, mangDiem, 4, kSAI, 0x000000, 0.0f, kDUNG, kBE_DAY_NET, mau, 1.0f );
+}
+
+// a = b = c và các góc ≠ π/2
+void tinhTheBaPhuong( FILE *tep, float viTriTamX, float viTriTamY, float phongTo, unsigned int mau ) {
+
+   // ---- hình bbình thành
+   float mangDiem[8];
+   mangDiem[0] = 0.5f*phongTo + viTriTamX;
+   mangDiem[1] = 0.8f*phongTo + viTriTamY;
+   mangDiem[2] = viTriTamX;
+   mangDiem[3] = -0.8f*phongTo + viTriTamY;
+   mangDiem[4] = -0.5f*phongTo + viTriTamX;
+   mangDiem[5] = mangDiem[3];
+   mangDiem[6] = mangDiem[2];
+   mangDiem[7] = mangDiem[1];
+   daGiac( tep, mangDiem, 4, kSAI, 0x000000, 0.0f, kDUNG, kBE_DAY_NET, mau, 1.0f );
+}
+
+// a ≠ b ≠ c và các góc ≠ π/2
+void tinhTheBaNghieng( FILE *tep, float viTriTamX, float viTriTamY, float phongTo, unsigned int mau ) {
+
+   // ---- hình bình thành phía trái
+   float mangDiem[8];
+   mangDiem[0] = 0.2f*phongTo + viTriTamX;
+   mangDiem[1] = 0.8f*phongTo + viTriTamY;
+   mangDiem[2] = -0.3f*phongTo + viTriTamX;
+   mangDiem[3] = -0.8f*phongTo + viTriTamY;
+   mangDiem[4] = -phongTo + viTriTamX;
+   mangDiem[5] = mangDiem[3];
+   mangDiem[6] = -0.5f*phongTo + viTriTamX;
+   mangDiem[7] = mangDiem[1];
+   daGiac( tep, mangDiem, 4, kSAI, 0x000000, 0.0f, kDUNG, kBE_DAY_NET, mau, 1.0f );
+   
+   // ---- hình bình thành trên
+   mangDiem[6] = mangDiem[2];
+   mangDiem[7] = mangDiem[3];
+   
+   mangDiem[2] = mangDiem[0] + 0.5f*phongTo;
+   mangDiem[3] = mangDiem[1] - 0.5f*phongTo;
+   mangDiem[4] = mangDiem[6] + 0.5f*phongTo;
+   mangDiem[5] = mangDiem[7] - 0.5f*phongTo;
+   duongDaDiem( tep, mangDiem, 4, kSAI, 0x000000, 0.0f, kDUNG, kBE_DAY_NET, mau, 1.0f );
+}
+
+#define kSO_LUONG_DIEM 12
+void tinhTheVoDang( FILE *tep, float viTriTamX, float viTriTamY, float phongTo, unsigned int mau ) {
+   
+   // ---- hình bình thành phía trái
+   float mangDiem[kSO_LUONG_DIEM];
+   
+   unsigned char chiSo = 0;
+   while( chiSo < kSO_LUONG_DIEM ) {
+      
+      // ---- chọn số ngẫu nhiên và đơn vị hóa
+      float giaTriX = (float)rand()/0x7fffffff;
+      float giaTriY = (float)rand()/0x7fffffff;
+//      printf( "%5.3f %5.3f\n", giaTriX, giaTriY );
+      // ---- chỉnh phạm vi vào  0 ≤ giá trị ≤ 1
+      giaTriX *= 2.0f;
+      giaTriY *= 2.0f;
+      giaTriX -= 1.0f;
+      giaTriY -= 1.0f;
+
+      mangDiem[chiSo] = giaTriX*phongTo + viTriTamX;
+      chiSo++;
+      mangDiem[chiSo] = giaTriY*phongTo + viTriTamY;
+      chiSo++;
+   }
+   
+   duongDaDiem( tep, mangDiem, (kSO_LUONG_DIEM >> 1), kSAI, 0x000000, 0.0f, kDUNG, kBE_DAY_NET, mau, 1.0f );
+}
+
+#pragma mark ======= NGUYÊN TỐ
+
+#define kSO_LUONG__NGUYEN_TO 118  //  số lượng nguyên tốcho vẽ bảng tuần hoàn
+
+#define kKHONG_BIET '-'   // cho  ghi dấu không biết giá trị
 
 
 // ----- Nguyên Tố
@@ -100,7 +400,7 @@ typedef struct {
    float tiTrong;          // tỉ trọng (kg/m3 tại 273 K)
    float nhietDoChay;      // nhiệt độ chảy (K)
    float nhietDoSoi;       // nhiệt độ sôi (K)
-   float banKinh;          // pm (Van Der Waals)
+   float banKinh;          // bán kính Van Der Waals (pm)
    char cauHinhElecton[32]; // cầu hình electron
    float nhietDung;        // nhiệt dunng(kJ/(kmol K)
    float doAmDien;         // độ điện âm
@@ -245,18 +545,6 @@ enum {
    RAN    // rắn
 };
 
-enum {
-   LAP_PHUONG,         // lập phương
-   LAP_PHUONG_TAM_MAT, // lập phương tâm mặt
-   LAP_PHUONG_TAM_KHOI,// lập phương tâm khối
-   LAP_PHUONG_KIM_CUONG,// lập phương kim cương
-   LUC_PHUONG,         // lục phương
-   TRUC_THOI,          // trực thoi
-   DON_NGHIENG,        // đơn nhiêng
-   BA_NGHIENG,         // ba nghiêng
-   BA_PHUONG,          // ba phương
-   VO_DANG,            // vô dạng
-};
 
 #pragma mark ==== Chuẩn Bị Thôn Tin Nguyên Tố
 void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
@@ -813,7 +1101,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 7190;
    nguyenTo->nhietDung = 23.35f;
    nguyenTo->doAmDien = 1.66f;
-   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
+   nguyenTo->cauTrucTinhThe = LAP_PHUONG_TAM_KHOI;
    nguyenTo->nangLuongIonHoa1 = 650.9f;
    nguyenTo->nangLuongIonHoa2 = 1414;
    nguyenTo->banKinh = 128;  // ???
@@ -2895,7 +3183,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = 18000;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
-   nguyenTo->cauTrucTinhThe = VO_DANG;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = 705;
    nguyenTo->nangLuongIonHoa2 = 1820;
    nguyenTo->banKinh = 176;  // <----
@@ -2975,7 +3263,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
-   nguyenTo->cauTrucTinhThe = VO_DANG;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 165;  // <----
@@ -2995,7 +3283,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo->tiTrong = kKHONG_BIET;
    nguyenTo->nhietDung = kKHONG_BIET;
    nguyenTo->doAmDien = kKHONG_BIET;
-   nguyenTo->cauTrucTinhThe = VO_DANG;
+   nguyenTo->cauTrucTinhThe = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa1 = kKHONG_BIET;
    nguyenTo->nangLuongIonHoa2 = kKHONG_BIET;
    nguyenTo->banKinh = 157;  // <----
@@ -3044,11 +3332,14 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
 #define kNHIET_DUNG__VI_TRI_X  0.95f
 #define kNHIET_DUNG__VI_TRI_Y  0.60f
 
-#define kNHIET_DO_CHAY__VI_TRI_X  0.40f
+#define kNHIET_DO_CHAY__VI_TRI_X  0.38f
 #define kNHIET_DO_CHAY__VI_TRI_Y  0.60f
 
-#define kNHIET_DO_SOI__VI_TRI_X  0.40f
+#define kNHIET_DO_SOI__VI_TRI_X  0.38f
 #define kNHIET_DO_SOI__VI_TRI_Y  0.70f
+
+#define kCAU_TRUC_TINH_THE__VI_TRI_X 0.53f
+#define kCAU_TRUC_TINH_THE__VI_TRI_Y 0.60f
 
 #define kTI_TRONG__VI_TRI_X  0.95f
 #define kTI_TRONG__VI_TRI_Y  0.70f
@@ -3127,6 +3418,34 @@ void vanBanNguyenTo( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, floa
    vanBan_ngang( tep, xauSo, gocX_dacTrung, gocY_dacTrung, "Arial", 14.0f*phongTo, "Normal",
                 kDUNG, mauVanBan, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "end" );
    
+   // ---- cấu trúc tinh thể
+   gocX_dacTrung = gocX + coO_ngang*kCAU_TRUC_TINH_THE__VI_TRI_X;
+   gocY_dacTrung = gocY + coO_doc*kCAU_TRUC_TINH_THE__VI_TRI_Y;
+   unsigned char cauTrucTinhThe = nguyenTo->cauTrucTinhThe;
+   if( cauTrucTinhThe == LAP_PHUONG )
+      tinhTheLapPhuong( tep, gocX_dacTrung, gocY_dacTrung, 10.0f*phongTo, 0xffffff );
+   else if( cauTrucTinhThe == LAP_PHUONG_TAM_MAT )
+      tinhTheLapPhuongTamMat( tep, gocX_dacTrung, gocY_dacTrung, 10.0f*phongTo, 0xffffff );
+   else if( cauTrucTinhThe == LAP_PHUONG_TAM_KHOI )
+      tinhTheLapPhuongTamKhoi( tep, gocX_dacTrung, gocY_dacTrung, 10.0f*phongTo, 0xffffff );
+   else if( cauTrucTinhThe == LAP_PHUONG_KIM_CUONG )
+      tinhTheLapPhuongKimCuong( tep, gocX_dacTrung, gocY_dacTrung, 10.0f*phongTo, 0xffffff );
+   else if( cauTrucTinhThe == TRUC_THOI )
+      tinhTheTrucThoi( tep, gocX_dacTrung, gocY_dacTrung, 10.0f*phongTo, 0xffffff );
+   else if( cauTrucTinhThe == LUC_PHUONG )
+      tinhTheLucPhuong( tep, gocX_dacTrung, gocY_dacTrung, 10.0f*phongTo, 0xffffff );
+   else if( cauTrucTinhThe == DON_NGHIENG )
+      tinhTheDonNghieng( tep, gocX_dacTrung, gocY_dacTrung, 10.0f*phongTo, 0xffffff );
+   else if( cauTrucTinhThe == BA_PHUONG )         // ba phương
+      tinhTheBaPhuong( tep, gocX_dacTrung, gocY_dacTrung, 10.0f*phongTo, 0xffffff );
+   else if( cauTrucTinhThe == BA_NGHIENG )         // ba nghiêng
+      tinhTheBaNghieng( tep, gocX_dacTrung, gocY_dacTrung, 10.0f*phongTo, 0xffffff );
+   else if( cauTrucTinhThe == VO_DANG )            // vô dạng
+      tinhTheVoDang( tep, gocX_dacTrung, gocY_dacTrung, 10.0f*phongTo, 0xffffff );
+   else
+      vanBan_ngang( tep, "-", gocX_dacTrung, gocY_dacTrung, "Arial", 14.0f*phongTo, "Normal",
+                   kDUNG, mauVanBan, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
+   
    // ---- nhiệt dung
    gocX_dacTrung = gocX + coO_ngang*kNHIET_DUNG__VI_TRI_X;
    gocY_dacTrung = gocY + coO_doc*kNHIET_DUNG__VI_TRI_Y;
@@ -3190,11 +3509,9 @@ void vanBanNguyenTo( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, floa
          chiSo++;
       }
    }
-
 }
 
 void veNen( FILE *tep, float gocX, float gocY, float coO_ngang, float coO_doc, unsigned int mauNenToanBo, unsigned int mauNenKyHieu ) {
-
 
    chuNhat( tep, gocX, gocY, coO_ngang, coO_doc, kDUNG, mauNenToanBo, 1.0f,
            kDUNG, 1.0f, 0x987654, 1.0f );
@@ -3205,7 +3522,7 @@ void veNen( FILE *tep, float gocX, float gocY, float coO_ngang, float coO_doc, u
    chuNhat( tep, gocX, gocY + coO_doc*0.20f, coO_ngang*0.38f, coO_doc*0.20f, kDUNG, mauNenKyHieu, 0.7f,
            kSAI, 0.0f, 0x000000, 0.0f );
    // ---- nền nhiệt độ
-   chuNhat( tep, gocX, gocY + 0.5f*coO_doc, coO_ngang*0.45f, coO_doc*0.23f, kDUNG, 0xffffff, 0.15f,
+   chuNhat( tep, gocX, gocY + 0.5f*coO_doc, coO_ngang*0.42f, coO_doc*0.23f, kDUNG, 0xffffff, 0.15f,
            kSAI, 0.0f, 0x000000, 0.0f );
    // ---- nền cấu hình electron
    chuNhat( tep, gocX, gocY + 0.73f*coO_doc, coO_ngang, coO_doc*0.12f, kDUNG, 0x000000, 0.25f,
@@ -3220,34 +3537,54 @@ void veNen( FILE *tep, float gocX, float gocY, float coO_ngang, float coO_doc, u
 }
 
 
+// ---- bên trái
 #define kVAN_BAN_DAC_TRUNG__VI_TRI_X  0.50f
 #define kVAN_BAN_DAC_TRUNG__VI_TRI_Y -0.35f
 #define kVAN_BAN_TEN__VI_TRI_X -0.20f
 #define kVAN_BAN_TEN__VI_TRI_Y  0.00f
 #define kVAN_BAN_KY_HIEU__VI_TRI_X -0.20f
 #define kVAN_BAN_KY_HIEU__VI_TRI_Y  0.30f
-#define kVAN_BAN_SO__VI_TRI_X  1.20f
-#define kVAN_BAN_SO__VI_TRI_Y  0.00f
-#define kVAN_BAN_TEN_TRUNG__VI_TRI_X  1.20f
-#define kVAN_BAN_TEN_TRUNG__VI_TRI_Y  0.25f
 #define kVAN_BAN_SO_OXY_HOA__VI_TRI_X -0.20f
 #define kVAN_BAN_SO_OXY_HOA__VI_TRI_Y  0.48f
 #define kVAN_BAN_NHIET_DO_CHAY__VI_TRI_X -0.20f
 #define kVAN_BAN_NHIET_DO_CHAY__VI_TRI_Y 0.65f
 #define kVAN_BAN_NHIET_DO_SOI__VI_TRI_X -0.20f
 #define kVAN_BAN_NHIET_DO_SOI__VI_TRI_Y  0.82f
+#define kVAN_BAN_KHOI_LUONG__VI_TRI_X  -0.20f
+#define kVAN_BAN_KHOI_LUONG__VI_TRI_Y  0.99f
+
+// ---- bên phải
+#define kVAN_BAN_SO_NGUYEN_TU__VI_TRI_X  1.20f
+#define kVAN_BAN_SO_NGUYEN_TU__VI_TRI_Y  0.00f
+#define kVAN_BAN_TEN_TRUNG__VI_TRI_X  1.20f
+#define kVAN_BAN_TEN_TRUNG__VI_TRI_Y  0.17f
+#define kVAN_BAN_CAU_TRUC_TINH_THE__VI_TRI_X  1.20f
+#define kVAN_BAN_CAU_TRUC_TINH_THE__VI_TRI_Y  0.34f
 #define kVAN_BAN_NHIET_DUNG__VI_TRI_X  1.20f
-#define kVAN_BAN_NHIET_DUNG__VI_TRI_Y  0.50f
+#define kVAN_BAN_NHIET_DUNG__VI_TRI_Y  0.52f
 #define kVAN_BAN_TI_TRONG__VI_TRI_X  1.20f
-#define kVAN_BAN_TI_TRONG__VI_TRI_Y  0.70f
+#define kVAN_BAN_TI_TRONG__VI_TRI_Y  0.69f
 #define kVAN_BAN_CAU_HINH_ELECTRON__VI_TRI_X  1.20f
-#define kVAN_BAN_CAU_HINH_ELECTRON__VI_TRI_Y  0.90f
-#define kVAN_BAN_KHOI_LUONG__VI_TRI_X  0.00f
-#define kVAN_BAN_KHOI_LUONG__VI_TRI_Y  1.15f
-#define kVAN_BAN_DO_AM_DIEN__VI_TRI_X  1.00f
-#define kVAN_BAN_DO_AM_DIEN__VI_TRI_Y  1.15f
+#define kVAN_BAN_CAU_HINH_ELECTRON__VI_TRI_Y  0.86f
+#define kVAN_BAN_DO_AM_DIEN__VI_TRI_X  1.20f
+#define kVAN_BAN_DO_AM_DIEN__VI_TRI_Y  1.03f
+
+// ----- giữa dưới
 #define kVAN_BAN_DONG_VI__VI_TRI_X 0.50f
-#define kVAN_BAN_DONG_VI__VI_TRI_Y 1.35f
+#define kVAN_BAN_DONG_VI__VI_TRI_Y 1.25f
+
+// ---- danh sách cấu trúc tinh thể
+#define kTIEU_DE_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_X  2.8f
+#define kTIEU_DE_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_Y -0.28f
+
+#define kVAN_BAN_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_X  3.0f
+#define kVAN_BAN_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_Y -0.1f
+#define kHINH_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_X   2.85f
+#define kHINH_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_Y  -0.14f
+
+#define kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE 0.15f
+
+#define kDO_DUC__NET 0.8f
 
 void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, float coO_ngang, float coO_doc, float phongTo ) {
    
@@ -3275,7 +3612,7 @@ void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, fl
    float y1 = gocY + coO_doc*0.10f;
    float x2 = gocX + coO_ngang*(kVAN_BAN_TEN__VI_TRI_X + 0.02f);
    float y2 = gocY + coO_doc*(kVAN_BAN_TEN__VI_TRI_Y - 0.02f);
-   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
 
    // ---- ký hiểu
    viTriX = gocX + coO_ngang*kVAN_BAN_KY_HIEU__VI_TRI_X;
@@ -3287,26 +3624,26 @@ void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, fl
    y1 = gocY + coO_doc*0.30f;
    x2 = gocX + coO_ngang*(kVAN_BAN_KY_HIEU__VI_TRI_X + 0.02f);
    y2 = gocY + coO_doc*(kVAN_BAN_KY_HIEU__VI_TRI_Y - 0.02f);
-   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
 
    // ---- số nguyên tử
-   viTriX = gocX + coO_ngang*kVAN_BAN_SO__VI_TRI_X;
-   viTriY = gocY + coO_doc*kVAN_BAN_SO__VI_TRI_Y;
-   vanBan_ngang( tep, "Số Nguyên Tử", viTriX, viTriY, "Arial", 25.0f, "Normal",
+   viTriX = gocX + coO_ngang*kVAN_BAN_SO_NGUYEN_TU__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_SO_NGUYEN_TU__VI_TRI_Y;
+   vanBan_ngang( tep, "Số nguyên tử", viTriX, viTriY, "Arial", 25.0f, "Normal",
                 kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
 
    x1 = gocX + coO_ngang*0.60f;
    y1 = gocY + coO_doc*0.30f;
-   x2 = gocX + coO_ngang*(kVAN_BAN_SO__VI_TRI_X - 0.02f);
-   y2 = gocY + coO_doc*(kVAN_BAN_SO__VI_TRI_Y - 0.02f);
-   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
+   x2 = gocX + coO_ngang*(kVAN_BAN_SO_NGUYEN_TU__VI_TRI_X - 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_SO_NGUYEN_TU__VI_TRI_Y - 0.02f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
 
    // ---- tên Trung
    x1 = gocX + coO_ngang*0.90f;
    y1 = gocY + coO_doc*0.30f;
    x2 = gocX + coO_ngang*(kVAN_BAN_TEN_TRUNG__VI_TRI_X - 0.02f);
    y2 = gocY + coO_doc*(kVAN_BAN_TEN_TRUNG__VI_TRI_Y - 0.02f);
-   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
 
    viTriX = gocX + coO_ngang*kVAN_BAN_TEN_TRUNG__VI_TRI_X;
    viTriY = gocY + coO_doc*kVAN_BAN_TEN_TRUNG__VI_TRI_Y;
@@ -3318,7 +3655,7 @@ void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, fl
    y1 = gocY + coO_doc*0.45f;
    x2 = gocX + coO_ngang*(kVAN_BAN_SO_OXY_HOA__VI_TRI_X + 0.02f);
    y2 = gocY + coO_doc*(kVAN_BAN_SO_OXY_HOA__VI_TRI_Y - 0.02);
-   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
 
    viTriX = gocX + coO_ngang*kVAN_BAN_SO_OXY_HOA__VI_TRI_X;
    viTriY = gocY + coO_doc*kVAN_BAN_SO_OXY_HOA__VI_TRI_Y;
@@ -3330,7 +3667,7 @@ void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, fl
    y1 = gocY + coO_doc*0.60f;
    x2 = gocX + coO_ngang*(kVAN_BAN_NHIET_DO_CHAY__VI_TRI_X + 0.02f);
    y2 = gocY + coO_doc*(kVAN_BAN_NHIET_DO_CHAY__VI_TRI_Y - 0.02f);
-   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
 
    viTriX = gocX + coO_ngang*kVAN_BAN_NHIET_DO_CHAY__VI_TRI_X;
    viTriY = gocY + coO_doc*kVAN_BAN_NHIET_DO_CHAY__VI_TRI_Y;
@@ -3342,19 +3679,31 @@ void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, fl
    y1 = gocY + coO_doc*0.70f;
    x2 = gocX + coO_ngang*(kVAN_BAN_NHIET_DO_SOI__VI_TRI_X + 0.02f);
    y2 = gocY + coO_doc*(kVAN_BAN_NHIET_DO_SOI__VI_TRI_Y - 0.02f);
-   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
 
    viTriX = gocX + coO_ngang*kVAN_BAN_NHIET_DO_SOI__VI_TRI_X;
    viTriY = gocY + coO_doc*kVAN_BAN_NHIET_DO_SOI__VI_TRI_Y;
    vanBan_ngang( tep, "Nhiệt độ sôi (K)", viTriX, viTriY, "Arial", 25.0f, "Normal",
                 kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "end" );
 
+   // ---- cấu trúc tinh thể
+   x1 = gocX + coO_ngang*0.55f;
+   y1 = gocY + coO_doc*0.60f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_CAU_TRUC_TINH_THE__VI_TRI_X - 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_CAU_TRUC_TINH_THE__VI_TRI_Y - 0.02f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+
+   viTriX = gocX + coO_ngang*kVAN_BAN_CAU_TRUC_TINH_THE__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_CAU_TRUC_TINH_THE__VI_TRI_Y;
+   vanBan_ngang( tep, "Cấu trúc tinh thể", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
    // ---- nhiệt dụng
    x1 = gocX + coO_ngang*0.90f;
    y1 = gocY + coO_doc*0.58f;
    x2 = gocX + coO_ngang*(kVAN_BAN_NHIET_DUNG__VI_TRI_X - 0.02f);
    y2 = gocY + coO_doc*(kVAN_BAN_NHIET_DUNG__VI_TRI_Y - 0.02f);
-   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
    
    viTriX = gocX + coO_ngang*kVAN_BAN_NHIET_DUNG__VI_TRI_X;
    viTriY = gocY + coO_doc*kVAN_BAN_NHIET_DUNG__VI_TRI_Y;
@@ -3366,31 +3715,31 @@ void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, fl
    y1 = gocY + coO_doc*0.68f;
    x2 = gocX + coO_ngang*(kVAN_BAN_TI_TRONG__VI_TRI_X - 0.02f);
    y2 = gocY + coO_doc*(kVAN_BAN_TI_TRONG__VI_TRI_Y - 0.02f);
-   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
    
    viTriX = gocX + coO_ngang*kVAN_BAN_TI_TRONG__VI_TRI_X;
    viTriY = gocY + coO_doc*kVAN_BAN_TI_TRONG__VI_TRI_Y;
    vanBan_ngang( tep, "Tỉ trọng (kg/m³)", viTriX, viTriY, "Arial", 25.0f, "Normal",
                 kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
 
-   // ---- Cấu hình elentron
+   // ---- cấu hình elentron
    x1 = gocX + coO_ngang*0.70f;
    y1 = gocY + coO_doc*0.80f;
    x2 = gocX + coO_ngang*(kVAN_BAN_CAU_HINH_ELECTRON__VI_TRI_X - 0.02f);
    y2 = gocY + coO_doc*(kVAN_BAN_CAU_HINH_ELECTRON__VI_TRI_Y - 0.02f);
-   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
 
    viTriX = gocX + coO_ngang*kVAN_BAN_CAU_HINH_ELECTRON__VI_TRI_X;
    viTriY = gocY + coO_doc*kVAN_BAN_CAU_HINH_ELECTRON__VI_TRI_Y;
    vanBan_ngang( tep, "Cấu hình elentron", viTriX, viTriY, "Arial", 25.0f, "Normal",
                 kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
 
-   // ---- Khối lượng nguyên tử
+   // ---- khối lượng nguyên tử
    x1 = gocX + coO_ngang*0.10f;
    y1 = gocY + coO_doc*0.90f;
-   x2 = gocX + coO_ngang*(kVAN_BAN_KHOI_LUONG__VI_TRI_X - 0.50f);
+   x2 = gocX + coO_ngang*(kVAN_BAN_KHOI_LUONG__VI_TRI_X + 0.02f);
    y2 = gocY + coO_doc*(kVAN_BAN_KHOI_LUONG__VI_TRI_Y - 0.08f);
-   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
 
    viTriX = gocX + coO_ngang*kVAN_BAN_KHOI_LUONG__VI_TRI_X;
    viTriY = gocY + coO_doc*kVAN_BAN_KHOI_LUONG__VI_TRI_Y;
@@ -3400,9 +3749,9 @@ void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, fl
    // ---- độ âm điện
    x1 = gocX + coO_ngang*0.9f;
    y1 = gocY + coO_doc*0.90f;
-   x2 = gocX + coO_ngang*(kVAN_BAN_DO_AM_DIEN__VI_TRI_X + 0.2f);
-   y2 = gocY + coO_doc*(kVAN_BAN_DO_AM_DIEN__VI_TRI_Y - 0.08f);
-   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
+   x2 = gocX + coO_ngang*(kVAN_BAN_DO_AM_DIEN__VI_TRI_X - 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_DO_AM_DIEN__VI_TRI_Y - 0.02f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
 
    viTriX = gocX + coO_ngang*kVAN_BAN_DO_AM_DIEN__VI_TRI_X;
    viTriY = gocY + coO_doc*kVAN_BAN_DO_AM_DIEN__VI_TRI_Y;
@@ -3412,14 +3761,96 @@ void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, fl
    // ---- những đồng vị ổn định
    x1 = gocX + coO_ngang*0.08f;
    y1 = gocY + coO_doc*0.99f;
-   x2 = gocX + coO_ngang*kVAN_BAN_DONG_VI__VI_TRI_X;
-   y2 = gocY + coO_doc*(kVAN_BAN_DONG_VI__VI_TRI_Y - 0.08f);
-   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, 0.5f );
+   x2 = gocX + coO_ngang*(kVAN_BAN_DONG_VI__VI_TRI_X - 0.5f);
+   y2 = gocY + coO_doc*(kVAN_BAN_DONG_VI__VI_TRI_Y - 0.1f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
    
    viTriX = gocX + coO_ngang*kVAN_BAN_DONG_VI__VI_TRI_X;
    viTriY = gocY + coO_doc*kVAN_BAN_DONG_VI__VI_TRI_Y;
-   vanBan_ngang( tep, "Những đồng vị ổ định (hay > 10¹⁰ năm)", viTriX, viTriY, "Arial", 25.0f, "Normal",
+   vanBan_ngang( tep, "Những đồng vị ổ định (hay bán rã > 10¹⁰ năm)", viTriX, viTriY, "Arial", 25.0f, "Normal",
                 kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
+   
+   // ==== cho mô tả cấu trúc tinh thể
+   // ---- tiêu đề
+   viTriX = gocX + coO_ngang*kTIEU_DE_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_X;
+   viTriY = gocY + coO_doc*kTIEU_DE_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_Y;
+   vanBan_ngang( tep, "Ký hiệu cấu trúc tinh thể", viTriX, viTriY, "Arial", 30.0f, "Bold",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   // ---- văn bản
+   viTriX = gocX + coO_ngang*kVAN_BAN_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_Y;
+   vanBan_ngang( tep, "- Lập phương", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- Lập phương tâm mặt", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- Lập phương tâm khối", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- Lập phương kim cương", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- Trục thoi", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- Lục phương", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- Đơn nghiêng", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- Ba phương", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- Ba nghiêng", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- Vô dạng", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   // ---- ký hiệu
+   viTriX = gocX + coO_ngang*kHINH_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_X;
+   viTriY = gocY + coO_doc*kHINH_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_Y;
+   tinhTheLapPhuong( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheLapPhuongTamMat( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheLapPhuongTamKhoi( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheLapPhuongKimCuong( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheTrucThoi( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheLucPhuong( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheDonNghieng( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheBaPhuong( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheBaNghieng( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheVoDang( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+
 }
 
 
@@ -3454,7 +3885,6 @@ void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo 
                 kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
 
    while( soNguyenTo < kSO_LUONG__NGUYEN_TO ) {
-
       
       if( soNguyenTo == HELI )
          gocX += 30.0f*(coO_ngang + giuaNgang);
@@ -3650,7 +4080,7 @@ void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo 
    // ==== tên công ty
    gocX = kLE_TRAI - 0.2f*coO_ngang;
    gocY = kLE_TREN + 7.6f*(coO_doc + giuaDoc);
-      vanBan_ngang( tep, "THNN TINH PHỤNG 2023.06.13 - An Giang, Phạm Vi công cộng", gocX, gocY, "Arial", 25.0f, "Normal", kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+      vanBan_ngang( tep, "THNN TINH PHỤNG 2023.07.11 - An Giang, Phạm Vi công cộng", gocX, gocY, "Arial", 25.0f, "Normal", kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
 };
 
 #pragma mark ==== main
@@ -3680,11 +4110,13 @@ int main( int argc, char *argv[] ) {
          float coO_doc = kBE_CAO__KHO - kLE_DUOI - kLE_TREN - (soLuongO_doc-1)*kGIUA_DOC;
          coO_doc /= (float)soLuongO_doc;
          
+         printf( "Khổ ô: %5.1f  %5.1f\n", coO_ngang, coO_doc );
+         
          // ==== SVG
          // ----ghi đầu tập tin SVG
          ghiDauSVG( tapTinSVG, kBE_RONG__KHO, kBE_CAO__KHO );
  
-         printf( "Khổ ô: %5.1f  %5.1f\n", coO_ngang, coO_doc );
+         // ---- vẽ bảng tuần hoàn
          veBangTuanHoanDungCoO( tapTinSVG, coO_ngang, coO_doc, mangNguyenTo, kLE_TRAI, kLE_TREN,
                                kGIUA_NGANG, kGIUA_DOC );
 
