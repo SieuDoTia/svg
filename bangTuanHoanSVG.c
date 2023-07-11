@@ -230,7 +230,7 @@ void tinhTheLapPhuongTamKhoi( FILE *tep, float viTriTamX, float viTriTamY, float
    mangDiem[5] = mangDiem[3];
    mangDiem[6] = mangDiem[4];
    mangDiem[7] = mangDiem[1];
-   daGiac( tep, mangDiem, 4, kSAI, 0x000000, 0.0f, kDUNG, 2.0f, mau, 1.0f );
+   daGiac( tep, mangDiem, 4, kSAI, 0x000000, 0.0f, kDUNG, kBE_DAY_NET, mau, 1.0f );
    
    // ---- hình tròn guữa
    hinhTron( tep, viTriTamX, viTriTamY, 0.1f*phongTo, kSAI, 0x000000, 0.0f,  kDUNG, kBE_DAY_NET, mau, 1.0f );
@@ -256,7 +256,7 @@ void tinhTheLapPhuongKimCuong( FILE *tep, float viTriTamX, float viTriTamY, floa
    mangDiem[13] = mangDiem[5];
    mangDiem[14] = mangDiem[10];
    mangDiem[15] = mangDiem[3];
-   daGiac( tep, mangDiem, 8, kSAI, 0x000000, 0.0f, kDUNG, 2.0f, mau, 1.0f );
+   daGiac( tep, mangDiem, 8, kSAI, 0x000000, 0.0f, kDUNG, kBE_DAY_NET, mau, 1.0f );
 
    // ---- hai nét chéo
    duong( tep, mangDiem[0], mangDiem[1], mangDiem[8], mangDiem[9], kBE_DAY_NET, mau, 1.0f );
