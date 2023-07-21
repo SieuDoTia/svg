@@ -24,6 +24,11 @@
 #define kSAI  0
 #define kDUNG 1
 
+enum {
+   VIET,
+   THAI,
+};
+
 // rộng: 2 + 14 + 10 + 6 = 32
 // cao: 7
 
@@ -393,6 +398,7 @@ void tinhTheVoDang( FILE *tep, float viTriTamX, float viTriTamY, float phongTo, 
 typedef struct {
    unsigned char so;       // số nguyên tố
    char ten[32];           // tên
+   char tenThai[64];       // tên Thái
    char kyHieu[4];         // ký hiệu
    char tenTrung[5];       // tên tiếng Trung Quốc
    float khoiLuong;        // khối lượng nguyên tử chuẩn
@@ -553,6 +559,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    NguyenTo *nguyenTo = &(mangNguyenTo[HIDRO]);
    nguyenTo->so = 1;
    strcpy( nguyenTo->ten, "Hiđrô" );
+   strcpy( nguyenTo->tenThai, "ไฮโดรเจน" );
    strcpy( nguyenTo->kyHieu, "H" );
    strcpy( nguyenTo->tenTrung, "氢" );
    nguyenTo->khoiLuong = 1.0079f;
@@ -576,6 +583,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[HELI]);
    nguyenTo->so = 2;
    strcpy( nguyenTo->ten, "Heli" );
+   strcpy( nguyenTo->tenThai, "ฮีเลียม" );
    strcpy( nguyenTo->kyHieu, "He" );
    strcpy( nguyenTo->tenTrung, "氦" );
    nguyenTo->khoiLuong = 4.0026f;
@@ -599,6 +607,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[LITI]);
    nguyenTo->so = 3;
    strcpy( nguyenTo->ten, "Liti" );
+   strcpy( nguyenTo->tenThai, "ลิเทียม" );
    strcpy( nguyenTo->kyHieu, "Li" );
    strcpy( nguyenTo->tenTrung, "锂" );
    nguyenTo->khoiLuong = 6.941f;
@@ -622,6 +631,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[BERI]);
    nguyenTo->so = 4;
    strcpy( nguyenTo->ten, "Beri" );
+   strcpy( nguyenTo->tenThai, "เบริลเลียม" );
    strcpy( nguyenTo->kyHieu, "Be" );
    strcpy( nguyenTo->tenTrung, "铍" );
    nguyenTo->khoiLuong = 9.0122f;
@@ -644,6 +654,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[BO]);
    nguyenTo->so = 5;
    strcpy( nguyenTo->ten, "Bo" );
+   strcpy( nguyenTo->tenThai, "โบรอน" );
    strcpy( nguyenTo->kyHieu, "B" );
    strcpy( nguyenTo->tenTrung, "硼" );
    nguyenTo->khoiLuong = 10.8117f;
@@ -667,6 +678,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[CACBON]);
    nguyenTo->so = 6;
    strcpy( nguyenTo->ten, "Cacbon" );
+   strcpy( nguyenTo->tenThai, "คาร์บอน" );
    strcpy( nguyenTo->kyHieu, "C" );
    strcpy( nguyenTo->tenTrung, "碳" );
    nguyenTo->khoiLuong = 12.0108f;
@@ -690,6 +702,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[NITO]);
    nguyenTo->so = 7;
    strcpy( nguyenTo->ten, "Nitơ" );
+   strcpy( nguyenTo->tenThai, "ไนโตรเจน" );
    strcpy( nguyenTo->kyHieu, "N" );
    strcpy( nguyenTo->tenTrung, "氮" );
    nguyenTo->khoiLuong = 14.0067f;
@@ -713,6 +726,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[OXI]);
    nguyenTo->so = 8;
    strcpy( nguyenTo->ten, "Oxi" );
+   strcpy( nguyenTo->tenThai, "ออกซิเจน" );
    strcpy( nguyenTo->kyHieu, "O" );
    strcpy( nguyenTo->tenTrung, "氧" );
    nguyenTo->khoiLuong = 15.9994f;
@@ -737,6 +751,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[FLO]);
    nguyenTo->so = 9;
    strcpy( nguyenTo->ten, "Flo" );
+   strcpy( nguyenTo->tenThai, "ฟลูออรีน" );
    strcpy( nguyenTo->kyHieu, "F" );
    strcpy( nguyenTo->tenTrung, "氟" );
    nguyenTo->khoiLuong = 18.9984f;
@@ -759,6 +774,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[NEON]);
    nguyenTo->so = 10;
    strcpy( nguyenTo->ten, "Neon" );
+   strcpy( nguyenTo->tenThai, "นีออน" );
    strcpy( nguyenTo->kyHieu, "Ne" );
    strcpy( nguyenTo->tenTrung, "氖" );
    nguyenTo->khoiLuong = 20.1798f;
@@ -783,6 +799,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[NATRI]);
    nguyenTo->so = 11;
    strcpy( nguyenTo->ten, "Natri" );
+   strcpy( nguyenTo->tenThai, "โซเดียม" );
    strcpy( nguyenTo->kyHieu, "Na" );
    strcpy( nguyenTo->tenTrung, "钠" );
    nguyenTo->khoiLuong = 22.9897f;
@@ -805,6 +822,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[MAGIE]);
    nguyenTo->so = 12;
    strcpy( nguyenTo->ten, "Magie" );
+   strcpy( nguyenTo->tenThai, "แมกนีเซียม" );
    strcpy( nguyenTo->kyHieu, "Mg" );
    strcpy( nguyenTo->tenTrung, "镁" );
    nguyenTo->khoiLuong = 24.3051f;
@@ -829,6 +847,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[NHOM]);
    nguyenTo->so = 13;
    strcpy( nguyenTo->ten, "Nhôm" );
+   strcpy( nguyenTo->tenThai, "อะลูมิเนียม" );
    strcpy( nguyenTo->kyHieu, "Al" );
    strcpy( nguyenTo->tenTrung, "铝" );
    nguyenTo->khoiLuong = 26.9815f;
@@ -851,6 +870,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[SILIC]);
    nguyenTo->so = 14;
    strcpy( nguyenTo->ten, "Silic" );
+   strcpy( nguyenTo->tenThai, "ซิลิคอน" );
    strcpy( nguyenTo->kyHieu, "Si" );
    strcpy( nguyenTo->tenTrung, "硅" );
    nguyenTo->khoiLuong = 28.0855f;
@@ -875,6 +895,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[PHOTPHO]);
    nguyenTo->so = 15;
    strcpy( nguyenTo->ten, "Photpho" );
+   strcpy( nguyenTo->tenThai, "ฟอสฟอรัส" );
    strcpy( nguyenTo->kyHieu, "P" );
    strcpy( nguyenTo->tenTrung, "磷" );
    nguyenTo->khoiLuong = 30.9737f;
@@ -897,6 +918,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[LUU_HUYNH]);
    nguyenTo->so = 16;
    strcpy( nguyenTo->ten, "Lưu Huỳnh" );
+   strcpy( nguyenTo->tenThai, "กำมะถัน" );
    strcpy( nguyenTo->kyHieu, "S" );
    strcpy( nguyenTo->tenTrung, "硫" );
    nguyenTo->khoiLuong = 32.0655f;
@@ -921,6 +943,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[CLO]);
    nguyenTo->so = 17;
    strcpy( nguyenTo->ten, "Clo" );
+   strcpy( nguyenTo->tenThai, "คลอรีน" );
    strcpy( nguyenTo->kyHieu, "Cl" );
    strcpy( nguyenTo->tenTrung, "氯" );
    nguyenTo->khoiLuong = 35.4532f;
@@ -944,6 +967,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[ARGON]);
    nguyenTo->so = 18;
    strcpy( nguyenTo->ten, "Argon" );
+   strcpy( nguyenTo->tenThai, "อาร์กอน" );
    strcpy( nguyenTo->kyHieu, "Ar" );
    strcpy( nguyenTo->tenTrung, "氩" );
    nguyenTo->khoiLuong = 39.9481f;
@@ -968,6 +992,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[KALI]);
    nguyenTo->so = 19;
    strcpy( nguyenTo->ten, "Kali" );
+   strcpy( nguyenTo->tenThai, "โพแทสเซียม" );
    strcpy( nguyenTo->kyHieu, "K" );
    strcpy( nguyenTo->tenTrung, "钾" );
    nguyenTo->khoiLuong = 39.0983f;
@@ -992,6 +1017,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[CANXI]);
    nguyenTo->so = 20;
    strcpy( nguyenTo->ten, "Canxi" );
+   strcpy( nguyenTo->tenThai, "แคลเซียม" );
    strcpy( nguyenTo->kyHieu, "Ca" );
    strcpy( nguyenTo->tenTrung, "钙" );
    nguyenTo->khoiLuong = 40.0784f;
@@ -1019,6 +1045,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[SCANDI]);
    nguyenTo->so = 21;
    strcpy( nguyenTo->ten, "Scanđi" );
+   strcpy( nguyenTo->tenThai, "สแกนเดียม" );
    strcpy( nguyenTo->kyHieu, "Sc" );
    strcpy( nguyenTo->tenTrung, "钪" );
    nguyenTo->khoiLuong = 44.9559f;
@@ -1041,6 +1068,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[TITAN]);
    nguyenTo->so = 22;
    strcpy( nguyenTo->ten, "Titan" );
+   strcpy( nguyenTo->tenThai, "ไทเทเนียม" );
    strcpy( nguyenTo->kyHieu, "Ti" );
    strcpy( nguyenTo->tenTrung, "钛" );
    nguyenTo->khoiLuong = 47.8671f;
@@ -1067,6 +1095,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[VANADI]);
    nguyenTo->so = 23;
    strcpy( nguyenTo->ten, "Vanađi" );
+   strcpy( nguyenTo->tenThai, "วาเนเดียม" );
    strcpy( nguyenTo->kyHieu, "V" );
    strcpy( nguyenTo->tenTrung, "钒" );
    nguyenTo->khoiLuong = 50.9415f;
@@ -1090,6 +1119,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[CROM]);
    nguyenTo->so = 24;
    strcpy( nguyenTo->ten, "Crom" );
+   strcpy( nguyenTo->tenThai, "โครเมียม" );
    strcpy( nguyenTo->kyHieu, "Cr" );
    strcpy( nguyenTo->tenTrung, "铬" );
    nguyenTo->khoiLuong = 50.9415f;
@@ -1115,6 +1145,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[MANGAN]);
    nguyenTo->so = 25;
    strcpy( nguyenTo->ten, "Mangan" );
+   strcpy( nguyenTo->tenThai, "แมงกานีส" );
    strcpy( nguyenTo->kyHieu, "Mn" );
    strcpy( nguyenTo->tenTrung, "锰" );
    nguyenTo->khoiLuong = 54.9380f;
@@ -1137,6 +1168,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[SAT]);
    nguyenTo->so = 26;
    strcpy( nguyenTo->ten, "Sắt" );
+   strcpy( nguyenTo->tenThai, "เหล็ก" );
    strcpy( nguyenTo->kyHieu, "Fe" );
    strcpy( nguyenTo->tenTrung, "铁" );
    nguyenTo->khoiLuong = 55.8452f;
@@ -1162,6 +1194,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[COBAN]);
    nguyenTo->so = 27;
    strcpy( nguyenTo->ten, "Coban" );
+   strcpy( nguyenTo->tenThai, "โคบอลต์" );
    strcpy( nguyenTo->kyHieu, "Co" );
    strcpy( nguyenTo->tenTrung, "钴" );
    nguyenTo->khoiLuong = 58.9332f;
@@ -1184,6 +1217,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[NICKEN]);
    nguyenTo->so = 28;
    strcpy( nguyenTo->ten, "Nicken" );
+   strcpy( nguyenTo->tenThai, "นิกเกิล" );
    strcpy( nguyenTo->kyHieu, "Ni" );
    strcpy( nguyenTo->tenTrung, "镍" );
    nguyenTo->khoiLuong = 58.6934f;
@@ -1210,6 +1244,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[DONG]);
    nguyenTo->so = 29;
    strcpy( nguyenTo->ten, "Đồng" );
+   strcpy( nguyenTo->tenThai, "ทองแดง" );
    strcpy( nguyenTo->kyHieu, "Cu" );
    strcpy( nguyenTo->tenTrung, "铜" );
    nguyenTo->khoiLuong = 63.5463f;
@@ -1233,6 +1268,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[KEM]);
    nguyenTo->so = 30;
    strcpy( nguyenTo->ten, "Kẽm" );
+   strcpy( nguyenTo->tenThai, "สังกะสี" );
    strcpy( nguyenTo->kyHieu, "Zn" );
    strcpy( nguyenTo->tenTrung, "锌" );
    nguyenTo->khoiLuong = 65.382f;
@@ -1259,6 +1295,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[GALI]);
    nguyenTo->so = 31;
    strcpy( nguyenTo->ten, "Gali" );
+   strcpy( nguyenTo->tenThai, "แกลเลียม" );
    strcpy( nguyenTo->kyHieu, "Ga" );
    strcpy( nguyenTo->tenTrung, "镓" );
    nguyenTo->khoiLuong = 69.7231f;
@@ -1282,6 +1319,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[GEMANI]);
    nguyenTo->so = 32;
    strcpy( nguyenTo->ten, "Gemani" );
+   strcpy( nguyenTo->tenThai, "เจอร์เมเนียม" );
    strcpy( nguyenTo->kyHieu, "Ge" );
    strcpy( nguyenTo->tenTrung, "锗" );
    nguyenTo->khoiLuong = 72.631f;
@@ -1308,6 +1346,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[ASEN]);
    nguyenTo->so = 33;
    strcpy( nguyenTo->ten, "Asen" );
+   strcpy( nguyenTo->tenThai, "สารหนู" );
    strcpy( nguyenTo->kyHieu, "As" );
    strcpy( nguyenTo->tenTrung, "砷" );
    nguyenTo->khoiLuong = 74.9216f;
@@ -1330,6 +1369,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[SELENI]);
    nguyenTo->so = 34;
    strcpy( nguyenTo->ten, "Seleni" );
+   strcpy( nguyenTo->tenThai, "ซีลีเนียม" );
    strcpy( nguyenTo->kyHieu, "Se" );
    strcpy( nguyenTo->tenTrung, "硒" );
    nguyenTo->khoiLuong = 78.96f;
@@ -1357,6 +1397,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[BROM]);
    nguyenTo->so = 35;
    strcpy( nguyenTo->ten, "Brom" );
+   strcpy( nguyenTo->tenThai, "โบรมีน" );
    strcpy( nguyenTo->kyHieu, "Br" );
    strcpy( nguyenTo->tenTrung, "溴" );
    nguyenTo->khoiLuong = 79.9041f;
@@ -1380,6 +1421,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[KRYPTON]);
    nguyenTo->so = 36;
    strcpy( nguyenTo->ten, "Krypton" );
+   strcpy( nguyenTo->tenThai, "คริปทอน" );
    strcpy( nguyenTo->kyHieu, "Kr" );
    strcpy( nguyenTo->tenTrung, "氪" );
    nguyenTo->khoiLuong = 83.798f;
@@ -1407,6 +1449,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[RUBIDI]);
    nguyenTo->so = 37;
    strcpy( nguyenTo->ten, "Rubiđi" );
+   strcpy( nguyenTo->tenThai, "รูบิเดียม" );
    strcpy( nguyenTo->kyHieu, "Rb" );
    strcpy( nguyenTo->tenTrung, "铷" );
    nguyenTo->khoiLuong = 85.4678f;
@@ -1430,6 +1473,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[STRONTI]);
    nguyenTo->so = 38;
    strcpy( nguyenTo->ten, "Stronti" );
+   strcpy( nguyenTo->tenThai, "สตรอนเชียม" );
    strcpy( nguyenTo->kyHieu, "Sr" );
    strcpy( nguyenTo->tenTrung, "锶" );
    nguyenTo->khoiLuong = 87.62f;
@@ -1455,6 +1499,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[YTRI]);
    nguyenTo->so = 39;
    strcpy( nguyenTo->ten, "Ytri" );
+   strcpy( nguyenTo->tenThai, "อิตเทรียม" );
    strcpy( nguyenTo->kyHieu, "Y" );
    strcpy( nguyenTo->tenTrung, "钇" );
    nguyenTo->khoiLuong = 88.9059f;
@@ -1477,6 +1522,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[ZIRCONI]);
    nguyenTo->so = 40;
    strcpy( nguyenTo->ten, "Zirconi" );
+   strcpy( nguyenTo->tenThai, "เซอร์โคเนียม" );
    strcpy( nguyenTo->kyHieu, "Zr" );
    strcpy( nguyenTo->tenTrung, "锆" );
    nguyenTo->khoiLuong = 91.224f;
@@ -1503,6 +1549,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[NIOBI]);
    nguyenTo->so = 41;
    strcpy( nguyenTo->ten, "Niobi" );
+   strcpy( nguyenTo->tenThai, "ไนโอเบียม" );
    strcpy( nguyenTo->kyHieu, "Nb" );
    strcpy( nguyenTo->tenTrung, "铌" );
    nguyenTo->khoiLuong = 92.9064f;
@@ -1525,6 +1572,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[MOLIPDEN]);
    nguyenTo->so = 42;
    strcpy( nguyenTo->ten, "Molipđen" );
+   strcpy( nguyenTo->tenThai, "โมลิบดีนัม" );
    strcpy( nguyenTo->kyHieu, "Mo" );
    strcpy( nguyenTo->tenTrung, "钼" );
    nguyenTo->khoiLuong = 95.941f;
@@ -1553,6 +1601,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[TECNEXI]);
    nguyenTo->so = 43;
    strcpy( nguyenTo->ten, "Tecnexi" );
+   strcpy( nguyenTo->tenThai, "เทคนีเชียม" );
    strcpy( nguyenTo->kyHieu, "Tc" );
    strcpy( nguyenTo->tenTrung, "锝" );
    nguyenTo->khoiLuong = 98.0f;
@@ -1574,6 +1623,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[RUTENI]);
    nguyenTo->so = 44;
    strcpy( nguyenTo->ten, "Ruteni" );
+   strcpy( nguyenTo->tenThai, "รูทีเนียม" );
    strcpy( nguyenTo->kyHieu, "Ru" );
    strcpy( nguyenTo->tenTrung, "钌" );
    nguyenTo->khoiLuong = 101.07f;
@@ -1602,6 +1652,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[RODI]);
    nguyenTo->so = 45;
    strcpy( nguyenTo->ten, "Rôđi" );
+   strcpy( nguyenTo->tenThai, "โรเดียม" );
    strcpy( nguyenTo->kyHieu, "Rh" );
    strcpy( nguyenTo->tenTrung, "铑" );
    nguyenTo->khoiLuong = 102.9055f;
@@ -1624,6 +1675,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[PALADI]);
    nguyenTo->so = 46;
    strcpy( nguyenTo->ten, "Paladi" );
+   strcpy( nguyenTo->tenThai, "แพลเลเดียม" );
    strcpy( nguyenTo->kyHieu, "Pd" );
    strcpy( nguyenTo->tenTrung, "钯" );
    nguyenTo->khoiLuong = 106.42f;
@@ -1651,6 +1703,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[BAC]);
    nguyenTo->so = 47;
    strcpy( nguyenTo->ten, "Bạc" );
+   strcpy( nguyenTo->tenThai, "เงินตรา" );
    strcpy( nguyenTo->kyHieu, "Ag" );
    strcpy( nguyenTo->tenTrung, "銀" );
    nguyenTo->khoiLuong = 107.8682f;
@@ -1674,6 +1727,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[CADIMI]);
    nguyenTo->so = 48;
    strcpy( nguyenTo->ten, "Cađimi" );
+   strcpy( nguyenTo->tenThai, "แคดเมียม" );
    strcpy( nguyenTo->kyHieu, "Cd" );
    strcpy( nguyenTo->tenTrung, "镉" );
    nguyenTo->khoiLuong = 112.411f;
@@ -1703,6 +1757,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[INDI]);
    nguyenTo->so = 49;
    strcpy( nguyenTo->ten, "Inđi" );
+   strcpy( nguyenTo->tenThai, "อินเดียม" );
    strcpy( nguyenTo->kyHieu, "In" );
    strcpy( nguyenTo->tenTrung, "铟" );
    nguyenTo->khoiLuong = 114.818f;
@@ -1726,6 +1781,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[THIEC]);
    nguyenTo->so = 50;
    strcpy( nguyenTo->ten, "Thiếc" );
+   strcpy( nguyenTo->tenThai, "ดีบุก" );
    strcpy( nguyenTo->kyHieu, "Sn" );
    strcpy( nguyenTo->tenTrung, "锡" );
    nguyenTo->khoiLuong = 118.710f;
@@ -1757,6 +1813,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[ANTIMON]);
    nguyenTo->so = 51;
    strcpy( nguyenTo->ten, "Antimon" );
+   strcpy( nguyenTo->tenThai, "พลวง" );
    strcpy( nguyenTo->kyHieu, "Sb" );
    strcpy( nguyenTo->tenTrung, "锑" );
    nguyenTo->khoiLuong = 121.7601f;
@@ -1780,6 +1837,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[TELU]);
    nguyenTo->so = 52;
    strcpy( nguyenTo->ten, "Telu" );
+   strcpy( nguyenTo->tenThai, "เทลลูเรียม" );
    strcpy( nguyenTo->kyHieu, "Te" );
    strcpy( nguyenTo->tenTrung, "碲" );
    nguyenTo->khoiLuong = 127.60;
@@ -1809,6 +1867,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[IOT]);
    nguyenTo->so = 53;
    strcpy( nguyenTo->ten, "Iot" );
+   strcpy( nguyenTo->tenThai, "ไอโอดีน" );
    strcpy( nguyenTo->kyHieu, "I" );
    strcpy( nguyenTo->tenTrung, "碘" );
    nguyenTo->khoiLuong = 126.9045;
@@ -1831,6 +1890,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[XENON]);
    nguyenTo->so = 54;
    strcpy( nguyenTo->ten, "Xenon" );
+   strcpy( nguyenTo->tenThai, "ซีนอน" );
    strcpy( nguyenTo->kyHieu, "Xe" );
    strcpy( nguyenTo->tenTrung, "氙" );
    nguyenTo->khoiLuong = 131.2936f;
@@ -1861,6 +1921,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[XESI]);
    nguyenTo->so = 55;
    strcpy( nguyenTo->ten, "Xesi" );
+   strcpy( nguyenTo->tenThai, "ซีเซียม" );
    strcpy( nguyenTo->kyHieu, "Cs" );
    strcpy( nguyenTo->tenTrung, "铯" );
    nguyenTo->khoiLuong = 132.9055f;
@@ -1883,6 +1944,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[BARI]);
    nguyenTo->so = 56;
    strcpy( nguyenTo->ten, "Bari" );
+   strcpy( nguyenTo->tenThai, "แบเรียม" );
    strcpy( nguyenTo->kyHieu, "Ba" );
    strcpy( nguyenTo->tenTrung, "钡" );
    nguyenTo->khoiLuong = 137.3277f;
@@ -1911,6 +1973,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[LANTAN]);
    nguyenTo->so = 57;
    strcpy( nguyenTo->ten, "Lantan" );
+   strcpy( nguyenTo->tenThai, "แลนทานัม" );
    strcpy( nguyenTo->kyHieu, "La" );
    strcpy( nguyenTo->tenTrung, "镧" );
    nguyenTo->khoiLuong = 138.9055f;
@@ -1934,6 +1997,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[XERI]);
    nguyenTo->so = 58;
    strcpy( nguyenTo->ten, "Xeri" );
+   strcpy( nguyenTo->tenThai, "ซีเรียม" );
    strcpy( nguyenTo->kyHieu, "Ce" );
    strcpy( nguyenTo->tenTrung, "铈" );
    nguyenTo->khoiLuong = 140.116f;
@@ -1959,6 +2023,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[PRAZEODIM]);
    nguyenTo->so = 59;
    strcpy( nguyenTo->ten, "Prazeođim" );
+   strcpy( nguyenTo->tenThai, "เพรซีโอดิเมียม" );
    strcpy( nguyenTo->kyHieu, "Pr" );
    strcpy( nguyenTo->tenTrung, "镨" );
    nguyenTo->khoiLuong = 140.9077f;
@@ -1981,6 +2046,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[NEODYMI]);
    nguyenTo->so = 60;
    strcpy( nguyenTo->ten, "Neođim" );
+   strcpy( nguyenTo->tenThai, "นีโอดิเมียม" );
    strcpy( nguyenTo->kyHieu, "Nd" );
    strcpy( nguyenTo->tenTrung, "钕" );
    nguyenTo->khoiLuong = 144.242f;
@@ -2009,6 +2075,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[PROMETI]);
    nguyenTo->so = 61;
    strcpy( nguyenTo->ten, "Prometi" );
+   strcpy( nguyenTo->tenThai, "โพรมีเทียม" );
    strcpy( nguyenTo->kyHieu, "Pm" );
    strcpy( nguyenTo->tenTrung, "钷" );
    nguyenTo->khoiLuong = 145;
@@ -2030,6 +2097,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[SAMARI]);
    nguyenTo->so = 62;
    strcpy( nguyenTo->ten, "Samari" );
+   strcpy( nguyenTo->tenThai, "ซาแมเรียม" );
    strcpy( nguyenTo->kyHieu, "Sm" );
    strcpy( nguyenTo->tenTrung, "钐" );
    nguyenTo->khoiLuong = 150.36f;
@@ -2058,6 +2126,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[EUROPI]);
    nguyenTo->so = 63;
    strcpy( nguyenTo->ten, "Europi" );
+   strcpy( nguyenTo->tenThai, "ยูโรเพียม" );
    strcpy( nguyenTo->kyHieu, "Eu" );
    strcpy( nguyenTo->tenTrung, "铕" );
    nguyenTo->khoiLuong = 151.964f;
@@ -2081,6 +2150,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[GADOLINI]);
    nguyenTo->so = 64;
    strcpy( nguyenTo->ten, "Gađolini" );
+   strcpy( nguyenTo->tenThai, "แกโดลิเนียม" );
    strcpy( nguyenTo->kyHieu, "Gd" );
    strcpy( nguyenTo->tenTrung, "钆" );
    nguyenTo->khoiLuong = 157.25f;
@@ -2109,6 +2179,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[TEBI]);
    nguyenTo->so = 65;
    strcpy( nguyenTo->ten, "Tebi" );
+   strcpy( nguyenTo->tenThai, "เทอร์เบียม" );
    strcpy( nguyenTo->kyHieu, "Tb" );
    strcpy( nguyenTo->tenTrung, "铽" );
    nguyenTo->khoiLuong = 158.9254f;
@@ -2131,6 +2202,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[DIPROZI]);
    nguyenTo->so = 66;
    strcpy( nguyenTo->ten, "Điprozi" );
+   strcpy( nguyenTo->tenThai, "ดิสโพรเซียม" );
    strcpy( nguyenTo->kyHieu, "Dy" );
    strcpy( nguyenTo->tenTrung, "镝" );
    nguyenTo->khoiLuong = 162.500f;
@@ -2159,6 +2231,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[HONMI]);
    nguyenTo->so = 67;
    strcpy( nguyenTo->ten, "Honmi" );
+   strcpy( nguyenTo->tenThai, "โฮลเมียม" );
    strcpy( nguyenTo->kyHieu, "Ho" );
    strcpy( nguyenTo->tenTrung, "钬" );
    nguyenTo->khoiLuong = 164.9303f;
@@ -2181,6 +2254,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[ERBI]);
    nguyenTo->so = 68;
    strcpy( nguyenTo->ten, "Eribi" );
+   strcpy( nguyenTo->tenThai, "เออร์เบียม" );
    strcpy( nguyenTo->kyHieu, "Er" );
    strcpy( nguyenTo->tenTrung, "铒" );
    nguyenTo->khoiLuong = 167.259f;
@@ -2208,6 +2282,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[TULI]);
    nguyenTo->so = 69;
    strcpy( nguyenTo->ten, "Tuli" );
+   strcpy( nguyenTo->tenThai, "ทูเลียม" );
    strcpy( nguyenTo->kyHieu, "Tm" );
    strcpy( nguyenTo->tenTrung, "铥" );
    nguyenTo->khoiLuong = 168.9342f;
@@ -2230,6 +2305,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[YTECBI]);
    nguyenTo->so = 70;
    strcpy( nguyenTo->ten, "Ytecbi" );
+   strcpy( nguyenTo->tenThai, "อิตเทอร์เบียม" );
    strcpy( nguyenTo->kyHieu, "Yb" );
    strcpy( nguyenTo->tenTrung, "镱" );
    nguyenTo->khoiLuong = 168.9342f;
@@ -2258,6 +2334,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[LUTEXI]);
    nguyenTo->so = 71;
    strcpy( nguyenTo->ten, "Lutexi" );
+   strcpy( nguyenTo->tenThai, "ลูทีเชียม" );
    strcpy( nguyenTo->kyHieu, "Lu" );
    strcpy( nguyenTo->tenTrung, "镥" );
    nguyenTo->khoiLuong = 174.9668f;
@@ -2281,6 +2358,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[HAFINI]);
    nguyenTo->so = 72;
    strcpy( nguyenTo->ten, "Hafini" );
+   strcpy( nguyenTo->tenThai, "แฮฟเนียม" );
    strcpy( nguyenTo->kyHieu, "Hf" );
    strcpy( nguyenTo->tenTrung, "铪" );
    nguyenTo->khoiLuong = 178.49f;
@@ -2308,6 +2386,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[TANTAN]);
    nguyenTo->so = 73;
    strcpy( nguyenTo->ten, "Tantan" );
+   strcpy( nguyenTo->tenThai, "แทนทาลัม" );
    strcpy( nguyenTo->kyHieu, "Ta" );
    strcpy( nguyenTo->tenTrung, "钽" );
    nguyenTo->khoiLuong = 180.9479f;
@@ -2330,6 +2409,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[VONFAM]);
    nguyenTo->so = 74;
    strcpy( nguyenTo->ten, "Vonfam" );
+   strcpy( nguyenTo->tenThai, "วุลฟรัม" );
    strcpy( nguyenTo->kyHieu, "W" );
    strcpy( nguyenTo->tenTrung, "鎢" );
    nguyenTo->khoiLuong = 183.84f;
@@ -2356,6 +2436,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[RENI]);
    nguyenTo->so = 75;
    strcpy( nguyenTo->ten, "Reni" );
+   strcpy( nguyenTo->tenThai, "รีเนียม" );
    strcpy( nguyenTo->kyHieu, "Re" );
    strcpy( nguyenTo->tenTrung, "铼" );
    nguyenTo->khoiLuong = 186.207f;
@@ -2379,6 +2460,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[OSIMI]);
    nguyenTo->so = 76;
    strcpy( nguyenTo->ten, "Osimi" );
+   strcpy( nguyenTo->tenThai, "ออสเมียม" );
    strcpy( nguyenTo->kyHieu, "Os" );
    strcpy( nguyenTo->tenTrung, "锇" );
    nguyenTo->khoiLuong = 190.23f;
@@ -2407,6 +2489,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[IRIDI]);
    nguyenTo->so = 77;
    strcpy( nguyenTo->ten, "Iriđi" );
+   strcpy( nguyenTo->tenThai, "อิริเดียม" );
    strcpy( nguyenTo->kyHieu, "Ir" );
    strcpy( nguyenTo->tenTrung, "铱" );
    nguyenTo->khoiLuong = 192.217f;
@@ -2430,6 +2513,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[PLATIN]);
    nguyenTo->so = 78;
    strcpy( nguyenTo->ten, "Platin" );
+   strcpy( nguyenTo->tenThai, "แพลทินัม" );
    strcpy( nguyenTo->kyHieu, "Pt" );
    strcpy( nguyenTo->tenTrung, "铂" );
    nguyenTo->khoiLuong = 195.084f;
@@ -2457,6 +2541,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[VANG]);
    nguyenTo->so = 79;
    strcpy( nguyenTo->ten, "Vàng" );
+   strcpy( nguyenTo->tenThai, "ทองคำ" );
    strcpy( nguyenTo->kyHieu, "Au" );
    strcpy( nguyenTo->tenTrung, "金" );
    nguyenTo->khoiLuong = 196.9666f;
@@ -2479,6 +2564,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[THUY_NGAN]);
    nguyenTo->so = 80;
    strcpy( nguyenTo->ten, "Thủy Ngân" );
+   strcpy( nguyenTo->tenThai, "ปรอท" );
    strcpy( nguyenTo->kyHieu, "Hg" );
    strcpy( nguyenTo->tenTrung, "汞" );
    nguyenTo->khoiLuong = 200.592f;
@@ -2507,6 +2593,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[TALI]);
    nguyenTo->so = 81;
    strcpy( nguyenTo->ten, "Tali" );
+   strcpy( nguyenTo->tenThai, "แทลเลียม" );
    strcpy( nguyenTo->kyHieu, "Tl" );
    strcpy( nguyenTo->tenTrung, "铊" );
    nguyenTo->khoiLuong = 204.3833f;
@@ -2530,6 +2617,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[CHI]);
    nguyenTo->so = 82;
    strcpy( nguyenTo->ten, "Chì" );
+   strcpy( nguyenTo->tenThai, "ตะกั่ว" );
    strcpy( nguyenTo->kyHieu, "Pb" );
    strcpy( nguyenTo->tenTrung, "铅" );
    nguyenTo->khoiLuong = 207.2f;
@@ -2555,6 +2643,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[BITMUT]);
    nguyenTo->so = 83;
    strcpy( nguyenTo->ten, "Bitmut" );
+   strcpy( nguyenTo->tenThai, "บิสมัท" );
    strcpy( nguyenTo->kyHieu, "Bi" );
    strcpy( nguyenTo->tenTrung, "铋" );
    nguyenTo->khoiLuong = 208.9804f;
@@ -2577,6 +2666,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[POLONI]);
    nguyenTo->so = 84;
    strcpy( nguyenTo->ten, "Poloni" );
+   strcpy( nguyenTo->tenThai, "พอโลเนียม" );
    strcpy( nguyenTo->kyHieu, "Po" );
    strcpy( nguyenTo->tenTrung, "钋" );
    nguyenTo->khoiLuong = 209;
@@ -2598,6 +2688,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[ASTATIN]);
    nguyenTo->so = 85;
    strcpy( nguyenTo->ten, "Astatin" );
+   strcpy( nguyenTo->tenThai, "แอสทาทีน" );
    strcpy( nguyenTo->kyHieu, "At" );
    strcpy( nguyenTo->tenTrung, "砹" );
    nguyenTo->khoiLuong = 210;
@@ -2619,6 +2710,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[RADON]);
    nguyenTo->so = 86;
    strcpy( nguyenTo->ten, "Rađon" );
+   strcpy( nguyenTo->tenThai, "เรดอน" );
    strcpy( nguyenTo->kyHieu, "Rn" );
    strcpy( nguyenTo->tenTrung, "氡" );
    nguyenTo->khoiLuong = 222;
@@ -2640,6 +2732,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[FRANXI]);
    nguyenTo->so = 87;
    strcpy( nguyenTo->ten, "Franxi" );
+   strcpy( nguyenTo->tenThai, "แฟรนเซียม" );
    strcpy( nguyenTo->kyHieu, "Fr" );
    strcpy( nguyenTo->tenTrung, "钫" );
    nguyenTo->khoiLuong = 226;
@@ -2661,6 +2754,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[RADI]);
    nguyenTo->so = 88;
    strcpy( nguyenTo->ten, "Rađi" );
+   strcpy( nguyenTo->tenThai, "เรเดียม" );
    strcpy( nguyenTo->kyHieu, "Ra" );
    strcpy( nguyenTo->tenTrung, "镭" );
    nguyenTo->khoiLuong = 226;
@@ -2682,6 +2776,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[ACTINI]);
    nguyenTo->so = 89;
    strcpy( nguyenTo->ten, "Actini" );
+   strcpy( nguyenTo->tenThai, "แอกทิเนียม" );
    strcpy( nguyenTo->kyHieu, "Ac" );
    strcpy( nguyenTo->tenTrung, "锕" );
    nguyenTo->khoiLuong = 227;
@@ -2703,6 +2798,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[THORI]);
    nguyenTo->so = 90;
    strcpy( nguyenTo->ten, "Thôri" );
+   strcpy( nguyenTo->tenThai, "ทอเรียม" );
    strcpy( nguyenTo->kyHieu, "Th" );
    strcpy( nguyenTo->tenTrung, "钍" );
    nguyenTo->khoiLuong = 232.0381f;
@@ -2724,6 +2820,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[PROTACTINI]);
    nguyenTo->so = 91;
    strcpy( nguyenTo->ten, "Protactini" );
+   strcpy( nguyenTo->tenThai, "โพรแทกทิเนียม" );
    strcpy( nguyenTo->kyHieu, "Pa" );
    strcpy( nguyenTo->tenTrung, "镤" );
    nguyenTo->khoiLuong = 231.0359f;
@@ -2745,6 +2842,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[URANI]);
    nguyenTo->so = 92;
    strcpy( nguyenTo->ten, "Urani" );
+   strcpy( nguyenTo->tenThai, "ยูเรเนียม" );
    strcpy( nguyenTo->kyHieu, "U" );
    strcpy( nguyenTo->tenTrung, "铀" );
    nguyenTo->khoiLuong = 238.0289f;
@@ -2766,6 +2864,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[NEPTUNI]);
    nguyenTo->so = 93;
    strcpy( nguyenTo->ten, "Neptuni" );
+   strcpy( nguyenTo->tenThai, "เนปทูเนียม" );
    strcpy( nguyenTo->kyHieu, "Np" );
    strcpy( nguyenTo->tenTrung, "镎" );
    nguyenTo->khoiLuong = 237;
@@ -2787,6 +2886,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[PLUTONI]);
    nguyenTo->so = 94;
    strcpy( nguyenTo->ten, "Plutoni" );
+   strcpy( nguyenTo->tenThai, "พลูโทเนียม" );
    strcpy( nguyenTo->kyHieu, "Pu" );
    strcpy( nguyenTo->tenTrung, "钚" );
    nguyenTo->khoiLuong = 244;
@@ -2808,6 +2908,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[AMERIXI]);
    nguyenTo->so = 95;
    strcpy( nguyenTo->ten, "Amerixi" );
+   strcpy( nguyenTo->tenThai, "อะเมริเซียม" );
    strcpy( nguyenTo->kyHieu, "Am" );
    strcpy( nguyenTo->tenTrung, "镅" );
    nguyenTo->khoiLuong = 243;
@@ -2829,6 +2930,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[CURI]);
    nguyenTo->so = 96;
    strcpy( nguyenTo->ten, "Curi" );
+   strcpy( nguyenTo->tenThai, "คูเรียม" );
    strcpy( nguyenTo->kyHieu, "Cm" );
    strcpy( nguyenTo->tenTrung, "锔" );
    nguyenTo->khoiLuong = 247;
@@ -2850,6 +2952,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[BECKELI]);
    nguyenTo->so = 97;
    strcpy( nguyenTo->ten, "Beckeli" );
+   strcpy( nguyenTo->tenThai, "เบอร์คีเลียม" );
    strcpy( nguyenTo->kyHieu, "Bk" );
    strcpy( nguyenTo->tenTrung, "锫" );
    nguyenTo->khoiLuong = 247;
@@ -2871,6 +2974,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[CALIFORNI]);
    nguyenTo->so = 98;
    strcpy( nguyenTo->ten, "Californi" );
+   strcpy( nguyenTo->tenThai, "แคลิฟอร์เนียม" );
    strcpy( nguyenTo->kyHieu, "Cf" );
    strcpy( nguyenTo->tenTrung, "锎" );
    nguyenTo->khoiLuong = 251;
@@ -2892,6 +2996,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[ENSTENI]);
    nguyenTo->so = 98;
    strcpy( nguyenTo->ten, "Ensteni" );
+   strcpy( nguyenTo->tenThai, "ไอน์สไตเนียม" );
    strcpy( nguyenTo->kyHieu, "Es" );
    strcpy( nguyenTo->tenTrung, "锿" );
    nguyenTo->khoiLuong = 252;
@@ -2912,6 +3017,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[FECMI]);
    nguyenTo->so = 100;
    strcpy( nguyenTo->ten, "Fecmi" );
+   strcpy( nguyenTo->tenThai, "เฟอร์เมียม" );
    strcpy( nguyenTo->kyHieu, "Fm" );
    strcpy( nguyenTo->tenTrung, "镄" );
    nguyenTo->khoiLuong = 257;
@@ -2932,6 +3038,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[MENDELEVI]);
    nguyenTo->so = 101;
    strcpy( nguyenTo->ten, "Menđelevi" );
+   strcpy( nguyenTo->tenThai, "เมนเดลีเวียม" );
    strcpy( nguyenTo->kyHieu, "Md" );
    strcpy( nguyenTo->tenTrung, "钔" );
    nguyenTo->khoiLuong = 258;
@@ -2952,6 +3059,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[NOBELI]);
    nguyenTo->so = 102;
    strcpy( nguyenTo->ten, "Nobeli" );
+   strcpy( nguyenTo->tenThai, "โนเบเลียม" );
    strcpy( nguyenTo->kyHieu, "No" );
    strcpy( nguyenTo->tenTrung, "锘" );
    nguyenTo->khoiLuong = 259;
@@ -2972,6 +3080,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[LORENXI]);
    nguyenTo->so = 103;
    strcpy( nguyenTo->ten, "Lorenxi" );
+   strcpy( nguyenTo->tenThai, "ลอว์เรนเซียม" );
    strcpy( nguyenTo->kyHieu, "Lr" );
    strcpy( nguyenTo->tenTrung, "铹" );
    nguyenTo->khoiLuong = 262;
@@ -2992,6 +3101,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[ROZOFODI]);
    nguyenTo->so = 104;
    strcpy( nguyenTo->ten, "Rozofođi" );
+   strcpy( nguyenTo->tenThai, "รัทเทอร์ฟอร์เดียม" );
    strcpy( nguyenTo->kyHieu, "Rf" );
    strcpy( nguyenTo->tenTrung, "𬬻" );
    nguyenTo->khoiLuong = 267;
@@ -3012,6 +3122,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[DUBNI]);
    nguyenTo->so = 105;
    strcpy( nguyenTo->ten, "Đupni" );
+   strcpy( nguyenTo->tenThai, "ดุบเนียม" );
    strcpy( nguyenTo->kyHieu, "Db" );
    strcpy( nguyenTo->tenTrung, "𬭊" );
    nguyenTo->khoiLuong = 268;
@@ -3032,6 +3143,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[SIBOGI]);
    nguyenTo->so = 106;
    strcpy( nguyenTo->ten, "Sibogi" );
+   strcpy( nguyenTo->tenThai, "ซีบอร์เกียม" );
    strcpy( nguyenTo->kyHieu, "Sg" );
    strcpy( nguyenTo->tenTrung, "𬭳" );
    nguyenTo->khoiLuong = 269;
@@ -3052,6 +3164,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[BORI]);
    nguyenTo->so = 107;
    strcpy( nguyenTo->ten, "Bori" );
+   strcpy( nguyenTo->tenThai, "โบห์เรียม" );
    strcpy( nguyenTo->kyHieu, "Bh" );
    strcpy( nguyenTo->tenTrung, "𬭛" );
    nguyenTo->khoiLuong = 270;
@@ -3072,6 +3185,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[HASI]);
    nguyenTo->so = 108;
    strcpy( nguyenTo->ten, "Hasi" );
+   strcpy( nguyenTo->tenThai, "ฮัสเซียม" );
    strcpy( nguyenTo->kyHieu, "Hs" );
    strcpy( nguyenTo->tenTrung, "𬭶" );
    nguyenTo->khoiLuong = 269;
@@ -3092,6 +3206,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[MEITNERI]);
    nguyenTo->so = 109;
    strcpy( nguyenTo->ten, "Méitneri" );
+   strcpy( nguyenTo->tenThai, "ไมต์เนเรียม" );
    strcpy( nguyenTo->kyHieu, "Mt" );
    strcpy( nguyenTo->tenTrung, "鿏" );
    nguyenTo->khoiLuong = 278;
@@ -3112,6 +3227,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[DAMASTATI]);
    nguyenTo->so = 110;
    strcpy( nguyenTo->ten, "Damastati" );
+   strcpy( nguyenTo->tenThai, "ดาร์มสตัดเทียม" );
    strcpy( nguyenTo->kyHieu, "Ds" );
    strcpy( nguyenTo->tenTrung, "𫟼" );
    nguyenTo->khoiLuong = 281;
@@ -3132,6 +3248,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[REONTGENI]);
    nguyenTo->so = 111;
    strcpy( nguyenTo->ten, "Roentgeni" );
+   strcpy( nguyenTo->tenThai, "เรินต์เกเนียม" );
    strcpy( nguyenTo->kyHieu, "Rg" );
    strcpy( nguyenTo->tenTrung, "𬬭" );
    nguyenTo->khoiLuong = 281;
@@ -3152,6 +3269,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[COPENIXI]);
    nguyenTo->so = 112;
    strcpy( nguyenTo->ten, "Copenixi" );
+   strcpy( nguyenTo->tenThai, "โคเปอร์นิเซียม" );
    strcpy( nguyenTo->kyHieu, "Cn" );
    strcpy( nguyenTo->tenTrung, "鿔" );
    nguyenTo->khoiLuong = 285;
@@ -3172,6 +3290,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[NIHONI]);
    nguyenTo->so = 113;
    strcpy( nguyenTo->ten, "Nihoni" );
+   strcpy( nguyenTo->tenThai, "นิโฮเนียม" );
    strcpy( nguyenTo->kyHieu, "Nh" );
    strcpy( nguyenTo->tenTrung, "鿭" );
    nguyenTo->khoiLuong = 285;
@@ -3192,6 +3311,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[FLEROVI]);
    nguyenTo->so = 114;
    strcpy( nguyenTo->ten, "Flerovi" );
+   strcpy( nguyenTo->tenThai, "ฟลิโรเวียม" );
    strcpy( nguyenTo->kyHieu, "Fl" );
    strcpy( nguyenTo->tenTrung, "𫓧" );
    nguyenTo->khoiLuong = 289;
@@ -3212,6 +3332,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[MOSCOVI]);
    nguyenTo->so = 115;
    strcpy( nguyenTo->ten, "Moscovi" );
+   strcpy( nguyenTo->tenThai, "มอสโกเวียม" );
    strcpy( nguyenTo->kyHieu, "Mc" );
    strcpy( nguyenTo->tenTrung, "镆" );
    nguyenTo->khoiLuong = 289;
@@ -3232,6 +3353,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[LIVEMORI]);
    nguyenTo->so = 116;
    strcpy( nguyenTo->ten, "Livemori" );
+   strcpy( nguyenTo->tenThai, "ลิเวอร์มอเรียม" );
    strcpy( nguyenTo->kyHieu, "Lv" );
    strcpy( nguyenTo->tenTrung, "𫟷" );
    nguyenTo->khoiLuong = 293;
@@ -3252,6 +3374,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[TENEXIN]);
    nguyenTo->so = 117;
    strcpy( nguyenTo->ten, "Tenexin" );
+   strcpy( nguyenTo->tenThai, "เทนเนสซีน" );
    strcpy( nguyenTo->kyHieu, "Ts" );
    strcpy( nguyenTo->tenTrung, "鿬" );
    nguyenTo->khoiLuong = 294;
@@ -3272,6 +3395,7 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
    nguyenTo = &(mangNguyenTo[OGANESON]);
    nguyenTo->so = 118;
    strcpy( nguyenTo->ten, "Ôganeson" );
+   strcpy( nguyenTo->tenThai, "โอกาเนสซอน" );
    strcpy( nguyenTo->kyHieu, "Og" );
    strcpy( nguyenTo->tenTrung, "鿫" );
    nguyenTo->khoiLuong = 294;
@@ -3353,14 +3477,23 @@ void chuanBiThongTinNguyenTo( NguyenTo *mangNguyenTo ) {
 #define kDONG_VI__VI_TRI_X  0.02f
 #define kDONG_VI__VI_TRI_Y  0.985f
 
-void vanBanNguyenTo( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, float coO_ngang, float coO_doc, unsigned int mauVanBan, float phongTo ) {
+void vanBanNguyenTo( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, float coO_ngang, float coO_doc, unsigned int mauVanBan, float phongTo, unsigned char ngonNgu ) {
 
    char xauSo[32];
 
    // ---- tên
+   char *tenNguyenTo = NULL;
+   float coVanBanTenNguyenTo = 25.0f;
+   if( ngonNgu == THAI ) {
+      tenNguyenTo = nguyenTo->tenThai;
+      coVanBanTenNguyenTo = 20.0f;
+   }
+   else
+      tenNguyenTo = nguyenTo->ten;
+
    float gocX_dacTrung = gocX + coO_ngang*kTEN__VI_TRI_X;
    float gocY_dacTrung = gocY + coO_doc*kTEN__VI_TRI_Y;
-   vanBan_ngang( tep, nguyenTo->ten, gocX_dacTrung, gocY_dacTrung, "Arial", 25.0f*phongTo, "Bold",
+   vanBan_ngang( tep, tenNguyenTo, gocX_dacTrung, gocY_dacTrung, "Arial", coVanBanTenNguyenTo*phongTo, "Bold",
                 kDUNG, mauVanBan, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
    
    // ---- ký hiệu
@@ -3586,13 +3719,13 @@ void veNen( FILE *tep, float gocX, float gocY, float coO_ngang, float coO_doc, u
 
 #define kDO_DUC__NET 0.8f
 
-void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, float coO_ngang, float coO_doc, float phongTo ) {
+void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, float coO_ngang, float coO_doc, float phongTo, unsigned char ngonNgu ) {
    
    // ---- nền
    // ---- vẽ chữ nhật nền
    veNen( tep, gocX, gocY, coO_ngang, coO_doc, 0x404040, 0xc0c0c0 );
    // ---- văn bản cho nguyên tố ví dụ
-   vanBanNguyenTo( tep, nguyenTo, gocX, gocY, coO_ngang, coO_doc, 0xffffff, phongTo );
+   vanBanNguyenTo( tep, nguyenTo, gocX, gocY, coO_ngang, coO_doc, 0xffffff, phongTo, ngonNgu );
 
    // ---- đặc trưng
    float viTriX = gocX + coO_ngang*kVAN_BAN_DAC_TRUNG__VI_TRI_X;
@@ -3854,7 +3987,278 @@ void soDoMoTaDacTrung( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, fl
 }
 
 
-void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo *mangNguyenTo, float dichX, float dichY, float giuaNgang, float giuaDoc ) {
+// ---- cho Tiếng Thái
+void soDoMoTaDacTrungThai( FILE *tep, NguyenTo *nguyenTo, float gocX, float gocY, float coO_ngang, float coO_doc, float phongTo, unsigned char ngonNgu ) {
+   
+   // ---- nền
+   // ---- vẽ chữ nhật nền
+   veNen( tep, gocX, gocY, coO_ngang, coO_doc, 0x404040, 0xc0c0c0 );
+   // ---- văn bản cho nguyên tố ví dụ
+   vanBanNguyenTo( tep, nguyenTo, gocX, gocY, coO_ngang, coO_doc, 0xffffff, phongTo, ngonNgu );
+   
+   // ---- đặc trưng
+   float viTriX = gocX + coO_ngang*kVAN_BAN_DAC_TRUNG__VI_TRI_X;
+   float viTriY = gocY + coO_doc*kVAN_BAN_DAC_TRUNG__VI_TRI_Y;
+   vanBan_ngang( tep, "ลักษณะเฉพาะ", viTriX, viTriY, "Arial", 35.0f, "Bold", kDUNG, 0x000000, 2.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
+   viTriY += 0.15f*coO_doc;
+   vanBan_ngang( tep, "(P = 101,3 kPa, T = 273 K)", viTriX, viTriY, "Arial", 20.0f, "Bold", kDUNG, 0x000000, 2.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
+   
+   
+   // ---- tên
+   viTriX = gocX + coO_ngang*kVAN_BAN_TEN__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_TEN__VI_TRI_Y;
+   vanBan_ngang( tep, "ชื่อ", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "end" );
+   
+   float x1 = gocX + coO_ngang*0.25f;
+   float y1 = gocY + coO_doc*0.10f;
+   float x2 = gocX + coO_ngang*(kVAN_BAN_TEN__VI_TRI_X + 0.02f);
+   float y2 = gocY + coO_doc*(kVAN_BAN_TEN__VI_TRI_Y - 0.02f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+   
+   // ---- ký hiểu
+   viTriX = gocX + coO_ngang*kVAN_BAN_KY_HIEU__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_KY_HIEU__VI_TRI_Y;
+   vanBan_ngang( tep, "สัญลักษณ์", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "end" );
+   
+   x1 = gocX + coO_ngang*0.05f;
+   y1 = gocY + coO_doc*0.30f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_KY_HIEU__VI_TRI_X + 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_KY_HIEU__VI_TRI_Y - 0.02f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+   
+   // ---- số nguyên tử
+   viTriX = gocX + coO_ngang*kVAN_BAN_SO_NGUYEN_TU__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_SO_NGUYEN_TU__VI_TRI_Y;
+   vanBan_ngang( tep, "เลขอะตอม", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   x1 = gocX + coO_ngang*0.60f;
+   y1 = gocY + coO_doc*0.30f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_SO_NGUYEN_TU__VI_TRI_X - 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_SO_NGUYEN_TU__VI_TRI_Y - 0.02f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+   
+   // ---- tên Trung
+   x1 = gocX + coO_ngang*0.90f;
+   y1 = gocY + coO_doc*0.30f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_TEN_TRUNG__VI_TRI_X - 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_TEN_TRUNG__VI_TRI_Y - 0.02f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+   
+   viTriX = gocX + coO_ngang*kVAN_BAN_TEN_TRUNG__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_TEN_TRUNG__VI_TRI_Y;
+   vanBan_ngang( tep, "ชื่อจีน", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   // ---- số oxy hóa
+   x1 = gocX + coO_ngang*0.1f;
+   y1 = gocY + coO_doc*0.45f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_SO_OXY_HOA__VI_TRI_X + 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_SO_OXY_HOA__VI_TRI_Y - 0.02);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+   
+   viTriX = gocX + coO_ngang*kVAN_BAN_SO_OXY_HOA__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_SO_OXY_HOA__VI_TRI_Y;
+   vanBan_ngang( tep, "สถานะออกซิเดชัน", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "end" );
+   
+   // ---- nhiệt độ chảy
+   x1 = gocX + coO_ngang*0.1f;
+   y1 = gocY + coO_doc*0.60f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_NHIET_DO_CHAY__VI_TRI_X + 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_NHIET_DO_CHAY__VI_TRI_Y - 0.02f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+   
+   viTriX = gocX + coO_ngang*kVAN_BAN_NHIET_DO_CHAY__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_NHIET_DO_CHAY__VI_TRI_Y;
+   vanBan_ngang( tep, "เหลว (K)", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "end" );
+   
+   // ---- nhiệt độ sôi
+   x1 = gocX + coO_ngang*0.1f;
+   y1 = gocY + coO_doc*0.70f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_NHIET_DO_SOI__VI_TRI_X + 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_NHIET_DO_SOI__VI_TRI_Y - 0.02f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+   
+   viTriX = gocX + coO_ngang*kVAN_BAN_NHIET_DO_SOI__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_NHIET_DO_SOI__VI_TRI_Y;
+   vanBan_ngang( tep, "เดือด (K)", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "end" );
+   
+   // ---- cấu trúc tinh thể
+   x1 = gocX + coO_ngang*0.55f;
+   y1 = gocY + coO_doc*0.60f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_CAU_TRUC_TINH_THE__VI_TRI_X - 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_CAU_TRUC_TINH_THE__VI_TRI_Y - 0.02f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+   
+   viTriX = gocX + coO_ngang*kVAN_BAN_CAU_TRUC_TINH_THE__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_CAU_TRUC_TINH_THE__VI_TRI_Y;
+   vanBan_ngang( tep, "โครงสร้างผลึก", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   // ---- nhiệt dụng
+   x1 = gocX + coO_ngang*0.90f;
+   y1 = gocY + coO_doc*0.58f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_NHIET_DUNG__VI_TRI_X - 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_NHIET_DUNG__VI_TRI_Y - 0.02f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+   
+   viTriX = gocX + coO_ngang*kVAN_BAN_NHIET_DUNG__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_NHIET_DUNG__VI_TRI_Y;
+   vanBan_ngang( tep, "ความจุความร้อนจำเพาะ (kJ/(mol•K))", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   // ---- tỉ trọng
+   x1 = gocX + coO_ngang*0.90f;
+   y1 = gocY + coO_doc*0.68f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_TI_TRONG__VI_TRI_X - 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_TI_TRONG__VI_TRI_Y - 0.02f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+   
+   viTriX = gocX + coO_ngang*kVAN_BAN_TI_TRONG__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_TI_TRONG__VI_TRI_Y;
+   vanBan_ngang( tep, "ความหนาแน่น (kg/m³)", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   // ---- cấu hình elentron
+   x1 = gocX + coO_ngang*0.70f;
+   y1 = gocY + coO_doc*0.80f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_CAU_HINH_ELECTRON__VI_TRI_X - 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_CAU_HINH_ELECTRON__VI_TRI_Y - 0.02f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+   
+   viTriX = gocX + coO_ngang*kVAN_BAN_CAU_HINH_ELECTRON__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_CAU_HINH_ELECTRON__VI_TRI_Y;
+   vanBan_ngang( tep, "โครงแบบอิเล็กตรอน", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   // ---- khối lượng nguyên tử
+   x1 = gocX + coO_ngang*0.10f;
+   y1 = gocY + coO_doc*0.90f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_KHOI_LUONG__VI_TRI_X + 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_KHOI_LUONG__VI_TRI_Y - 0.08f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+   
+   viTriX = gocX + coO_ngang*kVAN_BAN_KHOI_LUONG__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_KHOI_LUONG__VI_TRI_Y;
+   vanBan_ngang( tep, "มวลอะตอมมาตรฐาน", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "end" );
+   
+   // ---- độ âm điện
+   x1 = gocX + coO_ngang*0.9f;
+   y1 = gocY + coO_doc*0.90f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_DO_AM_DIEN__VI_TRI_X - 0.02f);
+   y2 = gocY + coO_doc*(kVAN_BAN_DO_AM_DIEN__VI_TRI_Y - 0.02f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+   
+   viTriX = gocX + coO_ngang*kVAN_BAN_DO_AM_DIEN__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_DO_AM_DIEN__VI_TRI_Y;
+   vanBan_ngang( tep, "อิเล็กโตรเนกาติวิตี", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   // ---- những đồng vị ổn định
+   x1 = gocX + coO_ngang*0.08f;
+   y1 = gocY + coO_doc*0.99f;
+   x2 = gocX + coO_ngang*(kVAN_BAN_DONG_VI__VI_TRI_X - 0.5f);
+   y2 = gocY + coO_doc*(kVAN_BAN_DONG_VI__VI_TRI_Y - 0.1f);
+   duong( tep, x1, y1, x2, y2, 2.0f, 0x0000ff, kDO_DUC__NET );
+   
+   viTriX = gocX + coO_ngang*kVAN_BAN_DONG_VI__VI_TRI_X;
+   viTriY = gocY + coO_doc*kVAN_BAN_DONG_VI__VI_TRI_Y;
+   vanBan_ngang( tep, "ไอโซโทปเสถียรเสถียร (หรือครึ่งชีวิต > 10¹⁰ ปี)", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
+   
+   // ==== cho mô tả cấu trúc tinh thể
+   float tiengThai_dichX = 0.8f;   // <------ cần địch ngang vỉ văn bản tiệng Thái rộng hơn
+   // ---- tiêu đề
+   viTriX = gocX + coO_ngang*(kTIEU_DE_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_X + tiengThai_dichX);
+   viTriY = gocY + coO_doc*kTIEU_DE_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_Y;
+   vanBan_ngang( tep, "สัญลักษณ์โครงสร้างผลึก", viTriX, viTriY, "Arial", 30.0f, "Bold",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   // ---- văn bản
+   viTriX = gocX + coO_ngang*(kVAN_BAN_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_X + tiengThai_dichX);
+   viTriY = gocY + coO_doc*kVAN_BAN_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_Y;
+   vanBan_ngang( tep, "- รูปลูกบาศก์", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- รูปลูกบาศก์กลางหน้า", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- รูปลูกบาศก์กลางตัว", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- รูปลูกบาศก์เพชร ", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- ออร์โธรอมบิก", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- หกเหลี่ยมปิดบรรจุ", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- มอโนคลินิก", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- สามทิศทาง", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- สามเอียง", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   vanBan_ngang( tep, "- ไร้รูปแบบ", viTriX, viTriY, "Arial", 25.0f, "Normal",
+                kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   
+   // ---- ký hiệu
+   viTriX = gocX + coO_ngang*(kHINH_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_X + tiengThai_dichX);
+   viTriY = gocY + coO_doc*kHINH_DANH_SACH_CAU_TRUC_TINH_THE__VI_TRI_Y;
+   tinhTheLapPhuong( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheLapPhuongTamMat( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheLapPhuongTamKhoi( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheLapPhuongKimCuong( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheTrucThoi( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheLucPhuong( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheDonNghieng( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheBaPhuong( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheBaNghieng( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+   
+   viTriY += coO_doc*kCACH_GIUA_DANH_SACH_CAU_TRUC_TINH_THE;
+   tinhTheVoDang( tep, viTriX, viTriY, 10.0f*phongTo, 0x000000 );
+   
+}
+
+
+
+void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo *mangNguyenTo, float dichX, float dichY, float giuaNgang, float giuaDoc, unsigned char ngonNgu ) {
    
    unsigned char soNguyenTo = 0;
    float gocX = dichX;
@@ -3881,7 +4285,16 @@ void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo 
    float beCaoVungTo = kBE_CAO__KHO - kLE_DUOI - kLE_TREN;
    
    // ---- tiêu đề
-   vanBan_ngang( tep, "Bảng Tuần Hoàn", kBE_RONG__KHO >> 1, kLE_TREN, "Arial", 120.0f, "Bold",
+   char vanBanTieuDe[64];
+   float coVanBan = 120.0f;
+   if( ngonNgu == THAI ) {
+      strcpy( vanBanTieuDe, "ตารางธาตุ" );
+      coVanBan = 150.0f;
+   }
+   else
+      strcpy( vanBanTieuDe, "Bảng Tuần Hoàn" );
+   
+   vanBan_ngang( tep, vanBanTieuDe, kBE_RONG__KHO >> 1, kLE_TREN, "Arial", coVanBan, "Bold",
                 kDUNG, 0x000000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
 
    while( soNguyenTo < kSO_LUONG__NGUYEN_TO ) {
@@ -3980,7 +4393,7 @@ void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo 
 
       // ==== văn bản
       NguyenTo *nguyenTo = &(mangNguyenTo[soNguyenTo]);
-      vanBanNguyenTo( tep, nguyenTo, gocX, gocY, coO_ngang, coO_doc, 0xffffff, 1.0f );
+      vanBanNguyenTo( tep, nguyenTo, gocX, gocY, coO_ngang, coO_doc, 0xffffff, 1.0f, ngonNgu );
       
       // ---- nguyên tố tiếp
       gocX += coO_ngang + giuaNgang;
@@ -4033,32 +4446,58 @@ void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo 
    // ---- s
    gocX = dichX + (coO_ngang + giuaNgang);
    gocY = dichY - 0.2f*(coO_doc + giuaDoc);
-   vanBan_ngang( tep, "Khối s", gocX, gocY, "Arial", 50.0f, "Normal",
+   if( ngonNgu == THAI )
+      vanBan_ngang( tep, "บล็อก s", gocX, gocY, "Arial", 50.0f, "Normal",
+                   kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
+   else
+      vanBan_ngang( tep, "Khối s", gocX, gocY, "Arial", 50.0f, "Normal",
                 kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
 
    // ---- f
    gocX = dichX + (2.0f + 7.0f)*(coO_ngang + giuaNgang);
    gocY = dichY + 4.8f*(coO_doc + giuaDoc);
-   vanBan_ngang( tep, "Khối f", gocX, gocY, "Arial", 50.0f, "Normal",
+   if( ngonNgu == THAI )
+      vanBan_ngang( tep, "บล็อก f", gocX, gocY, "Arial", 50.0f, "Normal",
+                   kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
+   else
+      vanBan_ngang( tep, "Khối f", gocX, gocY, "Arial", 50.0f, "Normal",
                 kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
    
    // ---- d
    gocX = dichX + (2.0f + 14.0f + 5.0f)*(coO_ngang + giuaNgang);
    gocY = dichY + 2.8f*(coO_doc + giuaDoc);
-   vanBan_ngang( tep, "Khối d", gocX, gocY, "Arial", 50.0f, "Normal",
+   if( ngonNgu == THAI )
+      vanBan_ngang( tep, "บล็อก d", gocX, gocY, "Arial", 50.0f, "Normal",
+                   kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
+   else
+      vanBan_ngang( tep, "Khối d", gocX, gocY, "Arial", 50.0f, "Normal",
                 kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
 
    // ---- p
    gocX = dichX + (2.0f + 14.0f + 10.0f + 3.0f)*(coO_ngang + giuaNgang);
    gocY = dichY + 0.8f*(coO_doc + giuaDoc);
-   vanBan_ngang( tep, "Khối p", gocX, gocY, "Arial", 50.0f, "Normal",
+   if( ngonNgu == THAI )
+      vanBan_ngang( tep, "บล็อก p", gocX, gocY, "Arial", 50.0f, "Normal",
+                   kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
+   else
+      vanBan_ngang( tep, "Khối p", gocX, gocY, "Arial", 50.0f, "Normal",
                 kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "middle" );
    
    // ==== Mô tả về đặc trưng cho nguyên tố Z > 94
-   gocX = kBE_RONG__KHO >> 1;
+   gocX = kBE_RONG__KHO - kLE_PHAI;
    gocY = dichY + 7.5f*(coO_doc + giuaDoc);
-   vanBan_ngang( tep, "Đặc trưng cho những nguyên tố số nguyên tử lớn hơn 94 ưa là dự đoán từ lý thuyết vì chỉ được sản xuất một số nguyên tử rất nhỏ mà phân rã rất nhanh.", gocX, gocY, "Arial", 30.0f, "Normal",
-                kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   if( ngonNgu == THAI )
+      vanBan_ngang( tep, "ลักษณะเฉพาะของธาตุที่มีเลขอะตอมมากกว่า 94 มักจะได้รับจากทฤษฎีเพราะมีอะตอมจำนวนน้อยเท่านั้นที่สลายตัวอย่างรวดเร็ว", gocX, gocY, "Arial", 30.0f, "Normal",
+                   kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "end" );
+   else
+      vanBan_ngang( tep, "Đặc trưng cho những nguyên tố số nguyên tử lớn hơn 94 ưa là dự đoán từ lý thuyết vì chỉ được sản xuất một số nguyên tử rất nhỏ mà phân rã rất nhanh.", gocX, gocY, "Arial", 30.0f, "Normal",
+                kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "end" );
+   
+   // ---- năng lượng các khối
+//   gocX = 0.0f;
+//   gocY = 0.0f;
+//   vanBan_ngang( tep, "Thứ tự năng lượng: 1s; 2s; 2p; 3s; 3p; 4s; 3d; 4p; 5s; 4d; 5p; 6s; 4f; 5d; 6p; 7s; 5f; 6d; 7p", gocX, gocY, "Arial", 30.0f, "Normal",
+//                kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
    
    // áp suất cho heli chảy
    gocX = kLE_TRAI + (2.0f + 14.0f + 10.0f + 4.9f)*(coO_ngang + giuaNgang);
@@ -4075,70 +4514,95 @@ void veBangTuanHoanDungCoO( FILE *tep, float coO_ngang, float coO_doc, NguyenTo 
    gocX = kLE_TRAI + coO_ngang*5.0f;
    gocY = kLE_TREN + coO_doc*2.0f;
 
-   soDoMoTaDacTrung( tep, nguyenToViDu, gocX, gocY, coO_ngang*phongTo, coO_doc*phongTo, phongTo );
+   if( ngonNgu == THAI )
+      soDoMoTaDacTrungThai( tep, nguyenToViDu, gocX, gocY, coO_ngang*phongTo, coO_doc*phongTo, phongTo, ngonNgu );
+   else
+      soDoMoTaDacTrung( tep, nguyenToViDu, gocX, gocY, coO_ngang*phongTo, coO_doc*phongTo, phongTo, ngonNgu );
    
    // ==== tên công ty
    gocX = kLE_TRAI - 0.2f*coO_ngang;
    gocY = kLE_TREN + 7.6f*(coO_doc + giuaDoc);
-      vanBan_ngang( tep, "THNN TINH PHỤNG 2023.07.11 - An Giang, Phạm Vi công cộng", gocX, gocY, "Arial", 25.0f, "Normal", kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   if( ngonNgu == THAI )
+      vanBan_ngang( tep, "THNN TINH PHỤNG 2023.07.15 - An Giang สาธารณะ", gocX, gocY, "Arial", 25.0f, "Normal", kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
+   else
+      vanBan_ngang( tep, "THNN TINH PHỤNG 2023.07.15 - An Giang, Phạm Vi công cộng", gocX, gocY, "Arial", 25.0f, "Normal", kDUNG, 0x00000, 1.0f, kSAI, 0.0f, 0x00, 0.0f, "start" );
 };
 
 #pragma mark ==== main
 
 int main( int argc, char *argv[] ) {
 
-   if( argc == 1 ) {
-      FILE *tapTinSVG = fopen( "BảngTuầnHoàn.svg", "w" );
+   unsigned char ngonNgu = VIET;   // ngôn ngữ mặc định
 
-      if( tapTinSVG ) {
-         NguyenTo *mangNguyenTo = malloc( kSO_LUONG__NGUYEN_TO*sizeof( NguyenTo ) );
-         
-         if( mangNguyenTo == NULL ) {
-            printf( "Có vấn đề giàng bộ nhớ.\n" );
-            exit(1);
-         }
-
-         // ---- Chuẩn bị thông tin nguyên tố
-         chuanBiThongTinNguyenTo( mangNguyenTo );
-         
-         // ---- tính cỡ thước
-         unsigned char soLuongO_ngang = 32;
-         unsigned char soLuongO_doc = 7;
-         float coO_ngang = kBE_RONG__KHO - kLE_TRAI - kLE_PHAI - (soLuongO_ngang-1)*kGIUA_NGANG;
-         coO_ngang /= (float)soLuongO_ngang;
-         
-         float coO_doc = kBE_CAO__KHO - kLE_DUOI - kLE_TREN - (soLuongO_doc-1)*kGIUA_DOC;
-         coO_doc /= (float)soLuongO_doc;
-         
-         printf( "Khổ ô: %5.1f  %5.1f\n", coO_ngang, coO_doc );
-         
-         // ==== SVG
-         // ----ghi đầu tập tin SVG
-         ghiDauSVG( tapTinSVG, kBE_RONG__KHO, kBE_CAO__KHO );
- 
-         // ---- vẽ bảng tuần hoàn
-         veBangTuanHoanDungCoO( tapTinSVG, coO_ngang, coO_doc, mangNguyenTo, kLE_TRAI, kLE_TREN,
-                               kGIUA_NGANG, kGIUA_DOC );
-
-         // ---- kết thúc tệp SVG
-         fprintf( tapTinSVG, "</svg>\n" );
-         
-         fclose( tapTinSVG );
-         
-         free( mangNguyenTo );
-      }
-      else {
-         printf( "Có vấn đề mở tập tin SVG.\n");
+   if( argc == 2 ) {
+      char chuCaiDau = argv[1][0];
+      
+      if( (chuCaiDau == 't') || (chuCaiDau == 'T') )
+         ngonNgu = THAI;
+   }
+      
+   // ---- chọn tên tệp tùy ngôn ngữ
+   char tenTapTinSVG[64];
+   if( ngonNgu == THAI )
+      strcpy( tenTapTinSVG, "ตารางธาตุ.svg" );
+   else  // VIET
+      strcpy( tenTapTinSVG, "BảngTuầnHoàn.svg" );
+   
+   // ---- cho biết tập tin
+   printf( "Tên tập tin: %s\n", tenTapTinSVG );
+   
+   
+   FILE *tapTinSVG = fopen( tenTapTinSVG, "w" );
+   
+   if( tapTinSVG ) {
+      NguyenTo *mangNguyenTo = malloc( kSO_LUONG__NGUYEN_TO*sizeof( NguyenTo ) );
+      
+      if( mangNguyenTo == NULL ) {
+         printf( "Có vấn đề giàng bộ nhớ.\n" );
          exit(1);
       }
-
+      
+      // ---- Chuẩn bị thông tin nguyên tố
+      chuanBiThongTinNguyenTo( mangNguyenTo );
+      
+      // ---- tính cỡ thước
+      unsigned char soLuongO_ngang = 32;
+      unsigned char soLuongO_doc = 7;
+      float coO_ngang = kBE_RONG__KHO - kLE_TRAI - kLE_PHAI - (soLuongO_ngang-1)*kGIUA_NGANG;
+      coO_ngang /= (float)soLuongO_ngang;
+      
+      float coO_doc = kBE_CAO__KHO - kLE_DUOI - kLE_TREN - (soLuongO_doc-1)*kGIUA_DOC;
+      coO_doc /= (float)soLuongO_doc;
+      
+      printf( "Khổ ô: %5.1f  %5.1f\n", coO_ngang, coO_doc );
+      
+      // ==== SVG
+      // ----ghi đầu tập tin SVG
+      ghiDauSVG( tapTinSVG, kBE_RONG__KHO, kBE_CAO__KHO );
+      
+      // ---- vẽ bảng tuần hoàn
+      veBangTuanHoanDungCoO( tapTinSVG, coO_ngang, coO_doc, mangNguyenTo, kLE_TRAI, kLE_TREN,
+                            kGIUA_NGANG, kGIUA_DOC, ngonNgu );
+      
       // ---- kết thúc tệp SVG
       fprintf( tapTinSVG, "</svg>\n" );
-
+      
       fclose( tapTinSVG );
+      
+      free( mangNguyenTo );
    }
    else {
-      printf( "Cách sử dụng:\n  5: ./>\n\n" );
+      printf( "Có vấn đề mở tập tin SVG.\n");
+      exit(1);
    }
+   
+   // ---- kết thúc tệp SVG
+   fprintf( tapTinSVG, "</svg>\n" );
+   
+   fclose( tapTinSVG );
+
+  // else {
+  //    printf( "Cách sử dụng:\n  5: ./>\n\n" );
+   
    return 0;
 }
