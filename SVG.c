@@ -9,8 +9,8 @@
 #include <math.h>
 //#include "SVG.h"
 
-//#define kFALSE 0
-//#define kTRUE 1
+//#define kSAI 0
+//#define kDUNG 1
 
 
 /*
@@ -30,7 +30,7 @@ void duong( FILE *tep, float diemX0, float diemY0, float diemX1, float diemY1, f
 void duongDaDiem( FILE *tep, float *mangDiem, unsigned int soLuongDiem, unsigned char toDay, unsigned int mauToDay, float doDucToDay,
                     unsigned char net, float beRongNet, unsigned int mauNet, float doDucNet );
  
- void polygonPoints( FILE *tep, float *mangDiem, unsigned int soLuongDiem, unsigned char toDay, unsigned int mauToDay, float doDucToDay,
+ void daGiac( FILE *tep, float *mangDiem, unsigned int soLuongDiem, unsigned char toDay, unsigned int mauToDay, float doDucToDay,
  unsigned char net, float beRongNet, unsigned int mauNet, float doDucNet );
  
  void duongCong( FILE *tep, float diemBatDauX, float diemBatDauY, float *mangDiem, unsigned int soLuongKhuc,
@@ -119,9 +119,9 @@ void elip( FILE *tep, float tamX, float tamY, float banKinhX, float banKinhY, un
 
 // Vẽ một nét giữa hai điểm
 void duong( FILE *tep, float diemX0, float diemY0, float diemX1, float diemY1, float beRongNet, unsigned int mauNet, float doDucNet ) {
+   
    fprintf( tep, "<line x1=\"%5.1f\" y1=\"%5.1f\" x2=\"%5.1f\" y2=\"%5.1f\" stroke=\"#%06X\" stroke-opacity=\"%4.2f\" stroke-width=\"%5.1f\" />\n",
 	               diemX0, diemY0, diemX1, diemY1, mauNet, doDucNet, beRongNet );
-	
 }
 
 
@@ -242,7 +242,7 @@ void duongCong( FILE *tep, float diemBatDauX, float diemBatDauY, float *mangDiem
 
 
 void vanBan_ngang( FILE *tep, char *xau, float viTriX, float viTriY, char *giaDinhPhong, float coKichPhong, char *beDayPhong,
-                       unsigned char toDay, unsigned int mauToDay, float doDucToDay, unsigned char net, float beRongNet, unsigned int mauNet, float doDucNet, unsigned char *canhHang ) {
+                       unsigned char toDay, unsigned int mauToDay, float doDucToDay, unsigned char net, float beRongNet, unsigned int mauNet, float doDucNet, char *canhHang ) {
 
    fprintf( tep, "<text x=\"%5.1f\" y=\"%5.1f\" font-family=\"%s\" font-size=\"%5.1f\" font-weight=\"%s\" writing-mode=\"lr\" ", viTriX, viTriY, giaDinhPhong, coKichPhong, beDayPhong );
    
